@@ -8,6 +8,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  *
  * @author Oskar Truffer <ot@studer-raimann.ch>
  * @author Fabian Schmid <fs@studer-raimann.ch>
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
@@ -41,10 +42,13 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 */
 	function modifyGUI($a_comp, $a_part, $a_par = array()) {
 		$locations = array(
+			array( 'ilobjgroupgui', 'members' ),
 			array( 'ilobjcoursegui', 'members' ),
 			array( 'ilcourseparticipantsgroupsgui', 'show' ),
 			array( 'ilobjcoursegui', 'membersGallery' ),
 			array( 'ilobjcoursegui', 'mailMembers' ),
+            array( 'ilobjgroupgui', 'membersGallery' ),
+			array( 'ilobjgroupgui', 'mailMembers' ),
 			array( 'ilsessionoverviewgui', 'listSessions' ),
 			array( 'iluimasssubscriptiongui', 'members' ),
 			array( 'iluimasssubscriptiongui', 'membersGallery' ),
@@ -54,11 +58,17 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			array( 'ilobjcoursegui', 'updateMembers' ),
 			array( 'ilobjcoursegui', 'deleteMembers' ),
 			array( 'ilobjcoursegui', 'removeMembers' ),
+            array( 'ilobjgroupgui', 'editMember' ),
+			array( 'ilobjgroupgui', 'updateMembers' ),
+			array( 'ilobjgroupgui', 'confirmDeleteMembers' ),
+			array( 'ilobjgroupgui', 'deleteMembers' ),
 			array( 'ilrepositorysearchgui', '*' ),
 			array( 'ilmemberexportgui', '*' ),
 		);
-		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
+
+        $tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
 		if ($this->checkContext($a_part, $locations)) {
+
 			$ref_id = $_GET['ref_id'];
 			if (! $this->access->checkAccess('write', '', $ref_id, 'crs')) {
 				return;
@@ -68,7 +78,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->tabs->setTabActive('members');
 			$this->ctrl->setTargetScript('ilias.php');
 			$this->ctrl->initBaseClass('ilRouterGUI');
-			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'crs_ref_id', $_GET['ref_id']);
+			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'obj_ref_id', $_GET['ref_id']);
 			$this->tabs->addSubTab('srsubscription', $pl_obj->txt('tab_usage_' . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
 				'ilRouterGUI',
 				'msSubscriptionGUI'

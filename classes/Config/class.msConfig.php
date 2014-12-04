@@ -5,6 +5,7 @@ require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRe
  * Class msConfig
  *
  * @author Fabian Schmid <fs@studer-raimann.ch>
+ * @author Theodor Truffer <tt@studer-raimann.ch>
  */
 class msConfig extends ActiveRecord {
 
@@ -24,6 +25,7 @@ class msConfig extends ActiveRecord {
 	const F_USE_EMAIL = 'use_email';
 	const F_SEND_MAILS = 'send_mails';
 	const F_PURGE = 'purge';
+    const F_ACTIVATE_GROUPS = 'activate_groups';
     const F_IGNORE_SUBTREE = 'ignore_subtree';
 	const TABLE_NAME = 'rep_robj_xmsb_conf';
 

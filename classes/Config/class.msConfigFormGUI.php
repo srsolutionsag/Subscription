@@ -8,6 +8,7 @@ require_once('class.msConfig.php');
  * GUI-Class msConfigFormGUI
  *
  * @author            Fabian Schmid <fs@studer-raimann.ch>
+ * @author            Theodor Truffer <tt@studer-raimann.ch>
  * @version           $Id:
  *
  */
@@ -72,11 +73,14 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 		}
 
-		$show_names = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
-		$this->addItem($show_names);
+		$use_matriculation = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
+		$this->addItem($use_matriculation);
 
 		$show_names = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_SHOW_NAMES), msConfig::F_SHOW_NAMES);
 		$this->addItem($show_names);
+
+        $activate_groups = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_ACTIVATE_GROUPS), msConfig::F_ACTIVATE_GROUPS);
+        $this->addItem($activate_groups);
 
 		$system_user = new ilTextInputGUI($this->pl->txt('admin_' . msConfig::F_SYSTEM_USER), msConfig::F_SYSTEM_USER);
 		$this->addItem($system_user);
@@ -126,7 +130,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 		foreach ($this->getItems() as $item) {
 			$this->writeValue($item);
 		}
-
+        ilUtil::sendSuccess($this->pl->txt('admin_save_succeed'), true);
 		return true;
 	}
 

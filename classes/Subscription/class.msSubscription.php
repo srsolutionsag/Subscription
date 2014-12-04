@@ -7,6 +7,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * msSubscription
  *
  * @author  Fabian Schmid <fs@studer-raimann.ch>
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
  *
  * @version
  */
@@ -33,7 +34,7 @@ class msSubscription extends ActiveRecord {
 
 
 	public function afterObjectLoad() {
-		$this->user_status_object = new msUserStatus($this->getMatchingString(), $this->getSubscriptionType(), $this->getCrsRefId());
+		$this->user_status_object = new msUserStatus($this->getMatchingString(), $this->getSubscriptionType(), $this->getObjRefId());
 		$this->account_type_object = new msAccountType($this->getMatchingString(), $this->getSubscriptionType());
 	}
 
@@ -124,28 +125,28 @@ class msSubscription extends ActiveRecord {
 
 
 	/**
-	 * @param     $crs_ref_id
+	 * @param     $obj_ref_id
 	 * @param     $input
 	 * @param int $type
 	 *
 	 * @internal param $mail
 	 */
-	public static function insertNewRequests($crs_ref_id, $input, $type = msSubscription::TYPE_EMAIL) {
+	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL) {
 		$where = array(
 			'matching_string' => $input,
-			'crs_ref_id' => $crs_ref_id,
+			'obj_ref_id' => $obj_ref_id,
 			'deleted' => false
 		);
 		$operators = array(
 			'matching_string' => 'LIKE',
-			'crs_ref_id' => '=',
+			'obj_ref_id' => '=',
 			'deleted' => '='
 		);
 		if (! msSubscription::where($where, $operators)->hasSets() AND $input != '') {
 			$msSubscription = new msSubscription();
 			$msSubscription->setMatchingString($input);
-			$status = new msUserStatus($input, $type, $crs_ref_id);
-			$msSubscription->setCrsRefId($crs_ref_id);
+			$status = new msUserStatus($input, $type, $obj_ref_id);
+			$msSubscription->setObjRefId($obj_ref_id);
 			$msSubscription->setSubscriptionType($type);
 			$msSubscription->setAccountType(msAccountType::TYPE_ILIAS);
 			$msSubscription->setUserStatus($status->getStatus());
@@ -193,7 +194,7 @@ class msSubscription extends ActiveRecord {
 	 * @db_fieldtype        integer
 	 * @db_length           4
 	 */
-	protected $crs_ref_id;
+	protected $obj_ref_id;
 	/**
 	 * @var string
 	 *
@@ -233,7 +234,7 @@ class msSubscription extends ActiveRecord {
 	 * @db_fieldtype        integer
 	 * @db_length           1
 	 */
-	protected $role = IL_CRS_MEMBER;
+	protected $role = IL_OBJ_MEMBER;
 	/**
 	 * @var bool
 	 *
@@ -278,18 +279,18 @@ class msSubscription extends ActiveRecord {
 
 
 	/**
-	 * @param int $crs_ref_id
+	 * @param int $obj_ref_id
 	 */
-	public function setCrsRefId($crs_ref_id) {
-		$this->crs_ref_id = $crs_ref_id;
+	public function setObjRefId($obj_ref_id) {
+		$this->obj_ref_id = $obj_ref_id;
 	}
 
 
 	/**
 	 * @return int
 	 */
-	public function getCrsRefId() {
-		return $this->crs_ref_id;
+	public function getObjRefId() {
+		return $this->obj_ref_id;
 	}
 
 

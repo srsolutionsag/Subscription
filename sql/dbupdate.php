@@ -33,6 +33,9 @@ $fields = array(
 if (!$ilDB->tableExists('rep_robj_xmsb_token')) {
 	$ilDB->createTable("rep_robj_xmsb_token", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_token", array("id"));
+    if(!$ilDB->tableExists('rep_robj_xmsb_token_seq')){
+        $ilDB->dropTable('rep_robj_xmsb_token_seq');
+    }
 	$ilDB->createSequence("rep_robj_xmsb_token");
 }
 
@@ -74,6 +77,9 @@ $fields = array(
 if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 	$ilDB->createTable("rep_robj_xmsb_invt", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_invt", array("id"));
+    if(!$ilDB->tableExists('rep_robj_xmsb_invt_seq')){
+        $ilDB->dropTable('rep_robj_xmsb_invt_seq');
+    }
 	$ilDB->createSequence("rep_robj_xmsb_invt");
 }
 
@@ -146,4 +152,9 @@ msConfig::set(msConfig::ENBL_INV, true);
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
 msConfig::set(msConfig::F_SEND_MAILS, false);
+?>
+<#12>
+<?php
+msSubscription::renameDBField('crs_ref_id', 'obj_ref_id');
+msSubscription::updateDB();
 ?>
