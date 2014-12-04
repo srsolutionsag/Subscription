@@ -6,6 +6,8 @@ require_once('class.msSubscription.php');
 
 /**
  * Class emSubscriptionTableGUI
+ *
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class msSubscriptionTableGUI extends srModelObjectTableGUI {
 
@@ -32,7 +34,7 @@ class msSubscriptionTableGUI extends srModelObjectTableGUI {
 
 	protected function initTableData() {
 		$where = array(
-			'crs_ref_id' => $_GET['crs_ref_id'],
+			'obj_ref_id' => $_GET['obj_ref_id'],
 			'deleted' => false
 		);
 		$data = array();
@@ -124,11 +126,23 @@ class msSubscriptionTableGUI extends srModelObjectTableGUI {
 	 * @return string
 	 */
 	protected function getRoleSelector($selected = self::STD_ROLE) {
-		$roles = array(
-			IL_CRS_MEMBER => $this->pl->txt('main_role_' . IL_CRS_MEMBER),
-			IL_CRS_TUTOR => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
-			IL_CRS_ADMIN => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
-		);
+        $type = $this->parent_obj->getObj()->getType();
+        switch($type){
+            case 'crs':
+                $roles = array(
+                    IL_CRS_MEMBER => $this->pl->txt('main_role_' . IL_CRS_MEMBER),
+                    IL_CRS_TUTOR => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
+                    IL_CRS_ADMIN => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
+                );
+                break;
+            case 'grp':
+                $roles = array(
+                    IL_GRP_MEMBER => $this->pl->txt('main_role_' . IL_GRP_MEMBER),
+                    IL_GRP_ADMIN => $this->pl->txt('main_role_' . IL_GRP_ADMIN),
+                );
+                break;
+        }
+
 		$selection_menu = '';
 		foreach ($roles as $value => $role) {
 			$sel = ($selected == $value ? 'selected' : '');

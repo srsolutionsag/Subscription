@@ -16,6 +16,7 @@ require_once('./Services/Object/classes/class.ilObject2.php');
  * GUI-Class msSubscriptionGUI
  *
  * @author            Fabian Schmid <fs@studer-raimann.ch>
+ * @author            Theodor Truffer <tt@studer-raimann.ch>
  * @version           $Id:
  *
  * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI
@@ -38,42 +39,49 @@ class msSubscriptionGUI {
 	 * @var ilPropertyFormGUI
 	 */
 	protected $form;
-	/**
+    /**
+     * @var ilObjectDefinition
+     */
+    protected $obj_def;
+    /**
 	 * @var int
 	 */
-	protected $crs_ref_id = 0;
+	protected $obj_ref_id = 0;
 	/**
 	 * @var msSubscriptionTableGUI
 	 */
 	protected $table;
 	/**
-	 * @var ilObjCourse
+	 * @var ilObjCourse|ilObjGroup
 	 */
-	protected $crs;
+	protected $obj;
 
 
 	/**
 	 * @param $parent
 	 */
 	function __construct($parent = NULL) {
-		global $tpl, $ilCtrl, $ilToolbar, $ilTabs;
+		global $tpl, $ilCtrl, $ilToolbar, $ilTabs, $objDefinition;
 		/**
 		 * @var $tpl       ilTemplate
 		 * @var $ilCtrl    ilCtrl
 		 * @var $ilToolbar ilToolbarGUI
 		 * @var $ilTabs    ilTabsGUI
+         * @var $objDefinition ilObjectDefinition
 		 */
 		$this->tpl = $tpl;
 		$this->ctrl = $ilCtrl;
 		$this->parent = $parent;
 		$this->toolbar = $ilToolbar;
 		$this->tabs = $ilTabs;
+        $this->obj_def = $objDefinition;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 //		$this->pl->updateLanguageFiles();
 
-		$this->crs_ref_id = $_GET['crs_ref_id'];
-		$this->ctrl->setParameterByClass('ilObjCourseGUI', 'ref_id', $this->crs_ref_id);
-		$this->crs = ilObjectFactory::getInstanceByRefId($this->crs_ref_id);
+		$this->obj_ref_id = $_GET['obj_ref_id'];
+        $this->obj = ilObjectFactory::getInstanceByRefId($this->obj_ref_id);
+        $class_name = $this->obj_def->getClassName($this->obj->getType());
+		$this->ctrl->setParameterByClass('ilObj'.$class_name.'GUI', 'ref_id', $this->obj_ref_id);
 	}
 
 
@@ -82,7 +90,7 @@ class msSubscriptionGUI {
 	 */
 	public function executeCommand() {
 		$this->initHeader();
-		$this->ctrl->saveParameter($this, 'crs_ref_id');
+		$this->ctrl->saveParameter($this, 'obj_ref_id');
 		$cmd = ($this->ctrl->getCmd()) ? $this->ctrl->getCmd() : $this->getStandardCommand();
 		if ($_GET['rl'] == 'true') {
 			$this->pl->updateLanguages();
@@ -102,18 +110,20 @@ class msSubscriptionGUI {
 		/**
 		 * @var $ilLocator ilLocatorGUI
 		 */
-		$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->crs->getType());
-		$this->tpl->setTitle($this->crs->getTitle());
-		$this->tpl->setDescription($this->crs->getDescription());
-		if ($this->crs->getOfflineStatus()) {
-			$this->tpl->setAlertProperties($list_gui->getAlertProperties());
-		}
-		$this->tpl->setTitleIcon(ilUtil::getTypeIconPath('crs', $this->crs->getId(), 'big'));
+		$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->obj->getType());
+		$this->tpl->setTitle($this->obj->getTitle());
+		$this->tpl->setDescription($this->obj->getDescription());
+        if(ilObject::_lookupType($this->obj->getId()) == 'crs'){
+            if ($this->obj->getOfflineStatus()) {
+                $this->tpl->setAlertProperties($list_gui->getAlertProperties());
+            }
+        }
+		$this->tpl->setTitleIcon(ilUtil::getTypeIconPath($this->obj->getType(), $this->obj->getId(), 'big'));
 		$this->tabs->setBackTarget($this->pl->txt('main_back'), $this->ctrl->getLinkTargetByClass(array(
 			'ilRepositoryGUI',
-			'ilObjCourseGUI'
+            'ilObj'.$this->obj_def->getClassName($this->obj->getType()).'GUI'
 		), 'members'));
-		$ilLocator->addRepositoryItems($this->crs_ref_id);
+		$ilLocator->addRepositoryItems($this->obj_ref_id);
 		$this->tpl->setLocator($ilLocator->getHTML());
 		$this->tpl->addCss('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/templates/default/Subscription/main.css');
 	}
@@ -141,7 +151,7 @@ class msSubscriptionGUI {
 			case 'listObjects':
 			case 'triage':
 			case 'clear':
-				if (! $ilAccess->checkAccess('write', '', $this->crs_ref_id)) {
+				if (! $ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->txt('main_no_access'));
 					ilUtil::redirect('index.php');
 
@@ -186,10 +196,10 @@ class msSubscriptionGUI {
 
 	public function sendForm() {
 		foreach (msSubscription::seperateEmailString($_POST[self::EMAIL_FIELD]) as $mail) {
-			msSubscription::insertNewRequests($this->crs_ref_id, $mail, msSubscription::TYPE_EMAIL);
+			msSubscription::insertNewRequests($this->obj_ref_id, $mail, msSubscription::TYPE_EMAIL);
 		}
 		foreach (msSubscription::seperateMatriculationString($_POST[self::MATRICULATION_FIELD]) as $matriculation) {
-			msSubscription::insertNewRequests($this->crs_ref_id, $matriculation, msSubscription::TYPE_MATRICULATION);
+			msSubscription::insertNewRequests($this->obj_ref_id, $matriculation, msSubscription::TYPE_MATRICULATION);
 		}
 		$this->ctrl->redirect($this, 'listObjects');
 	}
@@ -236,7 +246,7 @@ class msSubscriptionGUI {
 						$obj->setInvitationsSent(true);
 						break;
 					case self::CMD_SUBSCRIBE:
-						$this->assignToCourse($obj);
+						$this->assignToObject($obj);
 						$obj->setDeleted(true);
 						break;
 				}
@@ -271,7 +281,7 @@ class msSubscriptionGUI {
 			$this->ctrl->initBaseClass('ilRouterGUI');
 			$this->ctrl->setTargetScript('ilias.php');
 		}*/
-		$link = ilLink::_getLink($this->crs->getRefId()) . '&cmd=members';
+		$link = ilLink::_getLink($this->obj->getRefId()) . '&cmd=members';
 
 
 
@@ -296,7 +306,7 @@ class msSubscriptionGUI {
 		}
 		//		echo '<pre>' . print_r($mail, 1) . '</pre>';
 		$sf = array(
-			'crs_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getCrsRefId())),
+			'obj_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getObjRefId())),
 			'role' => $this->pl->txt('main_role_' . $msSubscription->getRole()),
 			'inv_email' => $msSubscription->getMatchingString(),
 			'link' => ILIAS_HTTP_PATH . '/goto.php?target=subscr_' . $msSubscription->getToken(),
@@ -317,16 +327,23 @@ class msSubscriptionGUI {
 	/**
 	 * @param msSubscription $msSubscription
 	 */
-	public function assignToCourse(msSubscription $msSubscription) {
-		$obj_id = ilObject::_lookupObjId($msSubscription->getCrsRefId());
-		$participants = new ilCourseParticipants($obj_id);
+	public function assignToObject(msSubscription $msSubscription) {
+		$obj_id = ilObject::_lookupObjId($msSubscription->getObjRefId());
+        switch(ilObject::_lookupType($obj_id)){
+            case 'crs':
+                $participants = new ilCourseParticipants($obj_id);
+                break;
+            case 'grp':
+                $participants = new ilGroupParticipants($obj_id);
+                break;
+        }
 		$participants->add($msSubscription->user_status_object->getUsrId(), $msSubscription->getRole());
 	}
 
 
 	protected function clear() {
 		$where = array(
-			'crs_ref_id' => $_GET['crs_ref_id'],
+			'obj_ref_id' => $_GET['obj_ref_id'],
 			'deleted' => false
 		);
 		/**
@@ -340,6 +357,14 @@ class msSubscriptionGUI {
 		}
 		$this->ctrl->redirect($this, 'listObjects');
 	}
+
+    /**
+     * @return \ilObjCourse|\ilObjGroup
+     */
+    public function getObj()
+    {
+        return $this->obj;
+    }
 }
 
 ?>
