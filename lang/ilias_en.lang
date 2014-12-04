@@ -4,22 +4,22 @@ admin_ask_for_login#:#Aks for exstisting Login
 admin_conf_description#:#MassSubscription-Plugin Settings
 admin_conf_title#:#Settings
 admin_configuration_title#:#Settings
-admin_purge#:#Purge unused entries
-admin_send_mails#:#Send Registration-Mails
+admin_enable_invitation#:#Send invitations
 admin_fixed_email#:#User can't change E-Mail in registration
 admin_metadata_xml#:#Path to Metadata-XML
+admin_purge#:#Purge unused entries
+admin_send_mails#:#Send Registration-Mails
 admin_shibboleth#:#SwitchAAI
 admin_show_names#:#Show names of existing Users
 admin_system_user#:#Systemuser
 admin_use_email#:#Use E-Mailfield
-admin_enable_invitation#:#Send invitations
 admin_use_matriculation#:#Use Matriculation
 admin_form_button_cancel#:#Cancel
 admin_form_button_save#:#Save
 button_reload_lang_files#:#Rewrite languagefiles
 main_back#:#Back
-main_msg_triage_finished#:#The users have been assigned
 main_msg_emails_sent#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
+main_msg_triage_finished#:#The users have been assigned
 main_no#:#No
 main_not_invalid_token#:#The Link has arleady been used. Please log in to ILIAS
 main_notification_body#:#Hello,\n\nYou have been invited to the ILIAS Course "%s" as "%s". Please use the link below to register to ILIAS:\n\n%s\n\n%s has invited you, if you have any problems please contact: %s
@@ -29,16 +29,16 @@ main_role_1#:#Administrator
 main_role_2#:#Member
 main_role_3#:#Tutor
 main_send_form#:#List Users
-main_send_table_usage_1#:#Assign
 main_send_table_clear#:#Clear
+main_send_table_usage_1#:#Assign
 main_send_table_usage_2#:#Assign and invite
 main_user_exists#:#A user with your E-Mail already exists. Please log in to ILIAS to acces the course
 main_user_status_1#:#Already in course
 main_user_status_2#:#Can be assigned
 main_user_status_3#:#Already invited
 main_user_status_4#:#Can be invited
-main_user_status_6#:#Can't be assigned
 main_user_status_5#:#Can't be invited
+main_user_status_6#:#Can't be assigned
 main_yes#:#Yes
 main_field_emails_info#:#Seperated List of E-Mailadresses (Comma, Semicolon, ...)
 main_field_emails_title#:#E-Mails

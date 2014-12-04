@@ -84,6 +84,10 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 		$cb_purge = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_PURGE), msConfig::F_PURGE);
 		$this->addItem($cb_purge);
 
+        $ignore_subtree = new ilTextInputGUI($this->pl->txt('admin_' . msConfig::F_IGNORE_SUBTREE), msConfig::F_IGNORE_SUBTREE);
+        $ignore_subtree->setInfo($this->pl->txt('admin_' . msConfig::F_IGNORE_SUBTREE . '_info'));
+        $this->addItem($ignore_subtree);
+
 		$this->addCommandButtons();
 	}
 

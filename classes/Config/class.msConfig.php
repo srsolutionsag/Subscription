@@ -24,6 +24,7 @@ class msConfig extends ActiveRecord {
 	const F_USE_EMAIL = 'use_email';
 	const F_SEND_MAILS = 'send_mails';
 	const F_PURGE = 'purge';
+    const F_IGNORE_SUBTREE = 'ignore_subtree';
 	const TABLE_NAME = 'rep_robj_xmsb_conf';
 
 

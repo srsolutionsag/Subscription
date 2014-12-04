@@ -94,12 +94,21 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 * @return bool
 	 */
 	private function checkContext($a_part, array $context) {
+        global $tree;
+        $ignore_subtree = array();
+        foreach(explode(',', trim(msConfig::get('ignore_subtree'))) as $root_id)
+        {
+            $ignore_subtree = array_merge($ignore_subtree, $tree->getSubTree($tree->getNodeData($root_id), false));
+        }
+
 		return ($a_part == 'sub_tabs'
 
 			AND (in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context) OR in_array(array(
 					$this->ctrl->getCmdClass(),
 					'*'
-				), $context)));
+				), $context))
+            AND (!in_array($_GET['ref_id'], $ignore_subtree))
+        );
 	}
 
 
