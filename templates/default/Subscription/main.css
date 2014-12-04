@@ -1,0 +1,11 @@
+td.no {
+	color: red;
+}
+
+td.yes {
+	color: green;
+}
+
+td.nomail {
+	display: none;
+}

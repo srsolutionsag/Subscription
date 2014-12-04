@@ -1,0 +1,45 @@
+multipleInput-container ul {
+	margin: 0;
+	padding: 0;
+	-webkit-padding-start: 0px;
+}
+
+.multipleInput-container {
+	border:         1px #CCCCCC solid;
+	padding:        1px;
+	padding-bottom: 0;
+	cursor:         text;
+	font-size:      13px;
+	width:          100%;
+}
+
+.multipleInput-container input {
+	font-size:     13px;
+	clear:         both;
+	width:         250px;
+	height:        24px;
+	border:        0;
+	margin-bottom: 1px;
+}
+
+.multipleInput-container ul {
+	list-style-type: none;
+}
+
+li.multipleInput-email {
+	float:         left;
+	margin-right:  2px;
+	margin-bottom: 1px;
+	border:        1px #BBD8FB solid;
+	padding:       2px;
+	background:    #F3F7FD;
+}
+
+.multipleInput-close {
+	width:      16px;
+	height:     16px;
+	background: url(close.png);
+	display:    block;
+	float:      right;
+	margin:     0 3px;
+}
