@@ -92,12 +92,12 @@ class msUserStatus {
 		} elseif ($this->getType() == self::EMAIL) {
 			$where = array(
 				'matching_string' => $this->getInput(),
-				'crs_ref_id' => $this->getCrsRefId(),
+				'obj_ref_id' => $this->getCrsRefId(),
 				'invitations_sent' => '1'
 			);
 			$op = array(
 				'matching_string' => 'LIKE',
-				'crs_ref_id' => '=',
+				'obj_ref_id' => '=',
 				'invitations_sent' => '='
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
@@ -163,12 +163,12 @@ class msUserStatus {
 		} else {
 			$where = array(
 				'matching_string' => $mail,
-				'crs_ref_id' => $crs_ref_id,
+				'obj_ref_id' => $crs_ref_id,
 				'invitations_sent' => '1'
 			);
 			$op = array(
 				'matching_string' => 'LIKE',
-				'crs_ref_id' => '=',
+				'obj_ref_id' => '=',
 				'invitations_sent' => '='
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {

@@ -23,6 +23,8 @@ class msSubscription extends ActiveRecord {
 	const TYPE_EMAIL = 1;
 	const TYPE_MATRICULATION = 2;
 	const DELIMITER = '|';
+	const CONTEXT_CRS = 1;
+	const CONTEXT_GRP = 2;
 	/**
 	 * @var msUserStatus
 	 */
@@ -131,7 +133,7 @@ class msSubscription extends ActiveRecord {
 	 *
 	 * @internal param $mail
 	 */
-	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL) {
+	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(
 			'matching_string' => $input,
 			'obj_ref_id' => $obj_ref_id,
@@ -142,7 +144,7 @@ class msSubscription extends ActiveRecord {
 			'obj_ref_id' => '=',
 			'deleted' => '='
 		);
-		if (! msSubscription::where($where, $operators)->hasSets() AND $input != '') {
+		if (!msSubscription::where($where, $operators)->hasSets() AND $input != '') {
 			$msSubscription = new msSubscription();
 			$msSubscription->setMatchingString($input);
 			$status = new msUserStatus($input, $type, $obj_ref_id);
@@ -150,6 +152,7 @@ class msSubscription extends ActiveRecord {
 			$msSubscription->setSubscriptionType($type);
 			$msSubscription->setAccountType(msAccountType::TYPE_ILIAS);
 			$msSubscription->setUserStatus($status->getStatus());
+			$msSubscription->setContext($context);
 			$msSubscription->create();
 		}
 	}
@@ -260,6 +263,14 @@ class msSubscription extends ActiveRecord {
 	 * @db_length           1
 	 */
 	protected $deleted = false;
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_length           1
+	 */
+	protected $context = self::CONTEXT_CRS;
 
 
 	/**
@@ -419,6 +430,35 @@ class msSubscription extends ActiveRecord {
 	 */
 	public function getSubscriptionType() {
 		return $this->subscription_type;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getContext() {
+		return $this->context;
+	}
+
+
+	/**
+	 * @param int $context
+	 */
+	public function setContext($context) {
+		$this->context = $context;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getContextAsString() {
+		switch ($this->getContext()) {
+			case self::CONTEXT_CRS:
+				return 'crs';
+			case self::CONTEXT_GRP:
+				return 'grp';
+		}
 	}
 
 

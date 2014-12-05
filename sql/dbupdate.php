@@ -33,7 +33,7 @@ $fields = array(
 if (!$ilDB->tableExists('rep_robj_xmsb_token')) {
 	$ilDB->createTable("rep_robj_xmsb_token", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_token", array("id"));
-    if(!$ilDB->tableExists('rep_robj_xmsb_token_seq')){
+    if($ilDB->tableExists('rep_robj_xmsb_token_seq')){
         $ilDB->dropTable('rep_robj_xmsb_token_seq');
     }
 	$ilDB->createSequence("rep_robj_xmsb_token");
@@ -77,7 +77,7 @@ $fields = array(
 if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 	$ilDB->createTable("rep_robj_xmsb_invt", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_invt", array("id"));
-    if(!$ilDB->tableExists('rep_robj_xmsb_invt_seq')){
+    if($ilDB->tableExists('rep_robj_xmsb_invt_seq')){
         $ilDB->dropTable('rep_robj_xmsb_invt_seq');
     }
 	$ilDB->createSequence("rep_robj_xmsb_invt");
@@ -113,7 +113,7 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 	$set = $ilDB->query('SELECT * FROM rep_robj_xmsb_token');
 	while ($rec = $ilDB->fetchObject($set)) {
 		$msSubscription = new msSubscription();
-		$msSubscription->setCrsRefId($rec->course_ref);
+		$msSubscription->setObjRefId($rec->course_ref);
 		$msSubscription->setMatchingString($rec->email);
 		$msSubscription->setToken($rec->token);
 		$msSubscription->setDeleted($rec->deleted);
@@ -155,6 +155,19 @@ msConfig::set(msConfig::F_SEND_MAILS, false);
 ?>
 <#12>
 <?php
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 msSubscription::renameDBField('crs_ref_id', 'obj_ref_id');
 msSubscription::updateDB();
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
+msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
+?>
+<#13>
+<?php
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
+global $ilDB;
+/**
+ * @var $ilDB ilDB
+ */
+msSubscription::updateDB();
+$ilDB->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
 ?>

@@ -1,13 +1,46 @@
 <?php
 require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php');
-
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilDynamicLanguage.php');
 
 /**
  * Class ilSubscriptionPlugin
  *
  * @author Fabian Schmid <fs@studer-raimann.ch>
  */
-class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
+class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynamicLanguageInterface {
+
+	/**
+	 * @return string
+	 */
+	public function getCsvPath() {
+		$path = substr(__FILE__, 0, strpos(__FILE__, 'classes')) . 'lang/';
+		if (file_exists($path . 'lang_custom.csv')) {
+			$file = $path . 'lang_custom.csv';
+		} else {
+			$file = $path . 'lang.csv';
+		}
+
+		return $file;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getAjaxLink() {
+		return __FILE__;
+	}
+
+
+	/**
+	 * @param $key
+	 *
+	 * @return mixed
+	 */
+	public function getDynamicTxt($key) {
+		return ilDynamicLanguage::getInstance($this, ilDynamicLanguage::MODE_DEV)->txt($key);
+	}
+
 
 	/**
 	 * @var ilSubscriptionPlugin
@@ -19,7 +52,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	 * @return ilSubscriptionPlugin
 	 */
 	public static function getInstance() {
-		if (! isset(self::$instance)) {
+		if (!isset(self::$instance)) {
 			self::$instance = new self();
 		}
 
@@ -44,8 +77,8 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 		 */
 		$path = strstr(__FILE__, 'Services', true) . 'Libraries/ActiveRecord/';
 		global $ilCtrl;
-		if ($ilCtrl->lookupClassPath('ilRouterGUI') === NULL OR ! is_file($path . 'class.ActiveRecord.php') OR ! is_file($path
-			. 'class.ActiveRecordList.php')
+		if ($ilCtrl->lookupClassPath('ilRouterGUI') === NULL OR !is_file($path . 'class.ActiveRecord.php') OR !is_file($path
+				. 'class.ActiveRecordList.php')
 		) {
 			return false;
 		}
@@ -63,7 +96,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 
 
 	public function updateLanguageFiles() {
-		if (! in_array('SimpleXLSX', get_declared_classes())) {
+		if (!in_array('SimpleXLSX', get_declared_classes())) {
 			require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/lib/simplexlsx.class.php');
 		}
 		$path = substr(__FILE__, 0, strpos(__FILE__, 'classes')) . 'lang/';
@@ -93,7 +126,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 			$status = file_put_contents($path . 'ilias_' . $lng_key . '.lang', $start . implode(PHP_EOL, $lang));
 		}
 
-		if (! $status) {
+		if (!$status) {
 			ilUtil::sendFailure('Language-Files coul\'d not be written');
 		}
 		$this->updateLanguages();

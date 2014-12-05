@@ -126,19 +126,19 @@ class msTriage {
 	protected function showLoginDecision() {
 		$this->tpl->getStandardTemplate();
 		$this->tpl->setVariable('BASE', msConfig::getPath());
-		$this->tpl->setTitle($this->pl->txt('triage_title'));
+		$this->tpl->setTitle($this->pl->getDynamicTxt('triage_title'));
 
 		$de = new ilConfirmationGUI();
 		$de->setFormAction('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/triage.php');
 		//$this->pl->txt('subscription_type_' . $this->subscription->getSubscriptionType()) . ': '
 		//.
 		$str = $this->subscription->getMatchingString()
-			. ', Ziel: ' . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getCrsRefId()));
+			. ', Ziel: ' . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
-		$de->setHeaderText($this->pl->txt('qst_already_account'));
-		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
-		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
+		$de->setHeaderText($this->pl->getDynamicTxt('qst_already_account'));
+		$de->setConfirm($this->pl->getDynamicTxt('main_yes'), 'hasLogin');
+		$de->setCancel($this->pl->getDynamicTxt('main_no'), 'hasNoLogin');
 
 		$this->tpl->setContent($de->getHTML());
 		$this->tpl->show();
@@ -163,7 +163,7 @@ class msTriage {
 
 	public function redirectToLogin() {
 		$this->setSubscriptionToDeleted();
-		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getCrsRefId() . '_rcode' . $this->getRegistrationCode();
+		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
 
 		ilUtil::redirect($link);
 	}
@@ -176,7 +176,7 @@ class msTriage {
 		/**
 		 * @var $crs ilObjCourse
 		 */
-		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getCrsRefId());
+		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
 		if (! $crs->isRegistrationAccessCodeEnabled()) {
 			$crs->enableRegistrationAccessCode(1);
 			$crs->update();

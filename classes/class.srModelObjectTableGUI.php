@@ -157,9 +157,9 @@ abstract class srModelObjectTableGUI extends ilTable2GUI {
 			return false;
 		}
 		foreach (array_keys(array_shift($data)) as $key) {
-			$this->addColumn($this->lng->txt($key), $key);
+			$this->addColumn($this->lng->getDynamicTxt($key), $key);
 		}
-		$this->addColumn($this->lng->txt('actions'), 'actions');
+		$this->addColumn($this->lng->getDynamicTxt('actions'), 'actions');
 
 		return true;
 	}
@@ -180,9 +180,9 @@ abstract class srModelObjectTableGUI extends ilTable2GUI {
 			$this->ctrl->setParameter($this->parent_obj, 'object_id', $a_set['id']);
 			$actions = new ilAdvancedSelectionListGUI();
 			$actions->setId('actions_' . self::$num);
-			$actions->setListTitle($this->lng->txt('actions'));
-			$actions->addItem($this->lng->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
-			$actions->addItem($this->lng->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
+			$actions->setListTitle($this->pl->getDynamicTxt('actions'));
+			$actions->addItem($this->pl->getDynamicTxt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
+			$actions->addItem($this->pl->getDynamicTxt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
 			$this->tpl->setCurrentBlock('cell');
 			$this->tpl->setVariable('VALUE', $actions->getHTML());
 			$this->tpl->parseCurrentBlock();

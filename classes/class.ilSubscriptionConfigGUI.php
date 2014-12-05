@@ -52,7 +52,6 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
 
 
 	public function configure() {
-		$this->addReloadButton();
 		$form = new msConfigFormGUI($this);
 		$form->fillForm();
 		$this->tpl->setContent($form->getHTML());
@@ -69,21 +68,13 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
 	}
 
 
-	public function reloadLanguageFiles() {
-		$this->pl->updateLanguageFiles();
-		ilUtil::sendSuccess($this->pl->txt('msg_lang_files_reloaded'), true);
-
-		$this->ctrl->redirect($this, 'configure');
-	}
-
-
 	protected function addReloadButton() {
 		if (is_writable('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/lang/')) {
 			global $ilToolbar;
 			/**
 			 * @var $ilToolbar ilToolbarGUI
 			 */
-			$ilToolbar->addButton($this->pl->txt('button_reload_lang_files'), $this->ctrl->getLinkTarget($this, 'reloadLanguageFiles'));
+			$ilToolbar->addButton($this->pl->getDynamicTxt('button_reload_lang_files'), $this->ctrl->getLinkTarget($this, 'reloadLanguageFiles'));
 		}
 	}
 }

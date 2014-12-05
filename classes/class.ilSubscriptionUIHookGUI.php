@@ -6,12 +6,16 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
 /**
  * Class ilSubscriptionUIHookGUI
  *
- * @author Oskar Truffer <ot@studer-raimann.ch>
- * @author Fabian Schmid <fs@studer-raimann.ch>
+ * @author  Oskar Truffer <ot@studer-raimann.ch>
+ * @author  Fabian Schmid <fs@studer-raimann.ch>
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
+	/**
+	 * @var array
+	 */
+	protected static $ignored_subtree = array();
 	/**
 	 * @var ilCtrl
 	 */
@@ -26,7 +30,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	protected $access;
 
 
-	function __construct() {
+	public function __construct() {
 		global $ilCtrl, $ilTabs, $ilAccess;
 		$this->ctrl = $ilCtrl;
 		$this->tabs = $ilTabs;
@@ -40,14 +44,14 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 * @param       $a_part
 	 * @param array $a_par
 	 */
-	function modifyGUI($a_comp, $a_part, $a_par = array()) {
+	public function modifyGUI($a_comp, $a_part, $a_par = array()) {
 		$locations = array(
 			array( 'ilobjgroupgui', 'members' ),
 			array( 'ilobjcoursegui', 'members' ),
 			array( 'ilcourseparticipantsgroupsgui', 'show' ),
 			array( 'ilobjcoursegui', 'membersGallery' ),
 			array( 'ilobjcoursegui', 'mailMembers' ),
-            array( 'ilobjgroupgui', 'membersGallery' ),
+			array( 'ilobjgroupgui', 'membersGallery' ),
 			array( 'ilobjgroupgui', 'mailMembers' ),
 			array( 'ilsessionoverviewgui', 'listSessions' ),
 			array( 'iluimasssubscriptiongui', 'members' ),
@@ -58,7 +62,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			array( 'ilobjcoursegui', 'updateMembers' ),
 			array( 'ilobjcoursegui', 'deleteMembers' ),
 			array( 'ilobjcoursegui', 'removeMembers' ),
-            array( 'ilobjgroupgui', 'editMember' ),
+			array( 'ilobjgroupgui', 'editMember' ),
 			array( 'ilobjgroupgui', 'updateMembers' ),
 			array( 'ilobjgroupgui', 'confirmDeleteMembers' ),
 			array( 'ilobjgroupgui', 'deleteMembers' ),
@@ -66,11 +70,11 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			array( 'ilmemberexportgui', '*' ),
 		);
 
-        $tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
+		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
 		if ($this->checkContext($a_part, $locations)) {
 
 			$ref_id = $_GET['ref_id'];
-			if (! $this->access->checkAccess('write', '', $ref_id, 'crs')) {
+			if (!$this->access->checkAccess('write', '', $ref_id, 'crs') OR !$this->access->checkAccess('write', '', $ref_id, 'grp')) {
 				return;
 			}
 			$pl_obj = ilSubscriptionPlugin::getInstance();
@@ -79,7 +83,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->ctrl->setTargetScript('ilias.php');
 			$this->ctrl->initBaseClass('ilRouterGUI');
 			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'obj_ref_id', $_GET['ref_id']);
-			$this->tabs->addSubTab('srsubscription', $pl_obj->txt('tab_usage_' . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
+			$this->tabs->addSubTab('srsubscription', $pl_obj->getDynamicTxt('tab_usage_'
+				. msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
 				'ilRouterGUI',
 				'msSubscriptionGUI'
 			)), '', 'ilsubscriptiongui');
@@ -103,22 +108,25 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 *
 	 * @return bool
 	 */
-	private function checkContext($a_part, array $context) {
-        global $tree;
-        $ignore_subtree = array();
-        foreach(explode(',', trim(msConfig::get('ignore_subtree'))) as $root_id)
-        {
-            $ignore_subtree = array_merge($ignore_subtree, $tree->getSubTree($tree->getNodeData($root_id), false));
-        }
+	protected function checkContext($a_part, array $context) {
+		$check_cmd = in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context);
+		$check_cmd_class = in_array(array( $this->ctrl->getCmdClass(), '*' ), $context);
+		if (!$check_cmd AND !$check_cmd_class) {
+			return false;
+		}
+		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
+			return false;
+		}
+		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::get(msConfig::F_ACTIVATE_GROUPS)) {
+			return false;
+		}
+		$ignore_subtree = $this->getIgnoredSubTree();
 
-		return ($a_part == 'sub_tabs'
+		$not_in_subtree = !in_array($_GET['ref_id'], $ignore_subtree);
 
-			AND (in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context) OR in_array(array(
-					$this->ctrl->getCmdClass(),
-					'*'
-				), $context))
-            AND (!in_array($_GET['ref_id'], $ignore_subtree))
-        );
+		//		$grp = (msConfig::get(msConfig::F_ACTIVATE_GROUPS) AND ilObject2::_lookupType($_GET['ref_id'], true) OR !msConfig::get(msConfig::F_ACTIVATE_GROUPS));
+
+		return ($a_part == 'sub_tabs' AND ($check_cmd OR $check_cmd_class) AND ($not_in_subtree));
 	}
 
 
@@ -140,6 +148,25 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );
 			$this->ctrl->redirectByClass($arr);
 		}
+	}
+
+
+	/**
+	 * @return array
+	 */
+	protected function getIgnoredSubTree() {
+		if (!isset(self::$ignored_subtree)) {
+			global $tree;
+
+			foreach (explode(',', trim(msConfig::get('ignore_subtree'))) as $root_id) {
+				if (!$root_id) {
+					continue;
+				}
+				self::$ignored_subtree = array_merge(self::$ignored_subtree, $tree->getSubTree($tree->getNodeData($root_id), false));
+			}
+		}
+
+		return self::$ignored_subtree;
 	}
 }
 

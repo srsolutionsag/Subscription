@@ -39,25 +39,25 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 
 	private function initForm() {
-		$this->setTitle($this->pl->txt('admin_' . 'conf_title'));
-		$this->setDescription($this->pl->txt('admin_' . 'conf_description'));
+		$this->setTitle($this->pl->getDynamicTxt('admin_' . 'conf_title'));
+		$this->setDescription($this->pl->getDynamicTxt('admin_' . 'conf_description'));
 
-		$cb_mail = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_USE_EMAIL), msConfig::F_USE_EMAIL);
+		$cb_mail = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_USE_EMAIL), msConfig::F_USE_EMAIL);
 		{
-			$cb_enable_invitation = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::ENBL_INV), msConfig::ENBL_INV);
+			$cb_enable_invitation = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::ENBL_INV), msConfig::ENBL_INV);
 			{
-				$cb_reg = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_ALLOW_REGISTRATION), msConfig::F_ALLOW_REGISTRATION);
-				$ask_for_login = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_ASK_FOR_LOGIN), msConfig::F_ASK_FOR_LOGIN);
+				$cb_reg = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_ALLOW_REGISTRATION), msConfig::F_ALLOW_REGISTRATION);
+				$ask_for_login = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_ASK_FOR_LOGIN), msConfig::F_ASK_FOR_LOGIN);
 				$cb_reg->addSubItem($ask_for_login);
 
-				$fixed_email = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_FIXED_EMAIL), msConfig::F_FIXED_EMAIL);
+				$fixed_email = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_FIXED_EMAIL), msConfig::F_FIXED_EMAIL);
 				$cb_reg->addSubItem($fixed_email);
 				$cb_enable_invitation->addSubItem($cb_reg);
 				$this->addItem($cb_mail);
 
-				$cb_shib = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_SHIBBOLETH), msConfig::F_SHIBBOLETH);
+				$cb_shib = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_SHIBBOLETH), msConfig::F_SHIBBOLETH);
 				{
-					$metadata_xml = new ilTextInputGUI($this->pl->txt('admin_' . msConfig::F_METADATA_XML), msConfig::F_METADATA_XML);
+					$metadata_xml = new ilTextInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_METADATA_XML), msConfig::F_METADATA_XML);
 					$cb_shib->addSubItem($metadata_xml);
 				}
 
@@ -68,28 +68,28 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 			$cb_mail->addSubItem($cb_enable_invitation);
 
-			$cb_send_mails = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_SEND_MAILS), msConfig::F_SEND_MAILS);
+			$cb_send_mails = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_SEND_MAILS), msConfig::F_SEND_MAILS);
 //			$cb_mail->addSubItem($cb_send_mails);
 
 		}
 
-		$use_matriculation = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
+		$use_matriculation = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
 		$this->addItem($use_matriculation);
 
-		$show_names = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_SHOW_NAMES), msConfig::F_SHOW_NAMES);
+		$show_names = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_SHOW_NAMES), msConfig::F_SHOW_NAMES);
 		$this->addItem($show_names);
 
-        $activate_groups = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_ACTIVATE_GROUPS), msConfig::F_ACTIVATE_GROUPS);
+        $activate_groups = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_ACTIVATE_GROUPS), msConfig::F_ACTIVATE_GROUPS);
         $this->addItem($activate_groups);
 
-		$system_user = new ilTextInputGUI($this->pl->txt('admin_' . msConfig::F_SYSTEM_USER), msConfig::F_SYSTEM_USER);
+		$system_user = new ilTextInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_SYSTEM_USER), msConfig::F_SYSTEM_USER);
 		$this->addItem($system_user);
 
-		$cb_purge = new ilCheckboxInputGUI($this->pl->txt('admin_' . msConfig::F_PURGE), msConfig::F_PURGE);
+		$cb_purge = new ilCheckboxInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_PURGE), msConfig::F_PURGE);
 		$this->addItem($cb_purge);
 
-        $ignore_subtree = new ilTextInputGUI($this->pl->txt('admin_' . msConfig::F_IGNORE_SUBTREE), msConfig::F_IGNORE_SUBTREE);
-        $ignore_subtree->setInfo($this->pl->txt('admin_' . msConfig::F_IGNORE_SUBTREE . '_info'));
+        $ignore_subtree = new ilTextInputGUI($this->pl->getDynamicTxt('admin_' . msConfig::F_IGNORE_SUBTREE), msConfig::F_IGNORE_SUBTREE);
+        $ignore_subtree->setInfo($this->pl->getDynamicTxt('admin_' . msConfig::F_IGNORE_SUBTREE . '_info'));
         $this->addItem($ignore_subtree);
 
 		$this->addCommandButtons();
@@ -130,14 +130,14 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 		foreach ($this->getItems() as $item) {
 			$this->writeValue($item);
 		}
-        ilUtil::sendSuccess($this->pl->txt('admin_save_succeed'), true);
+        ilUtil::sendSuccess($this->pl->getDynamicTxt('admin_save_succeed'), true);
 		return true;
 	}
 
 
 	protected function addCommandButtons() {
-		$this->addCommandButton('save', $this->pl->txt('admin_' . 'form_button_save'));
-		$this->addCommandButton('cancel', $this->pl->txt('admin_' . 'form_button_cancel'));
+		$this->addCommandButton('save', $this->pl->getDynamicTxt('admin_' . 'form_button_save'));
+		$this->addCommandButton('cancel', $this->pl->getDynamicTxt('admin_' . 'form_button_cancel'));
 	}
 
 

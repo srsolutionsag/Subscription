@@ -1,6 +1,7 @@
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 require_once('./Services/Utilities/classes/class.ilConfirmationGUI.php');
+require_once('./Services/Object/classes/class.ilObject2.php');
 
 /**
  * Class subscrTriageGUI
@@ -77,18 +78,18 @@ class subscrTriageGUI {
 	protected function showLoginDecision() {
 		$this->tpl->getStandardTemplate();
 		$this->tpl->setVariable('BASE', msConfig::getPath());
-		$this->tpl->setTitle($this->pl->txt('triage_title'));
+		$this->tpl->setTitle($this->pl->getDynamicTxt('triage_title'));
 
 		$de = new ilConfirmationGUI();
 		$de->setFormAction($this->ctrl->getFormAction($this));
 
-		$str = $this->subscription->getMatchingString()
-			. ', Ziel: ' . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getCrsRefId()));
+		$str = $this->subscription->getMatchingString() . ', Ziel: '
+			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
-		$de->setHeaderText($this->pl->txt('qst_already_account'));
-		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
-		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
+		$de->setHeaderText($this->pl->getDynamicTxt('qst_already_account'));
+		$de->setConfirm($this->pl->getDynamicTxt('main_yes'), 'hasLogin');
+		$de->setCancel($this->pl->getDynamicTxt('main_no'), 'hasNoLogin');
 
 		$this->tpl->setContent($de->getHTML());
 	}
@@ -125,11 +126,10 @@ class subscrTriageGUI {
 		/**
 		 * @var $crs ilObjCourse
 		 */
-		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getCrsRefId());
-		if (! $crs->isRegistrationAccessCodeEnabled()) {
+		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
+		if (!$crs->isRegistrationAccessCodeEnabled()) {
 			$crs->enableRegistrationAccessCode(1);
 			$crs->update();
-			// return $crs;
 		}
 
 		return $crs->getRegistrationAccessCode();
@@ -152,7 +152,9 @@ class subscrTriageGUI {
 	 * @return string
 	 */
 	protected function getLoginLonk() {
-		return msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getCrsRefId() . '_rcode' . $this->getRegistrationCode();
+		return
+			msConfig::getPath() . 'goto.php?target' . $this->subscription->getContextAsString() . '_' . $this->subscription->getObjRefId() . '_rcode'
+			. $this->getRegistrationCode();
 	}
 }
 

@@ -28,8 +28,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		/**
 		 * @var $ilCtrl ilCtrl
 		 */
-//		$_POST['username'] = 'anonymous';
-//		$_POST['password'] = 'anonymous';
+		//		$_POST['username'] = 'anonymous';
+		//		$_POST['password'] = 'anonymous';
 		ilInitialisation::initILIAS();
 		global $ilCtrl;
 
@@ -43,11 +43,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function executeCommand() {
-		global $tpl;
 		$cmd = $this->ctrl->getCmd();
-		//		var_dump($cmd); // FSX
-		//		exit;
-
 		if ($cmd) {
 			$this->$cmd();
 		} else {
@@ -55,20 +51,17 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 			$this->displayForm();
 		}
 
-		//$tpl->show();
-
 		return true;
-
 	}
 
 
 	protected function __initForm($a_force_code = false) {
 		parent::__initForm();
 		/**
-		 * @var $form ilPropertyFormGUI
+		 * @var $form      ilPropertyFormGUI
 		 * @var $usr_email ilTextInputGUI
 		 */
-		$this->form->setFormAction($this->ctrl->getFormActionByClass(array('ilRouterGUI', 'ilTokenRegistrationGUI')));
+		$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' )));
 
 		$username = $this->form->getItemByPostVar('username');
 		$username->setValue($this->subscription->getMatchingString());
@@ -84,12 +77,12 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 				if ($retype) {
 					$usr_email->setRetypeValue($this->subscription->getMatchingString());
 				}
-				if(msConfig::get('fixed_email')) {
-//					$usr_email->setPostVar('usr_email_fixed');
+				if (msConfig::get('fixed_email')) {
+					//					$usr_email->setPostVar('usr_email_fixed');
 					$hidden = new ilHiddenInputGUI('usr_email');
 					$hidden->setValue($this->subscription->getMatchingString());
 					$this->form->addItem($hidden);
-					if($retype) {
+					if ($retype) {
 						$hidden_retype = new ilHiddenInputGUI('usr_email_retype');
 						$hidden_retype->setValue($this->subscription->getMatchingString());
 						$this->form->addItem($hidden_retype);
@@ -104,9 +97,9 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function displayForm() {
-		if (! $this->subscription OR $this->subscription->getDeleted() == 1) {
+		if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
 			$this->tpl->getStandardTemplate();
-			$this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
+			$this->tpl->setContent($this->pl->getDynamicTxt('main_not_invalid_token'));
 		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR
 			$this->subscription->getUserStatus() == msUserStatus::STATUS_ALREADY_ASSIGNED
 		) {
@@ -119,7 +112,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function assignUser() {
-		$obj_id = ilObject::_lookupObjId($this->subscription->getCrsRefId());
+		$obj_id = ilObject::_lookupObjId($this->subscription->getObjRefId());
 		$participants = new ilCourseParticipants($obj_id);
 		$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
 		$this->subscription->setDeleted(true);
@@ -128,23 +121,16 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function redirectToCourse() {
-		header('Location: ' . ilLink::_getStaticLink($this->subscription->getCrsRefId()));
+		header('Location: ' . ilLink::_getStaticLink($this->subscription->getObjRefId()));
 	}
 
 
 	public function saveForm() {
-//		echo '<pre>' . print_r($_POST, 1) . '</pre>';
 		if (parent::saveForm()) {
-			//$this->login();
-
-
-			//$this->form->getInput('');
-
-
-
 			$this->assignUser();
-			$_POST['username'] = 'root';
-			$_POST['password'] = 'Kohifu78';
+			$User = new ilObjUser($this->subscription->user_status_object->getUsrId());
+			$_POST['username'] = $User->getLogin();
+			$_POST['password'] = $User->getPasswd();
 			ilInitialisation::initILIAS();
 			$this->redirectToCourse();
 		}

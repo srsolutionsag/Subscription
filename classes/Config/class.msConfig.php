@@ -25,15 +25,14 @@ class msConfig extends ActiveRecord {
 	const F_USE_EMAIL = 'use_email';
 	const F_SEND_MAILS = 'send_mails';
 	const F_PURGE = 'purge';
-    const F_ACTIVATE_GROUPS = 'activate_groups';
-    const F_IGNORE_SUBTREE = 'ignore_subtree';
+	const F_ACTIVATE_GROUPS = 'activate_groups';
+	const F_IGNORE_SUBTREE = 'ignore_subtree';
 	const TABLE_NAME = 'rep_robj_xmsb_conf';
-
-
 	/**
 	 * @var bool
 	 */
 	protected $ar_safe_read = false;
+
 
 	/**
 	 * @return string
@@ -107,7 +106,7 @@ class msConfig extends ActiveRecord {
 		require_once('./include/inc.ilias_version.php');
 		require_once('./Services/Component/classes/class.ilComponent.php');
 
-		return ! ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999');
+		return !ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999');
 	}
 
 
