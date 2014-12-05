@@ -72,11 +72,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
 		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
 		if ($this->checkContext($a_part, $locations)) {
-
-			$ref_id = $_GET['ref_id'];
-			if (!$this->access->checkAccess('write', '', $ref_id, 'crs') OR !$this->access->checkAccess('write', '', $ref_id, 'grp')) {
-				return;
-			}
 			$pl_obj = ilSubscriptionPlugin::getInstance();
 			$this->tabs->removeSubTab('srsubscription');
 			$this->tabs->setTabActive('members');
@@ -115,6 +110,10 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			return false;
 		}
 		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
+			return false;
+		}
+		$ref_id = $_GET['ref_id'];
+		if (!$this->access->checkAccess('write', '', $ref_id)) {
 			return false;
 		}
 		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::get(msConfig::F_ACTIVATE_GROUPS)) {

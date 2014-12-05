@@ -144,7 +144,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 	/**
 	 * @param string $password
 	 */
-	public function login($password) {
+	public function loginDeprecated($password) {
 		$_POST['username'] = $this->userObj->getLogin();
 		$_POST['password'] = $password;
 		ilInitialisation::initILIAS();
@@ -152,26 +152,5 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function subscribeToAllCourses() {
-	}
-
-
-	/**
-	 * @param $a_email
-	 *
-	 * @return string
-	 */
-	private static function getUsernameByEmail($a_email) {
-		$before_at = explode('@', $a_email);
-		$first_last = explode('.', $before_at[0]);
-		if (count($first_last) != 2) {
-			$name = $before_at[0];
-		} else {
-			$name = substr($first_last[0], 0, 1) . '.' . $first_last[1];
-		}
-		while (strlen($name) < 3) {
-			$name .= chr(rand(48, 57));
-		}
-
-		return $name;
 	}
 }

@@ -58,6 +58,10 @@ class ilDynamicLanguage {
 	 * @var array
 	 */
 	protected static $missing = array();
+	/**
+	 * @var array
+	 */
+	protected static $used = array();
 
 
 	/**
@@ -80,6 +84,16 @@ class ilDynamicLanguage {
 	 * @param int                        $mode
 	 */
 	protected function __construct(ilDynamicLanguageInterface $parent_object, $mode = self::MODE_PROD) {
+		global $tpl;
+		/**
+		 * @var tpl ilTemplate
+		 */
+		$tpl->addJavaScript('//code.jquery.com/ui/1.11.1/jquery-ui.min.js');
+		$tpl->addCss('//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css');
+		$tpl->addJavaScript('//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js');
+//		$tpl->addJavaScript('//malsup.github.com/jquery.form.js');
+//		$tpl->addOnLoadCode('');
+
 		$this->mode = $mode;
 		$this->parent_object = $parent_object;
 		if ($this->parent_object instanceof ilPlugin) {
@@ -87,6 +101,7 @@ class ilDynamicLanguage {
 		}
 		$this->csv_file = $this->parent_object->getCsvPath();
 		if ($this->mode == self::MODE_DEV) {
+			$this->ajax_link = $this->parent_object->getAjaxLink();
 			$this->loadLanguageModule();
 			$this->loadCsv();
 			$this->writeCsv();
@@ -102,6 +117,7 @@ class ilDynamicLanguage {
 	 * @return mixed
 	 */
 	public function txt($key) {
+		self::$used[] = $key;
 		if ($this->mode == self::MODE_PROD) {
 			return $this->parent_object->txt($key);
 		} else {
@@ -150,22 +166,37 @@ class ilDynamicLanguage {
 
 
 	public function __destruct() {
-		if ($this->mode == self::MODE_DEV) {
-
-			$echo = "<script src='http://malsup.github.com/jquery.form.js'></script> ";
-			$echo .= "<div id='dyno_lng' style='z-index: 999999; position: absolute; top:0; right: 0; background-color: #F5F5F5;padding: 20px;'>";
+		if ($this->mode == self::MODE_DEV AND $_GET['cmdMode']!='asynch') {
+			$url = $this->ajax_link;
+			$code = "<script> $(document).ready(function() {";
+			$code .="$.fn.editable.defaults.mode = 'inline';\n\n";
+			$echo = "<div id='dyno_lng' style='z-index: 999999; position: absolute; top:0; right: 0; background-color: #F5F5F5;padding: 20px;'>";
 			$echo .= "<form id='dyno_lng_form'>";
+			$echo .= "<br>Missed:<br>";
 			foreach (self::$missing as $missed) {
 				foreach ($this->languages as $lng) {
-					$echo .= $lng . ": " . $missed . "<br>";
+					$existing = self::$csv_cache[$lng][$missed];
+					if($url) {
+						$code .= "$('#{$lng}_{$missed}').editable();";
+					}
+
+					$echo .="<a href='#' id='{$lng}_{$missed}' data-type='text' data-pk='{$lng}/{$missed}' data-url='{$url}' data-value='{$existing}'>$missed</a><br>";
 				}
 			}
+			$echo .= "<br>Used:<br>";
+			foreach (self::$used as $used) {
+				foreach ($this->languages as $lng) {
+					$existing = self::$csv_cache[$lng][$used];
+					if($url) {
+						$code .= "$('#{$lng}_{$used}').editable();";
+					}
 
-			//			$echo .= "<script>$(document).ready(function() {
-			//            $('#dyno_lng_form').ajaxForm({url: '" . $this->parent_object->getAjaxLink() . "', type: 'post'});}); </script>";
-			//			$echo .= "<input type='submit'>";
+					$echo .="<a href='#' id='{$lng}_{$used}' data-type='text' data-pk='{$lng}/{$used}' data-url='{$url}' data-value='{$existing}'>$used</a><br>";
+				}
+			}
 			$echo .= "</form></div>";
-
+			$code .="});</script>";
+			echo $code;
 			echo $echo;
 		}
 	}

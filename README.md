@@ -12,7 +12,7 @@ You start in your ILIAS root directory
 cd Services  
 git clone https://github.com/studer-raimann/RouterService.git Router  
 ```
-Switch to the setup-Mennu of your Installation and perform a Structure-reload in the Tab Tools. this can take a few moments. After the reload has been performed, you can install the plugin.
+Switch to the setup-Menu of your Installation and perform a Structure-reload in the Tab Tools. this can take a few moments. After the reload has been performed, you can install the plugin.
 ###ActiveRecord
 ILIAS 4.4 does not include ActiveRecord. Therefore please install the latest Version of active record before you install the plugin:
 Start at your ILIAS root directory

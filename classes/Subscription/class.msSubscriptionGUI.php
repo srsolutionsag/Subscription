@@ -28,6 +28,7 @@ class msSubscriptionGUI {
 	const CMD_SUBSCRIBE = 'subscribe';
 	const CMD_INVITE = 'invite';
 	const CMD_REINVITE = 'reinvite';
+	const CMD_LNG = 'updateLanguageKey';
 	const SYSTEM_USER = 6;
 	const EMAIL_FIELD = 'sr_ms_email_list_field';
 	const MATRICULATION_FIELD = 'sr_ms_matriculation_list_field';
@@ -153,6 +154,7 @@ class msSubscriptionGUI {
 			case self::CMD_LIST_OBJECTS:
 			case 'triage':
 			case 'clear':
+			case self::CMD_LNG:
 				if (!$ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->getDynamicTxt('main_no_access'));
 					ilUtil::redirect('index.php');
@@ -371,6 +373,17 @@ class msSubscriptionGUI {
 	 */
 	public function getObj() {
 		return $this->obj;
+	}
+
+
+	public function updateLanguageKey() {
+		global $ilLog;
+		/**
+		 * @var $ilLog ilLog
+		 */
+		$ilLog->write('updateLanguageKey');
+		$ilLog->write(print_r($_POST, true));
+		exit;
 	}
 }
 

@@ -28,7 +28,15 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynami
 	 * @return string
 	 */
 	public function getAjaxLink() {
-		return __FILE__;
+		return false;
+		global $ilCtrl;
+
+		/**
+		 * @var $ilCtrl ilCtrl
+		 */
+		$ilCtrl->saveParameterByClass('msSubscriptionGUI', 'obj_ref_id');
+
+		return $ilCtrl->getLinkTargetByClass(array( 'ilRouterGUI', 'msSubscriptionGUI' ), 'updateLanguageKey', '', true);
 	}
 
 
@@ -38,7 +46,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynami
 	 * @return mixed
 	 */
 	public function getDynamicTxt($key) {
-		return ilDynamicLanguage::getInstance($this, ilDynamicLanguage::MODE_DEV)->txt($key);
+		return ilDynamicLanguage::getInstance($this, ilDynamicLanguage::MODE_PROD)->txt($key);
 	}
 
 
