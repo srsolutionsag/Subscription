@@ -3,6 +3,7 @@
 //ini_set('display_errors', 'stdout');
 require_once('./Services/Registration/classes/class.ilAccountRegistrationGUI.php');
 require_once('./Modules/Course/classes/class.ilCourseParticipants.php');
+require_once('./Modules/Group/classes/class.ilGroupParticipants.php');
 @include_once('./classes/class.ilLink.php');
 @include_once('./Services/Link/classes/class.ilLink.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
@@ -28,8 +29,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		/**
 		 * @var $ilCtrl ilCtrl
 		 */
-		//		$_POST['username'] = 'anonymous';
-		//		$_POST['password'] = 'anonymous';
 		ilInitialisation::initILIAS();
 		global $ilCtrl;
 
@@ -113,8 +112,17 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 	public function assignUser() {
 		$obj_id = ilObject::_lookupObjId($this->subscription->getObjRefId());
-		$participants = new ilCourseParticipants($obj_id);
-		$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
+		switch ($this->subscription->getContext()) {
+			case msSubscription::CONTEXT_CRS:
+				$participants = new ilCourseParticipants($obj_id);
+				$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
+				break;
+			case msSubscription::CONTEXT_GRP:
+				$participants = new ilGroupParticipants($obj_id);
+				$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
+				break;
+		}
+
 		$this->subscription->setDeleted(true);
 		$this->subscription->update();
 	}
@@ -128,12 +136,18 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 	public function saveForm() {
 		if (parent::saveForm()) {
 			$this->assignUser();
-			$User = new ilObjUser($this->subscription->user_status_object->getUsrId());
-			$_POST['username'] = $User->getLogin();
-			$_POST['password'] = $User->getPasswd();
-			ilInitialisation::initILIAS();
 			$this->redirectToCourse();
 		}
+	}
+
+
+	/**
+	 * @param string $password
+	 */
+	public function login($password) {
+		$_POST['username'] = $this->userObj->getLogin();
+		$_POST['password'] = $password;
+		ilInitialisation::initILIAS();
 	}
 
 
