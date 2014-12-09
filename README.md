@@ -2,7 +2,7 @@ Subscription
 ============
 This UIHook-Plugin allows you to subscribe multiple users to a course at once, by writing the names into a list. You can also type in e-mail addresses, to which the plugin will send an invitation and a formular to create an ilias account. 
 
-Have a look at the [full documentation](/blob/master/doc/Documentation.pdf?raw=true)
+Have a look at the [full documentation](/doc/Documentation.pdf?raw=true)
 
 ##Installation
 ###Router
