@@ -155,7 +155,14 @@ class ilDynamicLanguage {
 			foreach ($this->languages as $i => $lng) {
 				$txt = $data[$i + 2];
 				if ($txt) {
-					$key = implode('_', array( $part, $var ));
+					if ($part AND $var) {
+						$key = implode('_', array( $part, $var ));
+					} elseif ($part AND !$var) {
+						$key = $part;
+					} elseif (!$part AND $var) {
+						$key = $var;
+					}
+
 					self::$csv_cache[$lng][$key] = $txt;
 					$this->csv_keys[$key] = array( self::K_PART => $part, self::K_VAR => $var );
 				}
