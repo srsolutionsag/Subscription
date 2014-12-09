@@ -26,7 +26,9 @@ class msConfig extends ActiveRecord {
 	const F_SEND_MAILS = 'send_mails';
 	const F_PURGE = 'purge';
 	const F_ACTIVATE_GROUPS = 'activate_groups';
+	const F_ACTIVATE_COURSES = 'activate_courses';
 	const F_IGNORE_SUBTREE = 'ignore_subtree';
+	const F_IGNORE_SUBTREE_ACTIVE = 'activate_ignore_subtree';
 	const TABLE_NAME = 'rep_robj_xmsb_conf';
 	/**
 	 * @var bool
@@ -41,6 +43,31 @@ class msConfig extends ActiveRecord {
 	static function returnDbTableName() {
 		return self::TABLE_NAME;
 	}
+
+
+	/**
+	 * @var array
+	 */
+	protected static $ignore_chache = array();
+	/**
+	 * @var string
+	 *
+	 * @db_has_field        true
+	 * @db_is_unique        true
+	 * @db_is_primary       true
+	 * @db_is_notnull       true
+	 * @db_fieldtype        text
+	 * @db_length           250
+	 */
+	protected $config_key;
+	/**
+	 * @var string
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        text
+	 * @db_length           1000
+	 */
+	protected $config_value;
 
 
 	/**
@@ -68,27 +95,6 @@ class msConfig extends ActiveRecord {
 			$obj->create();
 		}
 	}
-
-
-	/**
-	 * @var string
-	 *
-	 * @db_has_field        true
-	 * @db_is_unique        true
-	 * @db_is_primary       true
-	 * @db_is_notnull       true
-	 * @db_fieldtype        text
-	 * @db_length           250
-	 */
-	protected $config_key;
-	/**
-	 * @var string
-	 *
-	 * @db_has_field        true
-	 * @db_fieldtype        text
-	 * @db_length           1000
-	 */
-	protected $config_value;
 
 
 	/**
@@ -134,6 +140,46 @@ class msConfig extends ActiveRecord {
 		}
 
 		return $usage_type;
+	}
+
+
+	/**
+	 * @param $check_ref_id
+	 *
+	 * @return bool
+	 */
+	public static function isInIgnoredSubtree($check_ref_id) {
+		if (!self::get(self::F_IGNORE_SUBTREE_ACTIVE)) {
+			return false;
+		}
+		if (isset(self::$ignore_chache[$check_ref_id])) {
+			return self::$ignore_chache[$check_ref_id];
+		}
+
+		global $tree;
+		/**
+		 * @var $tree ilTree
+		 */
+		$subtrees = explode(',', self::get(self::F_IGNORE_SUBTREE));
+		if (!is_array($subtrees) OR count($subtrees) == 0) {
+			self::$ignore_chache[$check_ref_id] = false;
+
+			return false;
+		}
+
+		$return = false;
+		foreach ($subtrees as $ref_id) {
+			if (!$ref_id) {
+				continue;
+			}
+			if ($tree->isGrandChild($ref_id, $check_ref_id)) {
+				$return = true;
+			}
+		}
+
+		self::$ignore_chache[$check_ref_id] = $return;
+
+		return self::$ignore_chache[$check_ref_id];
 	}
 
 

@@ -1,4 +1,5 @@
 <!-- language file start -->
+admin_activate_courses#:#Für Kurse aktivieren
 admin_activate_groups#:#Für Gruppen aktivieren
 admin_allow_registration#:#Kontoregistrierung erlauben
 admin_ask_for_login#:#Nach vorhandenem Login fragen
@@ -9,7 +10,9 @@ admin_enable_invitation#:#Einladungen verschicken
 admin_fixed_email#:#E-Mailadresse in Registrierung kann nicht geändert werden
 admin_form_button_cancel#:#Abbrechen
 admin_form_button_save#:#Speichern
-admin_ignore_subtree#:#Ignorieren Subtrees
+admin_header_general#:#Verschiedenes
+admin_header_input#:#Einschreibearten
+admin_ignore_subtree#:#IDs von Magazin-Objekten
 admin_ignore_subtree_info#:#Kommaseparierte Ref-IDS der Magazin-Nodes
 admin_metadata_xml#:#Pfad zur Metadata-XML
 admin_purge#:#Nicht eingeschrieben/eingeladene Datensätze löschen
@@ -68,7 +71,10 @@ main_user_status_6#:#Kann nicht eingeschrieben werden
 main_yes#:#Ja
 msg_lang_files_reloaded#:#Sprachdateien wurden neu geschrieben
 qst_already_account#:#Haben Sie bereits einen Account in ILIAS?
+subscription_type_1#:#E-Mail
+subscription_type_2#:#Matrikelnummer
 tab_usage_1#:#Mitglied(er) per E-Mail einladen
 tab_usage_2#:#Mitglied(er) per Matrikelnummernliste hinzufügen
 tab_usage_3#:#Mitglied(er) per E-Mail oder Matrikelnummer hinzufügen
 triage_title#:#Einladung zu ILIAS-Kurs
+admin_activate_ignore_subtree#:#Ignoriere Unterobjekte

@@ -171,3 +171,9 @@ global $ilDB;
 msSubscription::updateDB();
 $ilDB->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
 ?>
+<#14>
+<?php
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
+msConfig::set(msConfig::F_ACTIVATE_COURSES, true);
+msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
+?>

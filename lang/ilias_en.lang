@@ -1,4 +1,5 @@
 <!-- language file start -->
+admin_activate_courses#:#Activate for Courses
 admin_activate_groups#:#Activate for Groups
 admin_allow_registration#:#Allow registration
 admin_ask_for_login#:#Aks for exstisting Login
@@ -9,7 +10,9 @@ admin_enable_invitation#:#Send invitations
 admin_fixed_email#:#User can't change E-Mail in registration
 admin_form_button_cancel#:#Cancel
 admin_form_button_save#:#Save
-admin_ignore_subtree#:#Ignore Subtrees
+admin_header_general#:#Miscellaneous
+admin_header_input#:#Input-Types
+admin_ignore_subtree#:#IDs of Repository Objects
 admin_ignore_subtree_info#:#Comma-separated nodes
 admin_metadata_xml#:#Path to Metadata-XML
 admin_purge#:#Purge unused entries
@@ -68,7 +71,10 @@ main_user_status_6#:#Can't be assigned
 main_yes#:#Yes
 msg_lang_files_reloaded#:#Languagefiles rewritten
 qst_already_account#:#Do you have already an ILIAS-Account?
+subscription_type_1#:#E-Mail
+subscription_type_2#:#Mactriculation
 tab_usage_1#:#Subscription with E-Mail list
 tab_usage_2#:#Subscription with matriculation list
 tab_usage_3#:#Subscription with Mail or Matriculation
 triage_title#:#Invitation to ILIAS-Course
+admin_activate_ignore_subtree#:#Ignore Sub-Objects
