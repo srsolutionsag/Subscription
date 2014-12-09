@@ -155,7 +155,14 @@ class ilDynamicLanguage {
 			foreach ($this->languages as $i => $lng) {
 				$txt = $data[$i + 2];
 				if ($txt) {
-					$key = implode('_', array( $part, $var ));
+					if ($part AND $var) {
+						$key = implode('_', array( $part, $var ));
+					} elseif ($part AND !$var) {
+						$key = $part;
+					} elseif (!$part AND $var) {
+						$key = $var;
+					}
+
 					self::$csv_cache[$lng][$key] = $txt;
 					$this->csv_keys[$key] = array( self::K_PART => $part, self::K_VAR => $var );
 				}
@@ -173,25 +180,25 @@ class ilDynamicLanguage {
 			$echo = "<div id='dyno_lng' style='z-index: 999999; position: absolute; top:0; right: 0; background-color: #F5F5F5;padding: 20px;'>";
 			$echo .= "<form id='dyno_lng_form'>";
 			$echo .= "<br>Missed:<br>";
-			foreach (self::$missing as $missed) {
+			foreach (self::$missing as $key) {
 				foreach ($this->languages as $lng) {
-					$existing = self::$csv_cache[$lng][$missed];
+					$existing = self::$csv_cache[$lng][$key];
 					if($url) {
-						$code .= "$('#{$lng}_{$missed}').editable();";
+						$code .= "$('#{$lng}_{$key}').editable();";
 					}
 
-					$echo .="<a href='#' id='{$lng}_{$missed}' data-type='text' data-pk='{$lng}/{$missed}' data-url='{$url}' data-value='{$existing}'>$missed</a><br>";
+					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
 				}
 			}
 			$echo .= "<br>Used:<br>";
-			foreach (self::$used as $used) {
+			foreach (self::$used as $key) {
 				foreach ($this->languages as $lng) {
-					$existing = self::$csv_cache[$lng][$used];
+					$existing = self::$csv_cache[$lng][$key];
 					if($url) {
-						$code .= "$('#{$lng}_{$used}').editable();";
+						$code .= "$('#{$lng}_{$key}').editable();";
 					}
 
-					$echo .="<a href='#' id='{$lng}_{$used}' data-type='text' data-pk='{$lng}/{$used}' data-url='{$url}' data-value='{$existing}'>$used</a><br>";
+					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
 				}
 			}
 			$echo .= "</form></div>";

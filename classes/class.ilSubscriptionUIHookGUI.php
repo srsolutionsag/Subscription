@@ -104,6 +104,10 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 * @return bool
 	 */
 	protected function checkContext($a_part, array $context) {
+		if ($a_part != 'sub_tabs') {
+			return false;
+		}
+
 		$check_cmd = in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context);
 		$check_cmd_class = in_array(array( $this->ctrl->getCmdClass(), '*' ), $context);
 		if (!$check_cmd AND !$check_cmd_class) {
@@ -112,20 +116,21 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
 			return false;
 		}
+
 		$ref_id = $_GET['ref_id'];
 		if (!$this->access->checkAccess('write', '', $ref_id)) {
 			return false;
 		}
+
 		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::get(msConfig::F_ACTIVATE_GROUPS)) {
 			return false;
 		}
-		$ignore_subtree = $this->getIgnoredSubTree();
 
-		$not_in_subtree = !in_array($_GET['ref_id'], $ignore_subtree);
+		if (msConfig::isInIgnoredSubtree($_GET['ref_id'])) {
+			return false;
+		}
 
-		//		$grp = (msConfig::get(msConfig::F_ACTIVATE_GROUPS) AND ilObject2::_lookupType($_GET['ref_id'], true) OR !msConfig::get(msConfig::F_ACTIVATE_GROUPS));
-
-		return ($a_part == 'sub_tabs' AND ($check_cmd OR $check_cmd_class) AND ($not_in_subtree));
+		return true;
 	}
 
 
