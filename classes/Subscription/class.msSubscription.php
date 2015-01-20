@@ -2,6 +2,7 @@
 require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
+require_once('./Modules/Group/classes/class.ilGroupMembershipMailNotification.php');
 
 /**
  * msSubscription
@@ -88,7 +89,34 @@ class msSubscription extends ActiveRecord {
 	}
 
 
+	public function assignToObject() {
+		/**
+		 * @var $participants ilCourseParticipants
+		 */
+		$obj_id = ilObject::_lookupObjId($this->getObjRefId());
 
+		switch ($this->getContext()) {
+			case self::CONTEXT_CRS:
+				$participants = new ilCourseParticipants($obj_id);
+				break;
+			case self::CONTEXT_GRP:
+				$participants = new ilGroupParticipants($obj_id);
+				break;
+		}
+		$usr_id = $this->user_status_object->getUsrId();
+		$status = $participants->add($usr_id, $this->getRole());
+		if ($status AND msConfig::get(msConfig::F_SEND_MAILS)) {
+			switch ($this->getContext()) {
+				case self::CONTEXT_CRS:
+					$participants->sendNotification($participants->NOTIFY_ACCEPT_USER, $usr_id);
+					break;
+				case self::CONTEXT_GRP:
+					$participants->sendNotification(ilGroupMembershipMailNotification::TYPE_ADMISSION_MEMBER, $usr_id);
+					break;
+			}
+		}
+		$this->setDeleted(true);
+	}
 
 
 	//
@@ -130,8 +158,7 @@ class msSubscription extends ActiveRecord {
 	 * @param     $obj_ref_id
 	 * @param     $input
 	 * @param int $type
-	 *
-	 * @internal param $mail
+	 * @param     $context
 	 */
 	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(

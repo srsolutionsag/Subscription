@@ -85,10 +85,6 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 			}
 
 			$cb_mail->addSubItem($cb_enable_invitation);
-
-			$cb_send_mails = new ilCheckboxInputGUI($this->txt(msConfig::F_SEND_MAILS), msConfig::F_SEND_MAILS);
-			//						$cb_mail->addSubItem($cb_send_mails);
-
 		}
 
 		$use_matriculation = new ilCheckboxInputGUI($this->txt(msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
@@ -114,6 +110,9 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 			$activate_ignore_subtree->addSubItem($ignore_subtree);
 		}
 		$this->addItem($activate_ignore_subtree);
+
+		$cb_send_mails = new ilCheckboxInputGUI($this->txt(msConfig::F_SEND_MAILS), msConfig::F_SEND_MAILS);
+		$this->addItem($cb_send_mails);
 
 		$this->addCommandButtons();
 	}

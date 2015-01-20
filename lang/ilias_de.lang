@@ -1,6 +1,7 @@
 <!-- language file start -->
 admin_activate_courses#:#Für Kurse aktivieren
 admin_activate_groups#:#Für Gruppen aktivieren
+admin_activate_ignore_subtree#:#Ignoriere Unterobjekte
 admin_allow_registration#:#Kontoregistrierung erlauben
 admin_ask_for_login#:#Nach vorhandenem Login fragen
 admin_conf_description#:#MassSubscription-Plugin Einstellungen
@@ -18,7 +19,7 @@ admin_metadata_xml#:#Pfad zur Metadata-XML
 admin_purge#:#Nicht eingeschrieben/eingeladene Datensätze löschen
 admin_save_succeed#:#Einstellungen gespeichert
 admin_send_mails#:#Einschreibe-Mails versenden
-admin_shibboleth#:#SwitchAAI
+admin_shibboleth#:#Shibboleth Unterstützung
 admin_show_names#:#Namen bestehender User anzeigen
 admin_system_user#:#Systembenutzer
 admin_use_email#:#E-Mail für Zuordnung verwenden
@@ -35,7 +36,7 @@ main_form_info_usage_3#:#Fügen Sie hier eine Liste von Matrikelnummern oder E-M
 main_form_title_usage_1#:#Mitglied(er) per E-Mail einladen
 main_form_title_usage_2#:#Mitglied(er) per Matrikelnummernliste hinzufügen
 main_form_title_usage_3#:#Mitglied(er) per E-Mail oder Matrikelnummer hinzufügen
-main_msg_emails_sent#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugef�gt.
+main_msg_emails_sent#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
 main_msg_triage_finished#:#Die gewünschten Aktionen wurden ausgeführt
 main_no#:#Nein
 main_not_invalid_token#:#Der angegebene Link ist entweder ungültig oder wurde bereits für eine Registrierung benutzt.
@@ -50,7 +51,7 @@ main_role_5#:#Mitglied
 main_send_form#:#Benutzer auflisten
 main_send_table_clear#:#Aufräumen
 main_send_table_usage_1#:#Einschreiben
-main_send_table_usage_2#:#Einschrieben und einladen
+main_send_table_usage_2#:#Einschreiben und einladen
 main_tblh_email#:#E-Mailadresse
 main_tblh_in_ilias#:#Existiert in ILIAS
 main_tblh_invite#:#Per E-mail einladen
@@ -61,7 +62,7 @@ main_tblh_status#:#Status
 main_tblh_subscribe#:#In den Kurs einschreiben
 main_tblh_subscription_type#:#Typ
 main_tblt_subscriptions#:#Benutzer einschreiben
-main_user_exists#:#Ein Benutzer mit Ihrer E-Mailadresse wurde bereits erstellt, dieser Benutzer wurde in den gewünschten Kurs eingeschrieben. Loggen Sie sich in ILIAS ein. um auf den Workspace zuzugreifen
+main_user_exists#:#Ein Benutzer mit Ihrer E-Mailadresse wurde bereits erstellt, dieser Benutzer wurde in den gewünschten Kurs eingeschrieben. Loggen Sie sich in ILIAS ein. um auf den Kurs zuzugreifen
 main_user_status_1#:#Bereits im Kurs
 main_user_status_2#:#Kann eingeschrieben werden
 main_user_status_3#:#Bereits eingeladen
@@ -77,4 +78,3 @@ tab_usage_1#:#Mitglied(er) per E-Mail einladen
 tab_usage_2#:#Mitglied(er) per Matrikelnummernliste hinzufügen
 tab_usage_3#:#Mitglied(er) per E-Mail oder Matrikelnummer hinzufügen
 triage_title#:#Einladung zu ILIAS-Kurs
-admin_activate_ignore_subtree#:#Ignoriere Unterobjekte

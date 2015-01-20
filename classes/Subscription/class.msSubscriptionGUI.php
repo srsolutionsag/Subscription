@@ -234,15 +234,12 @@ class msSubscriptionGUI {
 
 
 	public function triage() {
-		//		echo '<pre>' . print_r($_POST, 1) . '</pre>';
 		foreach ($_POST as $k => $v) {
 			if (preg_match("/obj_([0-9]*)/um", $k, $m)) {
 				/**
 				 * @var $obj msSubscription
 				 */
-
 				$obj = msSubscription::find($m[1]);
-				//				echo '<pre>' . print_r($obj, 1) . '</pre>';
 				$obj->setRole($v['role']);
 				switch ($v['cmd']) {
 					case self::CMD_DELETE:
@@ -258,8 +255,7 @@ class msSubscriptionGUI {
 						$obj->setInvitationsSent(true);
 						break;
 					case self::CMD_SUBSCRIBE:
-						$this->assignToObject($obj);
-						$obj->setDeleted(true);
+						$obj->assignToObject();
 						break;
 				}
 				$obj->update();
@@ -272,7 +268,6 @@ class msSubscriptionGUI {
 		}
 		$this->listObjects();
 		$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
-		//		ilUtil::redirect($this->getCourseLink());
 	}
 
 
@@ -280,19 +275,7 @@ class msSubscriptionGUI {
 	 * @return string
 	 */
 	public function getCourseLink() {
-		/*if (ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999')) {
-			$this->ctrl->initBaseClass('ilRepositoryGUI');
-			$this->ctrl->setParameterByClass('ilObjCourseGUI', 'ref_id', $this->crs->getRefId());
-			$link = $this->ctrl->getLinkTargetByClass(array( 'ilRepositoryGUI', 'ilObjCourseGUI' ), 'members');
-			$this->ctrl->initBaseClass('ilRouterGUI');
-		} else {
-			$this->ctrl->setTargetScript('repository.php');
-			$this->ctrl->initBaseClass('ilRepositoryGUI');
-			$this->ctrl->setParameterByClass('ilObjCourseGUI', 'ref_id', $this->crs->getRefId());
-			$link = $this->ctrl->getLinkTargetByClass(array( 'ilRepositoryGUI', 'ilObjCourseGUI' ), 'members');
-			$this->ctrl->initBaseClass('ilRouterGUI');
-			$this->ctrl->setTargetScript('ilias.php');
-		}*/
+
 		$link = ilLink::_getLink($this->obj->getRefId()) . '&cmd=members';
 
 		return $link;
@@ -313,7 +296,7 @@ class msSubscriptionGUI {
 		} else {
 			$mail = new ilMail(self::SYSTEM_USER);
 		}
-		//		echo '<pre>' . print_r($mail, 1) . '</pre>';
+
 		$sf = array(
 			'obj_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getObjRefId())),
 			'role' => $this->pl->getDynamicTxt('main_role_' . $msSubscription->getRole()),
@@ -323,30 +306,11 @@ class msSubscriptionGUI {
 			'email' => $ilUser->getEmail(),
 		);
 
-		//'link' => ILIAS_HTTP_PATH . '/Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/triage.php?token='
-		//. $msSubscription->getToken(),
 
 		$mail_body = vsprintf($this->pl->getDynamicTxt('main_notification_body'), $sf);
 		$mail_body = preg_replace("/\\\\n/um", "\n", $mail_body);
 		$subject = $reinvite ? $this->pl->getDynamicTxt('main_notification_subject_reinvite') : $this->pl->getDynamicTxt('main_notification_subject');
 		$mail->sendMail($msSubscription->getMatchingString(), '', '', $subject, $mail_body, false, array( 'normal' ));
-	}
-
-
-	/**
-	 * @param msSubscription $msSubscription
-	 */
-	public function assignToObject(msSubscription $msSubscription) {
-		$obj_id = ilObject::_lookupObjId($msSubscription->getObjRefId());
-		switch (ilObject::_lookupType($obj_id)) {
-			case 'crs':
-				$participants = new ilCourseParticipants($obj_id);
-				break;
-			case 'grp':
-				$participants = new ilGroupParticipants($obj_id);
-				break;
-		}
-		$participants->add($msSubscription->user_status_object->getUsrId(), $msSubscription->getRole());
 	}
 
 

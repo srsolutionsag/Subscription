@@ -111,6 +111,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		$check_cmd = in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context);
 		$check_cmd_class = in_array(array( $this->ctrl->getCmdClass(), '*' ), $context);
 		if (!$check_cmd AND !$check_cmd_class) {
+
 			return false;
 		}
 		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
