@@ -11,6 +11,7 @@ require_once('./Services/Component/classes/class.ilComponent.php');
 @include_once('./Services/Link/classes/class.ilLink.php');
 require_once('./Services/Mail/classes/class.ilMail.php');
 require_once('./Services/Object/classes/class.ilObject2.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
 
 /**
  * GUI-Class msSubscriptionGUI
@@ -91,6 +92,10 @@ class msSubscriptionGUI {
 	 * @return bool
 	 */
 	public function executeCommand() {
+		if (!$this->pl->isActive()) {
+			ilUtil::sendFailure('Active Plugin first', true);
+			ilUtil::redirect('index.php');
+		}
 		$this->initHeader();
 		$this->ctrl->saveParameter($this, 'obj_ref_id');
 		$this->ctrl->setContext($this->obj->getId(), $this->obj->getType());
@@ -262,7 +267,7 @@ class msSubscriptionGUI {
 			}
 		}
 		if (msConfig::get(msConfig::ENBL_INV)) {
-			ilUtil::sendInfo($this->pl->getDynamicTxt('main_msg_emails_sent'), true);
+			ilUtil::sendInfo($this->pl->getDynamicTxt('main_msg_emails_sent_usage_' . msConfig::getUsageType()), true);
 		} else {
 			ilUtil::sendInfo($this->pl->getDynamicTxt('main_msg_triage_finished'), true);
 		}
@@ -305,7 +310,6 @@ class msSubscriptionGUI {
 			'username' => $ilUser->getFullname(),
 			'email' => $ilUser->getEmail(),
 		);
-
 
 		$mail_body = vsprintf($this->pl->getDynamicTxt('main_notification_body'), $sf);
 		$mail_body = preg_replace("/\\\\n/um", "\n", $mail_body);

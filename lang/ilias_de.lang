@@ -30,13 +30,15 @@ main_field_emails_info#:#Komma-separiert, mit neuer Zeile, Semikolon oder Leersc
 main_field_emails_title#:#E-Mailadressen
 main_field_matriculation_info#:#Komma-separiert, mit neuer Zeile, Semikolon oder Leerschlag
 main_field_matriculation_title#:#Matrikelnummern
-main_form_info_usage_1#:#Fügen Sie hier eine Liste von E-Mailadressen ein, die Sie in Ihrem Kurs hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. Personen, welche noch keinen Account in ILIAS haben, können per E-Mail eingeladen werden.
-main_form_info_usage_2#:#Fügen Sie hier eine Liste von Matrikelnummern ein, die Sie in Ihrem Kurs hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
-main_form_info_usage_3#:#Fügen Sie hier eine Liste von Matrikelnummern oder E-Mailadressen ein, die Sie in Ihrem Kurs hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
+main_form_info_usage_1#:#Fügen Sie hier eine Liste von E-Mailadressen ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. Personen, welche noch keinen Account in ILIAS haben, können per E-Mail eingeladen werden.
+main_form_info_usage_2#:#Fügen Sie hier eine Liste von Matrikelnummern ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
+main_form_info_usage_3#:#Fügen Sie hier eine Liste von Matrikelnummern oder E-Mailadressen ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
 main_form_title_usage_1#:#Mitglied(er) per E-Mail einladen
 main_form_title_usage_2#:#Mitglied(er) per Matrikelnummernliste hinzufügen
 main_form_title_usage_3#:#Mitglied(er) per E-Mail oder Matrikelnummer hinzufügen
-main_msg_emails_sent#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
+main_msg_emails_sent_usage_1#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
+main_msg_emails_sent_usage_2#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben.
+main_msg_emails_sent_usage_3#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
 main_msg_triage_finished#:#Die gewünschten Aktionen wurden ausgeführt
 main_no#:#Nein
 main_not_invalid_token#:#Der angegebene Link ist entweder ungültig oder wurde bereits für eine Registrierung benutzt.
@@ -59,7 +61,7 @@ main_tblh_matriculation#:#Matrikelnummer
 main_tblh_name#:#Name
 main_tblh_role#:#Rolle
 main_tblh_status#:#Status
-main_tblh_subscribe#:#In den Kurs einschreiben
+main_tblh_subscribe#:#Einschreiben
 main_tblh_subscription_type#:#Typ
 main_tblt_subscriptions#:#Benutzer einschreiben
 main_user_exists#:#Ein Benutzer mit Ihrer E-Mailadresse wurde bereits erstellt, dieser Benutzer wurde in den gewünschten Kurs eingeschrieben. Loggen Sie sich in ILIAS ein. um auf den Kurs zuzugreifen
