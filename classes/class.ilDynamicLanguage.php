@@ -68,7 +68,7 @@ class ilDynamicLanguage {
 	 * @param ilDynamicLanguageInterface $parent_object
 	 * @param int                        $mode
 	 *
-	 * @return mixed
+	 * @return ilDynamicLanguage
 	 */
 	public static function getInstance(ilDynamicLanguageInterface $parent_object, $mode = self::MODE_PROD) {
 		if (!isset(self::$instance[$mode])) {
@@ -119,7 +119,7 @@ class ilDynamicLanguage {
 	public function txt($key) {
 		self::$used[] = $key;
 		if ($this->mode == self::MODE_PROD) {
-			return $this->parent_object->txt($key);
+			return $this->parent_object->txt($key, true);
 		} else {
 			global $ilUser;
 			/**
@@ -190,17 +190,17 @@ class ilDynamicLanguage {
 					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
 				}
 			}
-			$echo .= "<br>Used:<br>";
-			foreach (self::$used as $key) {
-				foreach ($this->languages as $lng) {
-					$existing = self::$csv_cache[$lng][$key];
-					if($url) {
-						$code .= "$('#{$lng}_{$key}').editable();";
-					}
-
-					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
-				}
-			}
+//			$echo .= "<br>Used:<br>";
+//			foreach (self::$used as $key) {
+//				foreach ($this->languages as $lng) {
+//					$existing = self::$csv_cache[$lng][$key];
+//					if($url) {
+//						$code .= "$('#{$lng}_{$key}').editable();";
+//					}
+//
+//					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
+//				}
+//			}
 			$echo .= "</form></div>";
 			$code .="});</script>";
 			echo $code;

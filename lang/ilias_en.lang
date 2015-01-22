@@ -1,6 +1,7 @@
 <!-- language file start -->
 admin_activate_courses#:#Activate for Courses
 admin_activate_groups#:#Activate for Groups
+admin_activate_ignore_subtree#:#Ignore Sub-Objects
 admin_allow_registration#:#Allow registration
 admin_ask_for_login#:#Aks for exstisting Login
 admin_conf_description#:#MassSubscription-Plugin Settings
@@ -18,7 +19,7 @@ admin_metadata_xml#:#Path to Metadata-XML
 admin_purge#:#Purge unused entries
 admin_save_succeed#:#Saved
 admin_send_mails#:#Send Registration-Mails
-admin_shibboleth#:#SwitchAAI
+admin_shibboleth#:#Shibboleth support
 admin_show_names#:#Show names of existing Users
 admin_system_user#:#Systemuser
 admin_use_email#:#Use E-Mailfield
@@ -29,13 +30,15 @@ main_field_emails_info#:#Seperated List of E-Mailadresses (Comma, Semicolon, ...
 main_field_emails_title#:#E-Mails
 main_field_matriculation_info#:#Seperated List of Matriculations (Comma, Semicolon, ...)
 main_field_matriculation_title#:#Matriculations
-main_form_info_usage_1#:#Insert a list of E-Mailadresses, which you'd like to assign to your course Existing users can be assigned, nonexisting can be invited.
-main_form_info_usage_2#:#Insert a list of matriculations, which you'd like to assign to your course. Existing users can be assigned.
-main_form_info_usage_3#:#Insert a list of matriculations or e-mails, which you'd like to assign to your course. Existing users can be assigned.
+main_form_info_usage_1#:#Insert a list of E-Mailadresses, which you'd like to assign as a member. Existing users can be assigned, nonexisting can be invited.
+main_form_info_usage_2#:#Insert a list of matriculations, which you'd like to assign as a member. Existing users can be assigned.
+main_form_info_usage_3#:#Insert a list of matriculations or e-mails, which you'd like to assign as a member. Existing users can be assigned.
 main_form_title_usage_1#:#Subscription with E-Mail list
 main_form_title_usage_2#:#Subscription with matriculation list
 main_form_title_usage_3#:#Subscription with Mail or Matriculation
-main_msg_emails_sent#:#Vorhandene ILIAS Mitglieder wurden eingeschrieben, an die anderen wurde ein Einladungsmail verschickt. Benutzer, die sich durch den Link in dem Mail registrieren werden automatisch zum Kurs hinzugefügt.
+main_msg_emails_sent_usage_1#:#Existing ILIAS-Users have been assigned, non-existing will receive a subscription-link.
+main_msg_emails_sent_usage_2#:#Existing ILIAS-Users have been assigned.
+main_msg_emails_sent_usage_3#:#Existing ILIAS-Users have been assigned, non-existing will receive a subscription-link.
 main_msg_triage_finished#:#The users have been assigned
 main_no#:#No
 main_not_invalid_token#:#The Link has arleady been used. Please log in to ILIAS
@@ -58,7 +61,7 @@ main_tblh_matriculation#:#Matriculation
 main_tblh_name#:#Name
 main_tblh_role#:#Role
 main_tblh_status#:#Status
-main_tblh_subscribe#:#Subscribe to Course
+main_tblh_subscribe#:#Subscribe
 main_tblh_subscription_type#:#Type
 main_tblt_subscriptions#:#Subscribe Users
 main_user_exists#:#A user with your E-Mail already exists. Please log in to ILIAS to acces the course
@@ -77,4 +80,3 @@ tab_usage_1#:#Subscription with E-Mail list
 tab_usage_2#:#Subscription with matriculation list
 tab_usage_3#:#Subscription with Mail or Matriculation
 triage_title#:#Invitation to ILIAS-Course
-admin_activate_ignore_subtree#:#Ignore Sub-Objects
