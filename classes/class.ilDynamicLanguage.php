@@ -190,17 +190,17 @@ class ilDynamicLanguage {
 					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
 				}
 			}
-			$echo .= "<br>Used:<br>";
-			foreach (self::$used as $key) {
-				foreach ($this->languages as $lng) {
-					$existing = self::$csv_cache[$lng][$key];
-					if($url) {
-						$code .= "$('#{$lng}_{$key}').editable();";
-					}
-
-					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
-				}
-			}
+//			$echo .= "<br>Used:<br>";
+//			foreach (self::$used as $key) {
+//				foreach ($this->languages as $lng) {
+//					$existing = self::$csv_cache[$lng][$key];
+//					if($url) {
+//						$code .= "$('#{$lng}_{$key}').editable();";
+//					}
+//
+//					$echo .="{$lng}: <a href='#' id='{$lng}_{$key}' data-type='text' data-pk='{$lng}/{$key}' data-url='{$url}' data-value='{$existing}'>$key</a><br>";
+//				}
+//			}
 			$echo .= "</form></div>";
 			$code .="});</script>";
 			echo $code;
