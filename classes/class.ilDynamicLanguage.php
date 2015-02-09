@@ -68,7 +68,7 @@ class ilDynamicLanguage {
 	 * @param ilDynamicLanguageInterface $parent_object
 	 * @param int                        $mode
 	 *
-	 * @return mixed
+	 * @return ilDynamicLanguage
 	 */
 	public static function getInstance(ilDynamicLanguageInterface $parent_object, $mode = self::MODE_PROD) {
 		if (!isset(self::$instance[$mode])) {
@@ -119,7 +119,7 @@ class ilDynamicLanguage {
 	public function txt($key) {
 		self::$used[] = $key;
 		if ($this->mode == self::MODE_PROD) {
-			return $this->parent_object->txt($key);
+			return $this->parent_object->txt($key, true);
 		} else {
 			global $ilUser;
 			/**
