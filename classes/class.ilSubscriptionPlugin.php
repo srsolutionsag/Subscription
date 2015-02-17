@@ -9,6 +9,13 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynamicLanguageInterface {
 
+
+    /**
+     * @var string
+     */
+    protected static $baseClass;
+
+
 	/**
 	 * @return string
 	 */
@@ -90,6 +97,33 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynami
 	}
 
 
+    /**
+     * @var string
+     *
+     * In what class the command/ctrl chain should start for this plugin.
+     *
+     * This will return ilRouterGUI for ILIAS <= 4.4 if the corresponding plugin is installed
+     * and ilUIPluginRouterGUI for ILIAS >= 4.5 and false otherwise.
+     *
+     * @return string
+     */
+    public static function getBaseClass() {
+        if (self::$baseClass !== null) {
+            return self::$baseClass;
+        }
+        global $ilCtrl;
+        if($ilCtrl->lookupClassPath('ilUIPluginRouterGUI')) {
+            self::$baseClass = 'ilUIPluginRouterGUI';
+        } elseif($ilCtrl->lookupClassPath('ilRouterGUI')) {
+            self::$baseClass = 'ilRouterGUI';
+        } else {
+            self::$baseClass = false;
+        }
+
+        return self::$baseClass;
+    }
+
+
 	/**
 	 * @return ilCtrl
 	 * @throws ilPluginException
@@ -98,13 +132,13 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynami
 		/**
 		 * @var $ilCtrl ilCtrl
 		 */
-		$path = strstr(__FILE__, 'Services', true) . 'Libraries/ActiveRecord/';
+		if (self::getBaseClass() == false) {
+            ilUtil::sendFailure('Subscription needs ILIAS >= 5.0 OR for ILIAS < 5.0 ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router)', true);
+            return false;
+        }
+        $path = strstr(__FILE__, 'Services', true) . 'Libraries/ActiveRecord/';
 		global $ilCtrl;
-		if ($ilCtrl->lookupClassPath('ilRouterGUI') === NULL) {
-
-			throw new ilPluginException('Please install ilRouterGUI, see https://github.com/studer-raimann/RouterService');
-		}
-		if (!is_file($path . 'class.ActiveRecord.php') OR !is_file($path . 'class.ActiveRecordList.php')) {
+		if (!is_file($path . 'class.ActiveRecord.php') && !is_file('./Services/ActiveRecord/class.ActiveRecordList.php')) {
 			throw new ilPluginException('Please install ActiveRecord, see https://github.com/studer-raimann/ActiveRecord');
 		}
 
