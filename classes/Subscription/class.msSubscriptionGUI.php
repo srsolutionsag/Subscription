@@ -20,7 +20,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @author            Theodor Truffer <tt@studer-raimann.ch>
  * @version           $Id:
  *
- * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI
+ * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
 
@@ -96,6 +96,12 @@ class msSubscriptionGUI {
 			ilUtil::sendFailure('Active Plugin first', true);
 			ilUtil::redirect('index.php');
 		}
+
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->getStandardTemplate();
+        }
+
 		$this->initHeader();
 		$this->ctrl->saveParameter($this, 'obj_ref_id');
 		$this->ctrl->setContext($this->obj->getId(), $this->obj->getType());
@@ -109,7 +115,12 @@ class msSubscriptionGUI {
 				break;
 		}
 
-		return true;
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->show();
+        }
+
+        return true;
 	}
 
 
@@ -175,7 +186,7 @@ class msSubscriptionGUI {
 	public function showForm() {
 		$this->initForm();
 		ilUtil::sendInfo($this->pl->getDynamicTxt('main_form_info_usage_' . msConfig::getUsageType()));
-		$this->tpl->setContent($this->form->getHTML());
+        $this->tpl->setContent($this->form->getHTML());
 	}
 
 

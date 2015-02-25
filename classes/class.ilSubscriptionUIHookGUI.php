@@ -76,11 +76,11 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->tabs->removeSubTab('srsubscription');
 			$this->tabs->setTabActive('members');
 			$this->ctrl->setTargetScript('ilias.php');
-			$this->ctrl->initBaseClass('ilRouterGUI');
+			$this->ctrl->initBaseClass(ilSubscriptionPlugin::getBaseClass());
 			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'obj_ref_id', $_GET['ref_id']);
 			$this->tabs->addSubTab('srsubscription', $pl_obj->getDynamicTxt('tab_usage_'
 				. msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
-				'ilRouterGUI',
+				ilSubscriptionPlugin::getBaseClass(),
 				'msSubscriptionGUI'
 			)), '', 'ilsubscriptiongui');
 			if ($this->checkContext($a_part, $tab_highlight)) {
@@ -138,19 +138,19 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	public function gotoHook() {
 		if (preg_match("/tokenreg_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
 			$token = $matches[1];
-			$this->ctrl->initBaseClass('ilRouterGUI');
+			$this->ctrl->initBaseClass(ilSubscriptionPlugin::getBaseClass());
 			$this->ctrl->setTargetScript('/ilias.php');
 			$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $token);
-			$arr = array( 'ilRouterGUI', 'ilTokenRegistrationGUI' );
+			$arr = array( ilSubscriptionPlugin::getBaseClass(), 'ilTokenRegistrationGUI' );
 			$this->ctrl->redirectByClass($arr);
 		}
 
 		if (preg_match("/subscr_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
 			$token = $matches[1];
-			$this->ctrl->initBaseClass('ilRouterGUI');
+			$this->ctrl->initBaseClass(ilSubscriptionPlugin::getBaseClass());
 			$this->ctrl->setTargetScript('/ilias.php');
 			$this->ctrl->setParameterByClass('subscrTriageGUI', 'token', $token);
-			$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );
+			$arr = array( ilSubscriptionPlugin::getBaseClass(), 'subscrTriageGUI' );
 			$this->ctrl->redirectByClass($arr);
 		}
 	}

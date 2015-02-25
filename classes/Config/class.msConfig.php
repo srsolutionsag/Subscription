@@ -1,5 +1,10 @@
 <?php
-require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php');
+if (is_file('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php')) {
+    require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php');
+} else {
+    require_once('./Services/ActiveRecord/class.ActiveRecord.php');
+}
+
 
 /**
  * Class msConfig

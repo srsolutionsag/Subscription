@@ -15,7 +15,7 @@ require_once('./Services/Init/classes/class.ilStartUpGUI.php');
  * Class ilTokenRegistrationGUI
  *
  * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilAccountRegistrationGUI
- * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilRouterGUI
+ * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
@@ -42,14 +42,21 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function executeCommand() {
-		$cmd = $this->ctrl->getCmd();
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->getStandardTemplate();
+        }
+        $cmd = $this->ctrl->getCmd();
 		if ($cmd) {
 			$this->$cmd();
 		} else {
 
 			$this->displayForm();
 		}
-
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->show();
+        }
 		return true;
 	}
 

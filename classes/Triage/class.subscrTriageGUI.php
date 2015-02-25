@@ -9,7 +9,7 @@ require_once('./Services/Object/classes/class.ilObject2.php');
  * @author            Fabian Schmid <fs@studer-raimann.ch>
  * @version           1.0.0
  *
- * @ilCtrl_IsCalledBy subscrTriageGUI : ilRouterGUI
+ * @ilCtrl_IsCalledBy subscrTriageGUI : ilRouterGUI, ilUIPluginRouterGUI
  */
 class subscrTriageGUI {
 
@@ -44,8 +44,16 @@ class subscrTriageGUI {
 
 
 	public function executeCommand() {
-		$cmd = $this->ctrl->getCmd('start');
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->getStandardTemplate();
+        }
+        $cmd = $this->ctrl->getCmd('start');
 		$this->{$cmd}();
+        // needed for ILIAS >= 5
+        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
+            $this->tpl->show();
+        }
 	}
 
 
