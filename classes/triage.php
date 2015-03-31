@@ -199,24 +199,8 @@ class msTriage {
 			$this->ctrl->initBaseClass('ilStartUpGUI');
 			$this->ctrl->setTargetScript('/ilias.php');
 			$this->ctrl->setControllerContext(array( 'ilStartUpGUI', 'ilaccountregistrationgui' ));
-			//			echo $this->ctrl->getLinkTargetByClass('ilTokenRegistrationGUI');
 			$this->ctrl->redirectByClass('ilTokenRegistrationGUI');
 		} else {
-			//			$this->ctrl->initBaseClass('ilStartUpGUI');
-			//			$this->ctrl->setTargetScript('/register.php');
-			//			$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $_REQUEST['token']);
-			//			$this->ctrl->setCmdClass('ilTokenRegistrationGUI');
-			//			echo $this->ctrl->getLinkTargetByClass(array('ilAccountRegistrationGUI','ilTokenRegistrationGUI'));
-			//
-			//			exit;
-
-//			$this->ctrl->initBaseClass('ilRouterGUI');
-//			$this->ctrl->setTargetScript('/ilias.php');
-//			$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $_REQUEST['token']);
-//			$arr = array( 'ilRouterGUI', 'ilTokenRegistrationGUI' );
-//									echo $this->ctrl->getLinkTargetByClass($arr);
-//			$this->ctrl->redirectByClass($arr);
-
 			ilUtil::redirect('/goto.php?target=subscr_' . $_REQUEST['token']);
 		}
 	}

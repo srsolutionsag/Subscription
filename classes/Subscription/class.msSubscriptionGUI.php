@@ -114,6 +114,10 @@ class msSubscriptionGUI {
 				$this->performCommand($cmd);
 				break;
 		}
+		if(subscr::is50()) {
+			$this->tpl->getStandardTemplate();
+			$this->tpl->show();
+		}
 
         // needed for ILIAS >= 5
         if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
