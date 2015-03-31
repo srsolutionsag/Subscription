@@ -10,12 +10,13 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
 require_once('./Services/Init/classes/class.ilStartUpGUI.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
 
 /**
  * Class ilTokenRegistrationGUI
  *
  * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilAccountRegistrationGUI
- * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilRouterGUI
+ * @ilCtrl_isCalledBy ilTokenRegistrationGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
@@ -49,8 +50,22 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 			$this->displayForm();
 		}
+		if (subscr::is50()) {
+			$this->tpl->getStandardTemplate();
+			$this->tpl->show();
+		}
 
 		return true;
+	}
+
+
+	/**
+	 * @param $a_usr_id
+	 */
+	public function activateUser($a_usr_id) {
+		$user = new ilObjUser($a_usr_id);
+		$user->setActive(true);
+		$user->update();
 	}
 
 
@@ -60,7 +75,11 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		 * @var $form      ilPropertyFormGUI
 		 * @var $usr_email ilTextInputGUI
 		 */
-		$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' )));
+		if (subscr::is44()) {
+			$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' )));
+		} else {
+			$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' )));
+		}
 
 		$username = $this->form->getItemByPostVar('username');
 		$username->setValue($this->subscription->getMatchingString());
@@ -96,7 +115,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function displayForm() {
-		if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
+		if (! $this->subscription OR $this->subscription->getDeleted() == 1) {
 			$this->tpl->getStandardTemplate();
 			$this->tpl->setContent($this->pl->getDynamicTxt('main_not_invalid_token'));
 		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR
@@ -112,16 +131,19 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 	public function assignUser() {
 		$obj_id = ilObject::_lookupObjId($this->subscription->getObjRefId());
+		$a_usr_id = $this->subscription->user_status_object->getUsrId();
 		switch ($this->subscription->getContext()) {
 			case msSubscription::CONTEXT_CRS:
 				$participants = new ilCourseParticipants($obj_id);
-				$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
+				$participants->add($a_usr_id, $this->subscription->getRole());
 				break;
 			case msSubscription::CONTEXT_GRP:
 				$participants = new ilGroupParticipants($obj_id);
-				$participants->add($this->subscription->user_status_object->getUsrId(), $this->subscription->getRole());
+				$participants->add($a_usr_id, $this->subscription->getRole());
 				break;
 		}
+
+		$this->activateUser($a_usr_id);
 
 		$this->subscription->setDeleted(true);
 		$this->subscription->update();

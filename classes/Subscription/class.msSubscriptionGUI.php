@@ -20,7 +20,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @author            Theodor Truffer <tt@studer-raimann.ch>
  * @version           $Id:
  *
- * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI
+ * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
 
@@ -92,10 +92,11 @@ class msSubscriptionGUI {
 	 * @return bool
 	 */
 	public function executeCommand() {
-		if (!$this->pl->isActive()) {
+		if (! $this->pl->isActive()) {
 			ilUtil::sendFailure('Active Plugin first', true);
 			ilUtil::redirect('index.php');
 		}
+
 		$this->initHeader();
 		$this->ctrl->saveParameter($this, 'obj_ref_id');
 		$this->ctrl->setContext($this->obj->getId(), $this->obj->getType());
@@ -107,6 +108,10 @@ class msSubscriptionGUI {
 			default:
 				$this->performCommand($cmd);
 				break;
+		}
+		if (subscr::is50()) {
+			$this->tpl->getStandardTemplate();
+			$this->tpl->show();
 		}
 
 		return true;
@@ -160,7 +165,7 @@ class msSubscriptionGUI {
 			case 'triage':
 			case 'clear':
 			case self::CMD_LNG:
-				if (!$ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
+				if (! $ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->getDynamicTxt('main_no_access'));
 					ilUtil::redirect('index.php');
 
