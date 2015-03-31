@@ -6,7 +6,7 @@ Have a look at the [full documentation](/doc/Documentation.pdf?raw=true)
 
 ##Installation
 ###Router
-The Subscription-Plugin needs a Router-Service to work. Please install the Service first:
+In ILIAS 4.4 the Subscription-Plugin needs a Router-Service to work. Please install the Service first:
  
 You start in your ILIAS root directory
 
