@@ -148,7 +148,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		if (preg_match("/tokenreg_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
 			$token = $matches[1];
 			$this->initBaseClass();
-			$this->ctrl->setTargetScript('/ilias.php');
+			$this->ctrl->setTargetScript('./ilias.php');
 			$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $token);
 			if (subscr::is44()) {
 				$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );
@@ -161,7 +161,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		if (preg_match("/subscr_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
 			$token = $matches[1];
 			$this->initBaseClass();
-			$this->ctrl->setTargetScript('/ilias.php');
+			$this->ctrl->setTargetScript('./ilias.php');
 			$this->ctrl->setParameterByClass('subscrTriageGUI', 'token', $token);
 			if (subscr::is44()) {
 				$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );

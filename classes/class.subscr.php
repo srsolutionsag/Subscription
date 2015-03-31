@@ -58,7 +58,7 @@ class subscr {
 	 * @throws ilPluginException
 	 */
 	public static function loadActiveRecord() {
-		if (is_file('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php')) {
+		if (self::is44() AND is_file('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php')) {
 			require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php');
 		} elseif (self::is50()) {
 			require_once('./Services/ActiveRecord/class.ActiveRecord.php');
