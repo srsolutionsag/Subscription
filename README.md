@@ -31,7 +31,7 @@ cd Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
 git clone https://github.com/studer-raimann/Subscription.git  
 ```
 As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.
-This Plugin requires ActiveRecord and ilRouterGUI.
+This Plugin requires ActiveRecord and ilRouterGUI. In ILIAS 5.0 both components are already installed. 
 
 ##Contact
 studer + raimann ag  
