@@ -98,13 +98,14 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin implements ilDynami
 		/**
 		 * @var $ilCtrl ilCtrl
 		 */
+		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
 		$path = strstr(__FILE__, 'Services', true) . 'Libraries/ActiveRecord/';
 		global $ilCtrl;
-		if ($ilCtrl->lookupClassPath('ilRouterGUI') === NULL) {
 
+		if (subscr::is44() && $ilCtrl->lookupClassPath('ilRouterGUI') === NULL) {
 			throw new ilPluginException('Please install ilRouterGUI, see https://github.com/studer-raimann/RouterService');
 		}
-		if (!is_file($path . 'class.ActiveRecord.php') OR !is_file($path . 'class.ActiveRecordList.php')) {
+		if (subscr::is44() && (!is_file($path . 'class.ActiveRecord.php') OR !is_file($path . 'class.ActiveRecordList.php'))) {
 			throw new ilPluginException('Please install ActiveRecord, see https://github.com/studer-raimann/ActiveRecord');
 		}
 

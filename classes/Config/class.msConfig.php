@@ -1,5 +1,7 @@
 <?php
-require_once('./Customizing/global/plugins/Libraries/ActiveRecord/class.ActiveRecord.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
+subscr::loadActiveRecord();
+
 
 /**
  * Class msConfig
@@ -112,7 +114,7 @@ class msConfig extends ActiveRecord {
 		require_once('./include/inc.ilias_version.php');
 		require_once('./Services/Component/classes/class.ilComponent.php');
 
-		return !ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999');
+		return ! ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999');
 	}
 
 
@@ -149,7 +151,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function isInIgnoredSubtree($check_ref_id) {
-		if (!self::get(self::F_IGNORE_SUBTREE_ACTIVE)) {
+		if (! self::get(self::F_IGNORE_SUBTREE_ACTIVE)) {
 			return false;
 		}
 		if (isset(self::$ignore_chache[$check_ref_id])) {
@@ -161,7 +163,7 @@ class msConfig extends ActiveRecord {
 		 * @var $tree ilTree
 		 */
 		$subtrees = explode(',', self::get(self::F_IGNORE_SUBTREE));
-		if (!is_array($subtrees) OR count($subtrees) == 0) {
+		if (! is_array($subtrees) OR count($subtrees) == 0) {
 			self::$ignore_chache[$check_ref_id] = false;
 
 			return false;
@@ -169,7 +171,7 @@ class msConfig extends ActiveRecord {
 
 		$return = false;
 		foreach ($subtrees as $ref_id) {
-			if (!$ref_id) {
+			if (! $ref_id) {
 				continue;
 			}
 			if ($tree->isGrandChild($ref_id, $check_ref_id)) {

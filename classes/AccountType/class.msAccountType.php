@@ -13,7 +13,7 @@ class msAccountType {
 	/**
 	 * @var array
 	 */
-	public static $domains;
+	public static $domains = array();
 	/**
 	 * @var
 	 */
