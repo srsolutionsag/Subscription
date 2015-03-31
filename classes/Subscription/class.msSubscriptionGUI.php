@@ -92,15 +92,10 @@ class msSubscriptionGUI {
 	 * @return bool
 	 */
 	public function executeCommand() {
-		if (!$this->pl->isActive()) {
+		if (! $this->pl->isActive()) {
 			ilUtil::sendFailure('Active Plugin first', true);
 			ilUtil::redirect('index.php');
 		}
-
-        // needed for ILIAS >= 5
-        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
-            $this->tpl->getStandardTemplate();
-        }
 
 		$this->initHeader();
 		$this->ctrl->saveParameter($this, 'obj_ref_id');
@@ -114,17 +109,12 @@ class msSubscriptionGUI {
 				$this->performCommand($cmd);
 				break;
 		}
-		if(subscr::is50()) {
+		if (subscr::is50()) {
 			$this->tpl->getStandardTemplate();
 			$this->tpl->show();
 		}
 
-        // needed for ILIAS >= 5
-        if (ilSubscriptionPlugin::getBaseClass() != 'ilRouterGUI') {
-            $this->tpl->show();
-        }
-
-        return true;
+		return true;
 	}
 
 
@@ -175,7 +165,7 @@ class msSubscriptionGUI {
 			case 'triage':
 			case 'clear':
 			case self::CMD_LNG:
-				if (!$ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
+				if (! $ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->getDynamicTxt('main_no_access'));
 					ilUtil::redirect('index.php');
 
@@ -190,7 +180,7 @@ class msSubscriptionGUI {
 	public function showForm() {
 		$this->initForm();
 		ilUtil::sendInfo($this->pl->getDynamicTxt('main_form_info_usage_' . msConfig::getUsageType()));
-        $this->tpl->setContent($this->form->getHTML());
+		$this->tpl->setContent($this->form->getHTML());
 	}
 
 
