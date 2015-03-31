@@ -2,6 +2,7 @@
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 require_once('./Services/Utilities/classes/class.ilConfirmationGUI.php');
 require_once('./Services/Object/classes/class.ilObject2.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
 
 /**
  * Class subscrTriageGUI
@@ -9,7 +10,7 @@ require_once('./Services/Object/classes/class.ilObject2.php');
  * @author            Fabian Schmid <fs@studer-raimann.ch>
  * @version           1.0.0
  *
- * @ilCtrl_IsCalledBy subscrTriageGUI : ilRouterGUI
+ * @ilCtrl_IsCalledBy subscrTriageGUI : ilRouterGUI, ilUIPluginRouterGUI
  */
 class subscrTriageGUI {
 
@@ -45,7 +46,14 @@ class subscrTriageGUI {
 
 	public function executeCommand() {
 		$cmd = $this->ctrl->getCmd('start');
+		if(!$this->subscription instanceof msSubscription) {
+			throw new ilException('This token has already been used');
+		}
 		$this->{$cmd}();
+		if (subscr::is50()) {
+			$this->tpl->getStandardTemplate();
+			$this->tpl->show();
+		}
 	}
 
 
@@ -127,7 +135,7 @@ class subscrTriageGUI {
 		 * @var $crs ilObjCourse
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
-		if (!$crs->isRegistrationAccessCodeEnabled()) {
+		if (! $crs->isRegistrationAccessCodeEnabled()) {
 			$crs->enableRegistrationAccessCode(1);
 			$crs->update();
 		}
@@ -144,7 +152,11 @@ class subscrTriageGUI {
 
 	protected function redirectToTokenRegistrationGUI() {
 		$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $this->token);
-		$this->ctrl->redirectByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' ));
+		if (subscr::is44()) {
+			$this->ctrl->redirectByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' ));
+		} else {
+			$this->ctrl->redirectByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' ));
+		}
 	}
 
 

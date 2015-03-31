@@ -20,7 +20,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @author            Theodor Truffer <tt@studer-raimann.ch>
  * @version           $Id:
  *
- * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI
+ * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
 
@@ -107,6 +107,10 @@ class msSubscriptionGUI {
 			default:
 				$this->performCommand($cmd);
 				break;
+		}
+		if(subscr::is50()) {
+			$this->tpl->getStandardTemplate();
+			$this->tpl->show();
 		}
 
 		return true;
