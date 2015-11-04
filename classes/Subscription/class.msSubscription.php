@@ -231,7 +231,7 @@ class msSubscription extends ActiveRecord {
 	 *
 	 * @db_has_field        true
 	 * @db_fieldtype        text
-	 * @db_length           50
+	 * @db_length           1024
 	 */
 	protected $matching_string;
 	/**
