@@ -1,6 +1,6 @@
 <?php
 
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.srModelObjectTableGUI.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.msModelObjectTableGUI.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
 require_once('class.msSubscription.php');
 
@@ -9,7 +9,7 @@ require_once('class.msSubscription.php');
  *
  * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
-class msSubscriptionTableGUI extends srModelObjectTableGUI {
+class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 	const ICON_OFF = 'icon_led_off_s.png';
 	const ICON_ON = 'icon_led_on_s.png';
