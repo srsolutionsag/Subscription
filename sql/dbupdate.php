@@ -177,3 +177,12 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
 msConfig::set(msConfig::F_ACTIVATE_COURSES, true);
 msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 ?>
+<#15>
+<?php
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
+if (! $ilDB->tableColumnExists(msSubscription::returnDbTableName(), 'matching_string')) {
+	$ilDB->modifyTableColumn(msSubscription::returnDbTableName(), 'matching_string', array(
+		"length" => 1024,
+	));
+}
+?>
