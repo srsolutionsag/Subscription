@@ -373,7 +373,7 @@ class msUserStatus {
 		/**
 		 * @var $ilDB ilDB
 		 */
-		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text');
+		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text') . ' AND active = 1';
 		$set = $ilDB->query($query);
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
