@@ -4,6 +4,7 @@ subscr::loadActiveRecord();
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Modules/Group/classes/class.ilGroupMembershipMailNotification.php');
+require_once('./Modules/Course/classes/class.ilObjCourse.php');
 
 /**
  * msSubscription
@@ -95,17 +96,20 @@ class msSubscription extends ActiveRecord {
 		 * @var $participants ilCourseParticipants
 		 */
 		$obj_id = ilObject::_lookupObjId($this->getObjRefId());
-
+		$usr_id = $this->user_status_object->getUsrId();
+		$status = false;
 		switch ($this->getContext()) {
 			case self::CONTEXT_CRS:
-				$participants = new ilCourseParticipants($obj_id);
+				$participants = ilCourseParticipants::_getInstanceByObjId($obj_id);
+				$status = $participants->add($usr_id, $this->getRole());
+				$course = new ilObjCourse($this->getObjRefId());
+				$course->checkLPStatusSync($usr_id);
 				break;
 			case self::CONTEXT_GRP:
 				$participants = new ilGroupParticipants($obj_id);
+				$status = $participants->add($usr_id, $this->getRole());
 				break;
 		}
-		$usr_id = $this->user_status_object->getUsrId();
-		$status = $participants->add($usr_id, $this->getRole());
 		if ($status AND msConfig::get(msConfig::F_SEND_MAILS)) {
 			switch ($this->getContext()) {
 				case self::CONTEXT_CRS:
@@ -497,5 +501,3 @@ class msSubscription extends ActiveRecord {
 		return 'rep_robj_xmsb_susc';
 	}
 }
-
-?>
