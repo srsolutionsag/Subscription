@@ -39,14 +39,23 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		);
 		$data = array();
 
+		$user_ids = array();
 		foreach (msSubscription::where($where)->orderBy('matching_string')->get() as $dat) {
 			/**
 			 * @var $dat msSubscription
 			 */
+			// SW: Remove duplicated users, see bug https://jira.studer-raimann.ch/browse/PLMSC-11
+			$user_id = $dat->user_status_object->getUsrId();
+			if (in_array($user_id, $user_ids)) {
+				continue;
+			}
+			if ($user_id) {
+				$user_ids[] = $user_id;
+			}
 			$row = $dat->__asArray();
 			$row['name'] = $dat->lookupName();
 			$row['status_sort'] = $this->pl->getDynamicTxt('main_user_status_' . $dat->getUserStatus());
-			$row['in_ilias'] = $dat->user_status_object->getUsrId() ? 1 : 0;
+			$row['in_ilias'] = $user_id ? 1 : 0;
 			$data[] = $row;
 		}
 
