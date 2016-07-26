@@ -51,6 +51,7 @@ main_role_3#:#Tutor
 main_role_4#:#Administrator
 main_role_5#:#Mitglied
 main_send_form#:#Benutzer auflisten
+main_send_table_remove_unregistered#:#Entferne nicht registrierte Benutzer
 main_send_table_clear#:#Aufräumen
 main_send_table_usage_1#:#Einschreiben
 main_send_table_usage_2#:#Einschreiben und einladen

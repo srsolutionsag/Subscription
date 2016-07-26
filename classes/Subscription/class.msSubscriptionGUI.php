@@ -163,6 +163,7 @@ class msSubscriptionGUI {
 			case 'sendForm':
 			case self::CMD_LIST_OBJECTS:
 			case 'triage':
+			case 'removeUnregistered':
 			case 'clear':
 			case self::CMD_LNG:
 				if (! $ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
@@ -323,7 +324,7 @@ class msSubscriptionGUI {
 	}
 
 
-	protected function clear() {
+	protected function removeUnregistered() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
 			'deleted' => false
@@ -337,7 +338,28 @@ class msSubscriptionGUI {
 				$msSubscription->update();
 			}
 		}
-		$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
+		if(msSubscription::where($where)->count() > 0) {
+			$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
+		} else {
+			$this->ctrl->redirect($this, 'showForm');
+		}
+	}
+
+	protected function clear() {
+		$where = array(
+			'obj_ref_id' => $_GET['obj_ref_id'],
+			'deleted' => false
+		);
+
+		/**
+		 * @var $msSubscription msSubscription
+		 */
+		foreach (msSubscription::where($where)->get() as $msSubscription) {
+				$msSubscription->setDeleted(true);
+				$msSubscription->update();
+		}
+
+		$this->ctrl->redirect($this, 'showForm');
 	}
 
 

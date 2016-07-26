@@ -51,7 +51,8 @@ main_role_3#:#Tutor
 main_role_4#:#Administrator
 main_role_5#:#Member
 main_send_form#:#List Users
-main_send_table_clear#:#Clear
+main_send_table_remove_unregistered#:#Remove unregistered Users
+main_send_table_clear#:#Clear List
 main_send_table_usage_1#:#Assign
 main_send_table_usage_2#:#Assign and invite
 main_tblh_email#:#E-Mail

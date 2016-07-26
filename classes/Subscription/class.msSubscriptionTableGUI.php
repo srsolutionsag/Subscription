@@ -96,6 +96,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 
 	protected function initFormActionsAndCmdButtons() {
+		$this->addCommandButton('removeUnregistered', $this->pl->getDynamicTxt('main_send_table_remove_unregistered'));
 		$this->addCommandButton('clear', $this->pl->getDynamicTxt('main_send_table_clear'));
 		if (msConfig::get(msConfig::F_USE_EMAIL) AND msConfig::get(msConfig::ENBL_INV)) {
 			$this->addCommandButton('triage', $this->pl->getDynamicTxt('main_send_table_usage_2'));
