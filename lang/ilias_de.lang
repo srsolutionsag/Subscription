@@ -51,6 +51,7 @@ main_role_3#:#Tutor
 main_role_4#:#Administrator
 main_role_5#:#Mitglied
 main_send_form#:#Benutzer auflisten
+main_send_table_remove_unregistered#:#Entferne nicht existierende Benutzer
 main_send_table_clear#:#Aufräumen
 main_send_table_usage_1#:#Einschreiben
 main_send_table_usage_2#:#Einschreiben und einladen
@@ -80,3 +81,5 @@ tab_usage_1#:#Mitglied(er) per E-Mail einladen
 tab_usage_2#:#Mitglied(er) per Matrikelnummernliste hinzufügen
 tab_usage_3#:#Mitglied(er) per E-Mail oder Matrikelnummer hinzufügen
 triage_title#:#Einladung zu ILIAS-Kurs
+remove_unregistered_info#:#Benutzer die in ILIAS noch nicht existieren wurden aus der Liste entfernt.
+clear_info#:#Die Liste der Benutzer, die dem Kurs eingeschrieben werden wurde geleert.
