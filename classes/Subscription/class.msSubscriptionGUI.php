@@ -338,6 +338,9 @@ class msSubscriptionGUI {
 				$msSubscription->update();
 			}
 		}
+
+		ilUtil::sendInfo($this->pl->txt("remove_unregistered_info"), true);
+
 		if(msSubscription::where($where)->count() > 0) {
 			$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
 		} else {
@@ -358,6 +361,8 @@ class msSubscriptionGUI {
 				$msSubscription->setDeleted(true);
 				$msSubscription->update();
 		}
+
+		ilUtil::sendInfo($this->pl->txt("clear_info"), true);
 
 		$this->ctrl->redirect($this, 'showForm');
 	}

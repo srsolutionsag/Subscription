@@ -51,7 +51,7 @@ main_role_3#:#Tutor
 main_role_4#:#Administrator
 main_role_5#:#Member
 main_send_form#:#List Users
-main_send_table_remove_unregistered#:#Remove unregistered Users
+main_send_table_remove_unregistered#:#Remove Users not existing ILIAS
 main_send_table_clear#:#Clear List
 main_send_table_usage_1#:#Assign
 main_send_table_usage_2#:#Assign and invite
@@ -81,3 +81,5 @@ tab_usage_1#:#Subscription with E-Mail list
 tab_usage_2#:#Subscription with matriculation list
 tab_usage_3#:#Subscription with Mail or Matriculation
 triage_title#:#Invitation to ILIAS-Course
+remove_unregistered_info#:#Users that did not already exist in ILIAS have been removed from the list.
+clear_info#:#The list with users to be assigned to the course has been cleared.
