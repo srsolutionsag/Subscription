@@ -69,16 +69,29 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 	}
 
 
+	/**
+	 * @param bool $a_force_code
+	 * @throws \ilException
+	 */
 	protected function __initForm($a_force_code = false) {
+		if ($this->subscription->getDeleted()) {
+			throw new ilException('this token is no longer valid');
+		}
 		parent::__initForm();
 		/**
 		 * @var $form      ilPropertyFormGUI
 		 * @var $usr_email ilTextInputGUI
 		 */
 		if (subscr::is44()) {
-			$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' )));
+			$this->form->setFormAction($this->ctrl->getFormActionByClass(array(
+				'ilRouterGUI',
+				'ilTokenRegistrationGUI',
+			)));
 		} else {
-			$this->form->setFormAction($this->ctrl->getFormActionByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' )));
+			$this->form->setFormAction($this->ctrl->getFormActionByClass(array(
+				'ilUIPluginRouterGUI',
+				'ilTokenRegistrationGUI',
+			)));
 		}
 
 		$username = $this->form->getItemByPostVar('username');
@@ -115,11 +128,11 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function displayForm() {
-		if (! $this->subscription OR $this->subscription->getDeleted() == 1) {
+		if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
 			$this->tpl->getStandardTemplate();
 			$this->tpl->setContent($this->pl->getDynamicTxt('main_not_invalid_token'));
-		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR
-			$this->subscription->getUserStatus() == msUserStatus::STATUS_ALREADY_ASSIGNED
+		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED
+		          OR $this->subscription->getUserStatus() == msUserStatus::STATUS_ALREADY_ASSIGNED
 		) {
 			$this->assignUser();
 			$this->redirectToCourse();
@@ -144,7 +157,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		}
 
 		$this->activateUser($a_usr_id);
-
 		$this->subscription->setDeleted(true);
 		$this->subscription->update();
 	}
@@ -156,6 +168,21 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function saveForm() {
+		$matchingString = $this->subscription->getMatchingString();
+		switch ($this->subscription->getSubscriptionType()) {
+			case msSubscription::TYPE_EMAIL:
+				if ($_POST['usr_email'] != $matchingString
+				    || $_POST['usr_email_retype'] != $matchingString
+				) {
+					throw new ilException('no valid email!');
+				}
+				break;
+			case msSubscription::TYPE_MATRICULATION:
+				if ($_POST['matriculation'] != $matchingString) {
+					throw new ilException('no valid email!');
+				}
+		}
+
 		if (parent::saveForm()) {
 			$this->assignUser();
 			$this->redirectToCourse();
