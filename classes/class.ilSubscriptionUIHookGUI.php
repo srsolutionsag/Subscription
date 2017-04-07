@@ -68,6 +68,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			array( 'ilobjgroupgui', 'deleteMembers' ),
 			array( 'ilrepositorysearchgui', '*' ),
 			array( 'ilmemberexportgui', '*' ),
+            array( 'ilcoursemembershipgui', '*' ),
+            array( 'ilgroupmembershipgui', '*' ),
 		);
 
 		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
