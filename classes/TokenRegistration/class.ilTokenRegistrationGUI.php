@@ -47,10 +47,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 			$this->displayForm();
 		}
-		if (subscr::is50()) {
-			$this->tpl->getStandardTemplate();
-			$this->tpl->show();
-		}
+//		$this->tpl->getStandardTemplate();
+		$this->tpl->show();
 
 		return true;
 	}

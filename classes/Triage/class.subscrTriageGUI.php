@@ -50,10 +50,9 @@ class subscrTriageGUI {
 			throw new ilException('This token has already been used');
 		}
 		$this->{$cmd}();
-		if (subscr::is50()) {
-			$this->tpl->getStandardTemplate();
-			$this->tpl->show();
-		}
+
+		$this->tpl->getStandardTemplate();
+		$this->tpl->show();
 	}
 
 

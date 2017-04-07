@@ -110,10 +110,9 @@ class msSubscriptionGUI {
 				$this->performCommand($cmd);
 				break;
 		}
-		if (subscr::is50()) {
-			$this->tpl->getStandardTemplate();
-			$this->tpl->show();
-		}
+
+		$this->tpl->getStandardTemplate();
+		$this->tpl->show();
 
 		return true;
 	}
@@ -181,16 +180,14 @@ class msSubscriptionGUI {
 
 	public function showForm() {
 		$this->initForm();
-		ilUtil::sendInfo($this->pl->txt('main_form_info_usage_'
-		                                          . msConfig::getUsageType()));
+		ilUtil::sendInfo($this->pl->txt('main_form_info_usage_' . msConfig::getUsageType()));
 		$this->tpl->setContent($this->form->getHTML());
 	}
 
 
 	public function initForm() {
 		$this->form = new  ilPropertyFormGUI();
-		$this->form->setTitle($this->pl->txt('main_form_title_usage_'
-		                                               . msConfig::getUsageType()));
+		$this->form->setTitle($this->pl->txt('main_form_title_usage_' . msConfig::getUsageType()));
 		//		$this->form->setDescription($this->pl->txt('main_form_info_usage_' . msConfig::getUsageType()));
 		$this->form->setFormAction($this->ctrl->getFormAction($this));
 		if (msConfig::getValue('use_email')) {
@@ -277,7 +274,7 @@ class msSubscriptionGUI {
 		}
 		if (msConfig::getValue(msConfig::ENBL_INV)) {
 			ilUtil::sendInfo($this->pl->txt('main_msg_emails_sent_usage_'
-			                                          . msConfig::getUsageType()), true);
+			                                . msConfig::getUsageType()), true);
 		} else {
 			ilUtil::sendInfo($this->pl->txt('main_msg_triage_finished'), true);
 		}

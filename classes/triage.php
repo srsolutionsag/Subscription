@@ -196,13 +196,6 @@ class msTriage {
 
 
 	protected function redirectToTokenRegistrationGUI() {
-		if (msConfig::isOldILIAS()) {
-			$this->ctrl->initBaseClass('ilStartUpGUI');
-			$this->ctrl->setTargetScript('/ilias.php');
-			$this->ctrl->setControllerContext(array( 'ilStartUpGUI', 'ilaccountregistrationgui' ));
-			$this->ctrl->redirectByClass('ilTokenRegistrationGUI');
-		} else {
-			ilUtil::redirect('/goto.php?target=subscr_' . $_REQUEST['token']);
-		}
+		ilUtil::redirect('/goto.php?target=subscr_' . $_REQUEST['token']);
 	}
 }

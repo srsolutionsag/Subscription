@@ -101,18 +101,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function checkShibboleth() {
-		return self::get(self::F_SHIBBOLETH) AND is_readable(self::get(self::F_METADATA_XML));
-	}
-
-
-	/**
-	 * @return bool
-	 */
-	public static function isOldILIAS() {
-		require_once('./include/inc.ilias_version.php');
-		require_once('./Services/Component/classes/class.ilComponent.php');
-
-		return !ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.2.999');
+		return self::getValue(self::F_SHIBBOLETH) AND is_readable(self::getValue(self::F_METADATA_XML));
 	}
 
 
@@ -129,13 +118,13 @@ class msConfig extends ActiveRecord {
 	 */
 	public static function getUsageType() {
 		$usage_type = self::TYPE_NO_USAGE;
-		if (self::get(self::F_USE_EMAIL)) {
+		if (self::getValue(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_MAIL;
 		}
-		if (self::get(self::F_USE_MATRICULATION)) {
+		if (self::getValue(self::F_USE_MATRICULATION)) {
 			$usage_type = self::TYPE_USAGE_MATRICULATION;
 		}
-		if (self::get(self::F_USE_MATRICULATION) AND self::get(self::F_USE_EMAIL)) {
+		if (self::getValue(self::F_USE_MATRICULATION) AND self::getValue(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_BOTH;
 		}
 
@@ -149,7 +138,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function isInIgnoredSubtree($check_ref_id) {
-		if (!self::get(self::F_IGNORE_SUBTREE_ACTIVE)) {
+		if (!self::getValue(self::F_IGNORE_SUBTREE_ACTIVE)) {
 			return false;
 		}
 		if (isset(self::$ignore_chache[$check_ref_id])) {
@@ -160,7 +149,7 @@ class msConfig extends ActiveRecord {
 		/**
 		 * @var $tree ilTree
 		 */
-		$subtrees = explode(',', self::get(self::F_IGNORE_SUBTREE));
+		$subtrees = (array)self::getValue(self::F_IGNORE_SUBTREE);
 		if (!is_array($subtrees) OR count($subtrees) == 0) {
 			self::$ignore_chache[$check_ref_id] = false;
 
