@@ -1,12 +1,11 @@
 <?php
 
 $obj = new msTriage();
-if (! $_REQUEST['cmd']) {
+if (!$_REQUEST['cmd']) {
 	$obj->start();
 } else {
 	$obj->performCommand($_REQUEST['cmd']);
 }
-
 
 /**
  * msTriage
@@ -52,9 +51,9 @@ class msTriage {
 		chdir(substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], '/Customizing')));
 		global $ilCtrl;
 
-		if (! $ilCtrl instanceof ilCtrl) {
-//			echo "!!!";
-//			exit;
+		if (!$ilCtrl instanceof ilCtrl) {
+			//			echo "!!!";
+			//			exit;
 			require_once("Services/Init/classes/class.ilInitialisation.php");
 			$_POST['username'] = 'anonymous';
 			$_POST['password'] = 'anonymous';
@@ -113,7 +112,7 @@ class msTriage {
 
 
 	public function start() {
-		if (msConfig::get('ask_for_login')) {
+		if (msConfig::getValue('ask_for_login')) {
 			$this->showLoginDecision();
 		} else {
 			$this->determineLogin();
@@ -126,19 +125,19 @@ class msTriage {
 	protected function showLoginDecision() {
 		$this->tpl->getStandardTemplate();
 		$this->tpl->setVariable('BASE', msConfig::getPath());
-		$this->tpl->setTitle($this->pl->getDynamicTxt('triage_title'));
+		$this->tpl->setTitle($this->pl->txt('triage_title'));
 
 		$de = new ilConfirmationGUI();
 		$de->setFormAction('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/triage.php');
 		//$this->pl->txt('subscription_type_' . $this->subscription->getSubscriptionType()) . ': '
 		//.
-		$str = $this->subscription->getMatchingString()
-			. ', Ziel: ' . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
+		$str = $this->subscription->getMatchingString() . ', Ziel: '
+		       . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
-		$de->setHeaderText($this->pl->getDynamicTxt('qst_already_account'));
-		$de->setConfirm($this->pl->getDynamicTxt('main_yes'), 'hasLogin');
-		$de->setCancel($this->pl->getDynamicTxt('main_no'), 'hasNoLogin');
+		$de->setHeaderText($this->pl->txt('qst_already_account'));
+		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
+		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
 
 		$this->tpl->setContent($de->getHTML());
 		$this->tpl->show();
@@ -146,11 +145,12 @@ class msTriage {
 
 
 	public function determineLogin() {
-		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH
+		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType()
+		                                    == msAccountType::TYPE_SHIBBOLETH
 		) {
 			$this->redirectToLogin();
 		} else {
-			if (msConfig::get('allow_registration')) {
+			if (msConfig::getValue('allow_registration')) {
 				$this->redirectToTokenRegistrationGUI();
 			} else {
 				$this->redirectToLogin();
@@ -163,7 +163,8 @@ class msTriage {
 
 	public function redirectToLogin() {
 		$this->setSubscriptionToDeleted();
-		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
+		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId()
+		        . '_rcode' . $this->getRegistrationCode();
 
 		ilUtil::redirect($link);
 	}
@@ -177,7 +178,7 @@ class msTriage {
 		 * @var $crs ilObjCourse
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
-		if (! $crs->isRegistrationAccessCodeEnabled()) {
+		if (!$crs->isRegistrationAccessCodeEnabled()) {
 			$crs->enableRegistrationAccessCode(1);
 			$crs->update();
 
@@ -205,5 +206,3 @@ class msTriage {
 		}
 	}
 }
-
-?>

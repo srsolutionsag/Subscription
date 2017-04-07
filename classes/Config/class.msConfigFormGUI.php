@@ -1,6 +1,5 @@
 <?php
 
-
 require_once('./Services/Form/classes/class.ilPropertyFormGUI.php');
 require_once('class.msConfig.php');
 
@@ -44,7 +43,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @return mixed
 	 */
 	protected function txt($key) {
-		return $this->pl->getDynamicTxt('admin_' . $key);
+		return $this->pl->txt('admin_' . $key);
 	}
 
 
@@ -152,7 +151,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 		foreach ($this->getItems() as $item) {
 			$this->writeValue($item);
 		}
-		ilUtil::sendSuccess($this->pl->getDynamicTxt('admin_save_succeed'), true);
+		ilUtil::sendSuccess($this->pl->txt('admin_save_succeed'), true);
 
 		return true;
 	}
@@ -173,7 +172,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	protected function fillValue($item, $array) {
 		if (get_class($item) != 'ilFormSectionHeaderGUI') {
 			$key = $item->getPostVar();
-			$array[$key] = msConfig::get($key);
+			$array[$key] = msConfig::getValue($key);
 			foreach ($item->getSubItems() as $sub_item) {
 				$array = $this->fillValue($sub_item, $array);
 			}

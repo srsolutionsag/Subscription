@@ -46,7 +46,7 @@ class subscrTriageGUI {
 
 	public function executeCommand() {
 		$cmd = $this->ctrl->getCmd('start');
-		if(!$this->subscription instanceof msSubscription) {
+		if (!$this->subscription instanceof msSubscription) {
 			throw new ilException('This token has already been used');
 		}
 		$this->{$cmd}();
@@ -68,10 +68,11 @@ class subscrTriageGUI {
 
 
 	public function start() {
-		if (msConfig::get('ask_for_login')) {
+		if (msConfig::getValue('ask_for_login')) {
 			if ($this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
 				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.');
-				$this->tpl->setContent('<a href="' . $this->getLoginLonk() . '" class="submit">Login</a>');
+				$this->tpl->setContent('<a href="' . $this->getLoginLonk()
+				                       . '" class="submit">Login</a>');
 			} else {
 				$this->showLoginDecision();
 			}
@@ -86,29 +87,30 @@ class subscrTriageGUI {
 	protected function showLoginDecision() {
 		$this->tpl->getStandardTemplate();
 		$this->tpl->setVariable('BASE', msConfig::getPath());
-		$this->tpl->setTitle($this->pl->getDynamicTxt('triage_title'));
+		$this->tpl->setTitle($this->pl->txt('triage_title'));
 
 		$de = new ilConfirmationGUI();
 		$de->setFormAction($this->ctrl->getFormAction($this));
 
 		$str = $this->subscription->getMatchingString() . ', Ziel: '
-			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
+		       . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
-		$de->setHeaderText($this->pl->getDynamicTxt('qst_already_account'));
-		$de->setConfirm($this->pl->getDynamicTxt('main_yes'), 'hasLogin');
-		$de->setCancel($this->pl->getDynamicTxt('main_no'), 'hasNoLogin');
+		$de->setHeaderText($this->pl->txt('qst_already_account'));
+		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
+		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
 
 		$this->tpl->setContent($de->getHTML());
 	}
 
 
 	public function determineLogin() {
-		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH
+		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType()
+		                                    == msAccountType::TYPE_SHIBBOLETH
 		) {
 			$this->redirectToLogin();
 		} else {
-			if (msConfig::get('allow_registration')) {
+			if (msConfig::getValue('allow_registration')) {
 				$this->redirectToTokenRegistrationGUI();
 			} else {
 				$this->redirectToLogin();
@@ -135,7 +137,7 @@ class subscrTriageGUI {
 		 * @var $crs ilObjCourse
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
-		if (! $crs->isRegistrationAccessCodeEnabled()) {
+		if (!$crs->isRegistrationAccessCodeEnabled()) {
 			$crs->enableRegistrationAccessCode(1);
 			$crs->update();
 		}
@@ -152,11 +154,7 @@ class subscrTriageGUI {
 
 	protected function redirectToTokenRegistrationGUI() {
 		$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $this->token);
-		if (subscr::is44()) {
-			$this->ctrl->redirectByClass(array( 'ilRouterGUI', 'ilTokenRegistrationGUI' ));
-		} else {
-			$this->ctrl->redirectByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' ));
-		}
+		$this->ctrl->redirectByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' ));
 	}
 
 
@@ -164,10 +162,7 @@ class subscrTriageGUI {
 	 * @return string
 	 */
 	protected function getLoginLonk() {
-		return
-			msConfig::getPath() . 'goto.php?target' . $this->subscription->getContextAsString() . '_' . $this->subscription->getObjRefId() . '_rcode'
-			. $this->getRegistrationCode();
+		return msConfig::getPath() . 'goto.php?target' . $this->subscription->getContextAsString()
+		       . '_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
 	}
 }
-
-?>
