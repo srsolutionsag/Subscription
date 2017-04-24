@@ -77,7 +77,7 @@ class msConfig extends ActiveRecord {
 	 *
 	 * @return array|string
 	 */
-	public static function get($key) {
+	public static function getValueByKey($key) {
 		$obj = new self($key);
 
 		return $obj->getConfigValue();
@@ -103,7 +103,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function checkShibboleth() {
-		return self::get(self::F_SHIBBOLETH) AND is_readable(self::get(self::F_METADATA_XML));
+		return self::getValueByKey(self::F_SHIBBOLETH) AND is_readable(self::getValueByKey(self::F_METADATA_XML));
 	}
 
 
@@ -131,13 +131,13 @@ class msConfig extends ActiveRecord {
 	 */
 	public static function getUsageType() {
 		$usage_type = self::TYPE_NO_USAGE;
-		if (self::get(self::F_USE_EMAIL)) {
+		if (self::getValueByKey(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_MAIL;
 		}
-		if (self::get(self::F_USE_MATRICULATION)) {
+		if (self::getValueByKey(self::F_USE_MATRICULATION)) {
 			$usage_type = self::TYPE_USAGE_MATRICULATION;
 		}
-		if (self::get(self::F_USE_MATRICULATION) AND self::get(self::F_USE_EMAIL)) {
+		if (self::getValueByKey(self::F_USE_MATRICULATION) AND self::getValueByKey(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_BOTH;
 		}
 
@@ -151,7 +151,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function isInIgnoredSubtree($check_ref_id) {
-		if (! self::get(self::F_IGNORE_SUBTREE_ACTIVE)) {
+		if (! self::getValueByKey(self::F_IGNORE_SUBTREE_ACTIVE)) {
 			return false;
 		}
 		if (isset(self::$ignore_chache[$check_ref_id])) {
@@ -162,7 +162,7 @@ class msConfig extends ActiveRecord {
 		/**
 		 * @var $tree ilTree
 		 */
-		$subtrees = explode(',', self::get(self::F_IGNORE_SUBTREE));
+		$subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
 		if (! is_array($subtrees) OR count($subtrees) == 0) {
 			self::$ignore_chache[$check_ref_id] = false;
 

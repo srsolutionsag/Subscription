@@ -113,7 +113,7 @@ class msTriage {
 
 
 	public function start() {
-		if (msConfig::get('ask_for_login')) {
+		if (msConfig::getValueByKey('ask_for_login')) {
 			$this->showLoginDecision();
 		} else {
 			$this->determineLogin();
@@ -150,7 +150,7 @@ class msTriage {
 		) {
 			$this->redirectToLogin();
 		} else {
-			if (msConfig::get('allow_registration')) {
+			if (msConfig::getValueByKey('allow_registration')) {
 				$this->redirectToTokenRegistrationGUI();
 			} else {
 				$this->redirectToLogin();

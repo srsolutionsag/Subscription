@@ -68,9 +68,12 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			array( 'ilobjgroupgui', 'deleteMembers' ),
 			array( 'ilrepositorysearchgui', '*' ),
 			array( 'ilmemberexportgui', '*' ),
+            array( 'ilcoursemembershipgui', '*' ),
+            array( 'ilgroupmembershipgui', '*' ),
 		);
 
 		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
+
 		if ($this->checkContext($a_part, $locations)) {
 			$pl_obj = ilSubscriptionPlugin::getInstance();
 			$this->tabs->removeSubTab('srsubscription');
@@ -120,7 +123,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		$check_cmd = in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context);
 		$check_cmd_class = in_array(array( $this->ctrl->getCmdClass(), '*' ), $context);
 		if (!$check_cmd AND !$check_cmd_class) {
-
 			return false;
 		}
 		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
@@ -132,7 +134,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			return false;
 		}
 
-		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::get(msConfig::F_ACTIVATE_GROUPS)) {
+		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::getValueByKey(msConfig::F_ACTIVATE_GROUPS)) {
 			return false;
 		}
 
@@ -180,7 +182,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		if (!isset(self::$ignored_subtree)) {
 			global $tree;
 
-			foreach (explode(',', trim(msConfig::get('ignore_subtree'))) as $root_id) {
+			foreach (explode(',', trim(msConfig::getValueByKey('ignore_subtree'))) as $root_id) {
 				if (!$root_id) {
 					continue;
 				}
