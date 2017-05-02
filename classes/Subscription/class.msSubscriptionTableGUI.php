@@ -35,7 +35,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	protected function initTableData() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted' => false
+			'deleted'    => false,
 		);
 		$data = array();
 
@@ -54,7 +54,8 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 			}
 			$row = $dat->__asArray();
 			$row['name'] = $dat->lookupName();
-			$row['status_sort'] = $this->pl->getDynamicTxt('main_user_status_' . $dat->getUserStatus());
+			$row['status_sort'] = $this->pl->txt('main_user_status_'
+			                                               . $dat->getUserStatus());
 			$row['in_ilias'] = $user_id ? 1 : 0;
 			$data[] = $row;
 		}
@@ -65,46 +66,45 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 	protected function initTableColumns() {
 		if ($this->getMailUsage()) {
-			$this->addColumn($this->pl->getDynamicTxt('main_tblh_email'), 'matching_string');
+			$this->addColumn($this->pl->txt('main_tblh_email'), 'matching_string');
 		}
 		if ($this->getMatriculationUsage()) {
-			$this->addColumn($this->pl->getDynamicTxt('main_tblh_matriculation'), 'matching_string');
+			$this->addColumn($this->pl->txt('main_tblh_matriculation'), 'matching_string');
 		}
 		if ($this->getMatriculationAndMailUsage()) {
-			$this->addColumn($this->pl->getDynamicTxt('main_tblh_subscription_type'));
+			$this->addColumn($this->pl->txt('main_tblh_subscription_type'));
 		}
-		$this->addColumn($this->pl->getDynamicTxt('main_tblh_in_ilias'), 'in_ilias');
-		if (msConfig::get(msConfig::F_SHOW_NAMES)) {
-			$this->addColumn($this->pl->getDynamicTxt('main_tblh_name'), 'name');
+		$this->addColumn($this->pl->txt('main_tblh_in_ilias'), 'in_ilias');
+		if (msConfig::getValueByKey(msConfig::F_SHOW_NAMES)) {
+			$this->addColumn($this->pl->txt('main_tblh_name'), 'name');
 		}
-		$this->addColumn($this->pl->getDynamicTxt('main_tblh_status'), 'status_sort');
+		$this->addColumn($this->pl->txt('main_tblh_status'), 'status_sort');
 
-		$this->addColumn($this->pl->getDynamicTxt('main_tblh_subscribe'));
+		$this->addColumn($this->pl->txt('main_tblh_subscribe'));
 
-		if ($this->getMailUsage() AND msConfig::get(msConfig::ENBL_INV)) {
-			$this->addColumn($this->pl->getDynamicTxt('main_tblh_invite'));
+		if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
+			$this->addColumn($this->pl->txt('main_tblh_invite'));
 		}
-		$this->addColumn($this->pl->getDynamicTxt('main_tblh_role'));
+		$this->addColumn($this->pl->txt('main_tblh_role'));
 	}
 
 
 	protected function initTableProperties() {
-		$this->table_title = $this->pl->getDynamicTxt('main_tblt_subscriptions');
+		$this->table_title = $this->pl->txt('main_tblt_subscriptions');
 		$this->table_id = 'srsubscr';
 		$this->prefix = 'srsubscr';
 	}
 
 
 	protected function initFormActionsAndCmdButtons() {
-		$this->addCommandButton('removeUnregistered', $this->pl->getDynamicTxt('main_send_table_remove_unregistered'));
-		$this->addCommandButton('clear', $this->pl->getDynamicTxt('main_send_table_clear'));
-		if (msConfig::get(msConfig::F_USE_EMAIL) AND msConfig::get(msConfig::ENBL_INV)) {
-			$this->addCommandButton('triage', $this->pl->getDynamicTxt('main_send_table_usage_2'));
+		$this->addCommandButton('removeUnregistered', $this->pl->txt('main_send_table_remove_unregistered'));
+		$this->addCommandButton('clear', $this->pl->txt('main_send_table_clear'));
+		if (msConfig::getValueByKey(msConfig::F_USE_EMAIL) AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
+			$this->addCommandButton('triage', $this->pl->txt('main_send_table_usage_2'));
 		} else {
-			$this->addCommandButton('triage', $this->pl->getDynamicTxt('main_send_table_usage_1'));
+			$this->addCommandButton('triage', $this->pl->txt('main_send_table_usage_1'));
 		}
 		$this->setFormAction($this->ctrl->getFormAction($this->parent_obj));
-		//		return false;
 	}
 
 
@@ -136,27 +136,28 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	 * @return string
 	 */
 	protected function getRoleSelector($selected = self::STD_ROLE) {
-        $type = $this->parent_obj->getObj()->getType();
-        switch($type){
-            case 'crs':
-                $roles = array(
-                    IL_CRS_MEMBER => $this->pl->getDynamicTxt('main_role_' . IL_CRS_MEMBER),
-                    IL_CRS_TUTOR => $this->pl->getDynamicTxt('main_role_' . IL_CRS_TUTOR),
-                    IL_CRS_ADMIN => $this->pl->getDynamicTxt('main_role_' . IL_CRS_ADMIN),
-                );
-                break;
-            case 'grp':
-                $roles = array(
-                    IL_GRP_MEMBER => $this->pl->getDynamicTxt('main_role_' . IL_GRP_MEMBER),
-                    IL_GRP_ADMIN => $this->pl->getDynamicTxt('main_role_' . IL_GRP_ADMIN),
-                );
-                break;
-        }
+		$type = $this->parent_obj->getObj()->getType();
+		switch ($type) {
+			case 'crs':
+				$roles = array(
+					IL_CRS_MEMBER => $this->pl->txt('main_role_' . IL_CRS_MEMBER),
+					IL_CRS_TUTOR  => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
+					IL_CRS_ADMIN  => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
+				);
+				break;
+			case 'grp':
+				$roles = array(
+					IL_GRP_MEMBER => $this->pl->txt('main_role_' . IL_GRP_MEMBER),
+					IL_GRP_ADMIN  => $this->pl->txt('main_role_' . IL_GRP_ADMIN),
+				);
+				break;
+		}
 
 		$selection_menu = '';
 		foreach ($roles as $value => $role) {
 			$sel = ($selected == $value ? 'selected' : '');
-			$selection_menu .= '<option value=\'' . $value . '\' ' . $sel . '>' . $role . '</option>';
+			$selection_menu .= '<option value=\'' . $value . '\' ' . $sel . '>' . $role
+			                   . '</option>';
 		}
 
 		return $selection_menu;
@@ -170,29 +171,30 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		if ($this->getMailUsage()) {
 			$this->tpl->setCurrentBlock('email');
 			$this->tpl->setVariable('EMAIL', ($msSubscription->getSubscriptionType()
-			== msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;'));
+			                                  == msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;'));
 			$this->tpl->parseCurrentBlock();
 		}
 		if ($this->getMatriculationUsage()) {
 			$this->tpl->setCurrentBlock('matriculation');
 			$this->tpl->setVariable('MATRICULATION', ($msSubscription->getSubscriptionType()
-			== msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;'));
+			                                          == msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;'));
 			$this->tpl->parseCurrentBlock();
 		}
 		if ($this->getMatriculationAndMailUsage()) {
 			$this->tpl->setCurrentBlock('type');
-			$this->tpl->setVariable('TYPE', $this->pl->getDynamicTxt('subscription_type_' . $msSubscription->getSubscriptionType()));
+			$this->tpl->setVariable('TYPE', $this->pl->txt('subscription_type_'
+			                                                         . $msSubscription->getSubscriptionType()));
 			$this->tpl->parseCurrentBlock();
 		}
-		$this->tpl->setVariable('STATUS', $this->pl->getDynamicTxt('main_user_status_' . $msSubscription->getUserStatus()));
-		if (msConfig::get('show_names')) {
+		$this->tpl->setVariable('STATUS', $this->pl->txt('main_user_status_' . $msSubscription->getUserStatus()));
+		if (msConfig::getValueByKey('show_names')) {
 			$this->tpl->setCurrentBlock('name');
 			$this->tpl->setVariable('NAME', $msSubscription->lookupName());
 			$this->tpl->parseCurrentBlock();
 		}
 		$this->tpl->setVariable('USR_ID', 'obj_' . $msSubscription->getId());
 		$this->tpl->setVariable('STD_ROLE', msUserStatus::ROLE_MEMBER);
-		if (! $this->getMailUsage() OR ! msConfig::get(msConfig::ENBL_INV)) {
+		if (! $this->getMailUsage() OR ! msConfig::getValueByKey(msConfig::ENBL_INV)) {
 			$this->tpl->setVariable('DISABLE_NOMAIL', 'nomail');
 		}
 		$this->tpl->setVariable('CMD_INVITE', msSubscriptionGUI::CMD_INVITE);
@@ -208,7 +210,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		switch ($msSubscription->getUserStatus()) {
 			case msUserStatus::STATUS_ALREADY_ASSIGNED:
 				$this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_ON));
-				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->getDynamicTxt('main_yes'));
+				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_yes'));
 				$this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'yes');
 				$this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
 				$this->tpl->setVariable('DISABLED_INV', self::DISABLED);
@@ -217,14 +219,14 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 				break;
 			case msUserStatus::STATUS_USER_CAN_BE_ASSIGNED:
 				$this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_ON));
-				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->getDynamicTxt('main_yes'));
+				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_yes'));
 				$this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'yes');
 				$this->tpl->setVariable('DISABLED_INV', self::DISABLED);
 				$this->tpl->setVariable('CHECKED_SUB', self::CHECKED);
 				break;
 			case msUserStatus::STATUS_ALREADY_INVITED:
 				$this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
-				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->getDynamicTxt('main_no'));
+				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
 				$this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
 				$this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
 				$this->tpl->setVariable('DISABLED_ROLE', self::DISABLED);
@@ -233,10 +235,10 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 				break;
 			case msUserStatus::STATUS_USER_CAN_BE_INVITED:
 				$this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
-				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->getDynamicTxt('main_no'));
+				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
 				$this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
 				$this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
-				if (msConfig::get(msConfig::ENBL_INV)) {
+				if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
 					$this->tpl->setVariable('CHECKED_INV', self::CHECKED);
 				} else {
 					$this->tpl->setVariable('CHECKED_INV', self::DISABLED);
@@ -245,7 +247,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 			case msUserStatus::STATUS_USER_NOT_INVITABLE:
 			case msUserStatus::STATUS_USER_NOT_ASSIGNABLE:
 				$this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
-				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->getDynamicTxt('main_no'));
+				$this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
 				$this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
 				$this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
 				$this->tpl->setVariable('CHECKED_INV', self::DISABLED);
@@ -268,7 +270,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	 * @return bool|string
 	 */
 	protected function getMatriculationUsage() {
-		return msConfig::get('use_matriculation');
+		return msConfig::getValueByKey('use_matriculation');
 	}
 
 
@@ -276,8 +278,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	 * @return bool|string
 	 */
 	protected function getMailUsage() {
-		return msConfig::get('use_email');
+		return msConfig::getValueByKey('use_email');
 	}
 }
-
-?>

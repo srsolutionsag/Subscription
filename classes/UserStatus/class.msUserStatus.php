@@ -91,21 +91,21 @@ class msUserStatus {
 			}
 		} elseif ($this->getType() == self::EMAIL) {
 			$where = array(
-				'matching_string' => $this->getInput(),
-				'obj_ref_id' => $this->getCrsRefId(),
-				'invitations_sent' => '1'
+				'matching_string'  => $this->getInput(),
+				'obj_ref_id'       => $this->getCrsRefId(),
+				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string' => 'LIKE',
-				'obj_ref_id' => '=',
-				'invitations_sent' => '='
+				'matching_string'  => 'LIKE',
+				'obj_ref_id'       => '=',
+				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
 				$this->setStatus(self::STATUS_ALREADY_INVITED);
 
 				return;
 			} else {
-				if (msConfig::get(msConfig::ENBL_INV)) {
+				if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
 					$this->setStatus(self::STATUS_USER_CAN_BE_INVITED);
 				} else {
 					$this->setStatus(self::STATUS_USER_NOT_ASSIGNABLE);
@@ -162,14 +162,14 @@ class msUserStatus {
 			}
 		} else {
 			$where = array(
-				'matching_string' => $mail,
-				'obj_ref_id' => $crs_ref_id,
-				'invitations_sent' => '1'
+				'matching_string'  => $mail,
+				'obj_ref_id'       => $crs_ref_id,
+				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string' => 'LIKE',
-				'obj_ref_id' => '=',
-				'invitations_sent' => '='
+				'matching_string'  => 'LIKE',
+				'obj_ref_id'       => '=',
+				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
 				return self::STATUS_ALREADY_INVITED;
@@ -231,7 +231,8 @@ class msUserStatus {
 		/**
 		 * @var $ilDB ilDB
 		 */
-		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE ' . $ilDB->quote($mail, 'text'));
+		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE '
+		                    . $ilDB->quote($mail, 'text'));
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
 		}
@@ -251,7 +252,8 @@ class msUserStatus {
 		/**
 		 * @var $ilDB ilDB
 		 */
-		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE ' . $ilDB->quote($mail, 'text'));
+		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE '
+		                    . $ilDB->quote($mail, 'text'));
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
 		}
@@ -373,7 +375,8 @@ class msUserStatus {
 		/**
 		 * @var $ilDB ilDB
 		 */
-		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text') . ' AND active = 1';
+		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE '
+		         . $ilDB->quote($value, 'text') . ' AND active = 1';
 		$set = $ilDB->query($query);
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
@@ -382,5 +385,3 @@ class msUserStatus {
 		return false;
 	}
 }
-
-?>

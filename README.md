@@ -4,27 +4,7 @@ This UIHook-Plugin allows you to subscribe multiple users to a course at once, b
 
 Have a look at the [full documentation](/doc/Documentation.pdf?raw=true)
 
-## Installation
-This Plugin requires ActiveRecord and ilRouterGUI. In ILIAS 5.0 and above, both components are already installed. 
-### Router
-In ILIAS 4.4 the Subscription-Plugin needs a Router-Service to work. Please install the Service first:
- 
-You start in your ILIAS root directory
-
-```bash
-cd Services  
-git clone https://github.com/studer-raimann/RouterService.git Router  
-```
-Switch to the setup-Menu of your Installation and perform a Structure-reload in the Tab Tools. this can take a few moments. After the reload has been performed, you can install the plugin.
-### ActiveRecord
-ILIAS 4.4 does not include ActiveRecord. Therefore please install the latest Version of active record before you install the plugin:
-Start at your ILIAS root directory
-```bash
-mkdir -p Customizing/global/plugins/Libraries/  
-cd Customizing/global/plugins/Libraries  
-git clone https://github.com/studer-raimann/ActiveRecord.git  
-```
-### Plugin
+## Installation 
 Start at your ILIAS root directory
 ```bash
 mkdir -p Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/  
@@ -40,9 +20,9 @@ Sind Sie interessiert an einer Plugin-Patenschaft (https://studer-raimann.ch/pro
 
 ## Contact
 studer + raimann ag  
-Waldeggstrasse 72  
-3097 Liebefeld  
-Switzerland 
+Farbweg 9  
+3400 Burgdorf    
+Switzerland
 
 info@studer-raimann.ch  
 www.studer-raimann.ch  
