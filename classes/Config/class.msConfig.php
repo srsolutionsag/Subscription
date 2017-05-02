@@ -75,7 +75,7 @@ class msConfig extends ActiveRecord {
 	 *
 	 * @return array|string
 	 */
-	public static function getValue($key) {
+	public static function getValueByKey($key) {
 		$obj = new self($key);
 
 		return $obj->getConfigValue();
@@ -101,7 +101,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function checkShibboleth() {
-		return self::getValue(self::F_SHIBBOLETH) AND is_readable(self::getValue(self::F_METADATA_XML));
+		return self::getValueByKey(self::F_SHIBBOLETH) AND is_readable(self::getValueByKey(self::F_METADATA_XML));
 	}
 
 
@@ -118,13 +118,14 @@ class msConfig extends ActiveRecord {
 	 */
 	public static function getUsageType() {
 		$usage_type = self::TYPE_NO_USAGE;
-		if (self::getValue(self::F_USE_EMAIL)) {
+
+		if (self::getValueByKey(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_MAIL;
 		}
-		if (self::getValue(self::F_USE_MATRICULATION)) {
+		if (self::getValueByKey(self::F_USE_MATRICULATION)) {
 			$usage_type = self::TYPE_USAGE_MATRICULATION;
 		}
-		if (self::getValue(self::F_USE_MATRICULATION) AND self::getValue(self::F_USE_EMAIL)) {
+		if (self::getValueByKey(self::F_USE_MATRICULATION) AND self::getValueByKey(self::F_USE_EMAIL)) {
 			$usage_type = self::TYPE_USAGE_BOTH;
 		}
 
@@ -138,7 +139,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function isInIgnoredSubtree($check_ref_id) {
-		if (!self::getValue(self::F_IGNORE_SUBTREE_ACTIVE)) {
+		if (! self::getValueByKey(self::F_IGNORE_SUBTREE_ACTIVE)) {
 			return false;
 		}
 		if (isset(self::$ignore_chache[$check_ref_id])) {
@@ -149,8 +150,9 @@ class msConfig extends ActiveRecord {
 		/**
 		 * @var $tree ilTree
 		 */
-		$subtrees = (array)self::getValue(self::F_IGNORE_SUBTREE);
-		if (!is_array($subtrees) OR count($subtrees) == 0) {
+
+		$subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
+		if (! is_array($subtrees) OR count($subtrees) == 0) {
 			self::$ignore_chache[$check_ref_id] = false;
 
 			return false;
@@ -203,5 +205,3 @@ class msConfig extends ActiveRecord {
 		return $this->config_value;
 	}
 }
-
-?>

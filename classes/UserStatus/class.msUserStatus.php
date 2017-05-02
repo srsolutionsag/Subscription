@@ -105,7 +105,7 @@ class msUserStatus {
 
 				return;
 			} else {
-				if (msConfig::getValue(msConfig::ENBL_INV)) {
+				if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
 					$this->setStatus(self::STATUS_USER_CAN_BE_INVITED);
 				} else {
 					$this->setStatus(self::STATUS_USER_NOT_ASSIGNABLE);

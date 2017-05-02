@@ -109,7 +109,7 @@ class msSubscription extends ActiveRecord {
 				$status = $participants->add($usr_id, $this->getRole());
 				break;
 		}
-		if ($status AND msConfig::getValue(msConfig::F_SEND_MAILS)) {
+		if ($status AND msConfig::getValueByKey(msConfig::F_SEND_MAILS)) {
 			switch ($this->getContext()) {
 				case self::CONTEXT_CRS:
 					$participants->sendNotification($participants->NOTIFY_ACCEPT_USER, $usr_id);

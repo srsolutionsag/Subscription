@@ -91,13 +91,13 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 		switch ($this->subscription->getSubscriptionType()) {
 			case msSubscription::TYPE_EMAIL:
-				$usr_email->setDisabled(msConfig::getValue('fixed_email'));
+				$usr_email->setDisabled(msConfig::getValueByKey('fixed_email'));
 				$usr_email->setValue($this->subscription->getMatchingString());
 				$retype = in_array('setRetypeValue', get_class_methods(get_class($usr_email)));
 				if ($retype) {
 					$usr_email->setRetypeValue($this->subscription->getMatchingString());
 				}
-				if (msConfig::getValue('fixed_email')) {
+				if (msConfig::getValueByKey('fixed_email')) {
 					//					$usr_email->setPostVar('usr_email_fixed');
 					$hidden = new ilHiddenInputGUI('usr_email');
 					$hidden->setValue($this->subscription->getMatchingString());
@@ -110,7 +110,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 				}
 				break;
 			case msSubscription::TYPE_MATRICULATION:
-				$matriculation->setDisabled(msConfig::getValue('fixed_email'));
+				$matriculation->setDisabled(msConfig::getValueByKey('fixed_email'));
 				$matriculation->setValue($this->subscription->getMatchingString());
 		}
 	}

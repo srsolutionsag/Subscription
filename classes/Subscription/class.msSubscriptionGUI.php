@@ -190,14 +190,14 @@ class msSubscriptionGUI {
 		$this->form->setTitle($this->pl->txt('main_form_title_usage_' . msConfig::getUsageType()));
 		//		$this->form->setDescription($this->pl->txt('main_form_info_usage_' . msConfig::getUsageType()));
 		$this->form->setFormAction($this->ctrl->getFormAction($this));
-		if (msConfig::getValue('use_email')) {
+		if (msConfig::getValueByKey('use_email')) {
 			$te = new ilTextareaInputGUI($this->pl->txt('main_field_emails_title'), self::EMAIL_FIELD);
 			$te->setInfo($this->pl->txt('main_field_emails_info'));
 			$te->setRows(10);
 			$te->setCols(100);
 			$this->form->addItem($te);
 		}
-		if (msConfig::getValue('use_matriculation')) {
+		if (msConfig::getValueByKey('use_matriculation')) {
 			$te = new ilTextareaInputGUI($this->pl->txt('main_field_matriculation_title'), self::MATRICULATION_FIELD);
 			$te->setInfo($this->pl->txt('main_field_matriculation_info'));
 			$te->setRows(10);
@@ -258,7 +258,7 @@ class msSubscriptionGUI {
 						break;
 					case '':
 					case self::CMD_KEEP:
-						$obj->setDeleted(msConfig::getValue(msConfig::F_PURGE));
+						$obj->setDeleted(msConfig::getValueByKey(msConfig::F_PURGE));
 						break;
 					case self::CMD_INVITE:
 					case self::CMD_REINVITE:
@@ -272,9 +272,8 @@ class msSubscriptionGUI {
 				$obj->update();
 			}
 		}
-		if (msConfig::getValue(msConfig::ENBL_INV)) {
-			ilUtil::sendInfo($this->pl->txt('main_msg_emails_sent_usage_'
-			                                . msConfig::getUsageType()), true);
+		if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
+			ilUtil::sendInfo($this->pl->txt('main_msg_emails_sent_usage_' . msConfig::getUsageType()), true);
 		} else {
 			ilUtil::sendInfo($this->pl->txt('main_msg_triage_finished'), true);
 		}
@@ -303,8 +302,8 @@ class msSubscriptionGUI {
 		/**
 		 * @var $ilUser ilObjUser
 		 */
-		if (msConfig::getValue(msConfig::F_SYSTEM_USER)) {
-			$mail = new ilMail(msConfig::getValue(msConfig::F_SYSTEM_USER));
+		if (msConfig::getValueByKey(msConfig::F_SYSTEM_USER)) {
+			$mail = new ilMail(msConfig::getValueByKey(msConfig::F_SYSTEM_USER));
 		} else {
 			$mail = new ilMail(self::SYSTEM_USER);
 		}
@@ -389,5 +388,3 @@ class msSubscriptionGUI {
 		exit;
 	}
 }
-
-?>

@@ -40,9 +40,7 @@ class msAccountType {
 
 
 	public function initAccountType() {
-		if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL
-		    AND msConfig::getValue('shibboleth')
-		) {
+		if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL AND msConfig::getValueByKey('shibboleth')) {
 			self::readDomains();
 			foreach (self::$domains as $aai) {
 				// (bool)preg_match("/(\\@".$aai.")|(\\@[a-zA-Z0-9]*\\.".$aai.")/uism", $this->getMatchingString()) // Possible Fix fo
@@ -116,7 +114,7 @@ class msAccountType {
 			if (msConfig::checkShibboleth()) {
 				$xslt = new XSLTProcessor();
 				$xslt->importStylesheet(new SimpleXMLElement(file_get_contents('domain_to_idp_entityid.xsl', true)));
-				$metadata = new SimpleXMLElement(file_get_contents(msConfig::getValue('metadata_xml')));
+				$metadata = new SimpleXMLElement(file_get_contents(msConfig::getValueByKey('metadata_xml')));
 				$xml = simplexml_load_string($xslt->transformToXml($metadata));
 				$domains = array();
 				foreach ($xml->children() as $child) {
