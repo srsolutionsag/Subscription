@@ -75,5 +75,3 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
 		$this->ctrl->redirect($this, self::CMD_STD);
 	}
 }
-
-?>

@@ -78,7 +78,9 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	/**
 	 * @return bool
 	 * @description  returns false, if no filter is needed, otherwise implement filters
-	 * @description  set custom metjosd for filtering and resetting ($this->setResetCommand('resetFilter'); and $this->setFilterCommand('applyFilter');)
+	 * @description  set custom metjosd for filtering and resetting
+	 *               ($this->setResetCommand('resetFilter'); and
+	 *               $this->setFilterCommand('applyFilter');)
 	 */
 	abstract protected function initTableFilter();
 
@@ -100,7 +102,8 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	/**
 	 * @return bool
 	 * @description returns false or set the following
-	 * @description e.g. ovverride table id oder title: $this->table_id = 'myid', $this->table_title = 'My Title'
+	 * @description e.g. ovverride table id oder title: $this->table_id = 'myid',
+	 *              $this->table_title = 'My Title'
 	 */
 	abstract protected function initTableProperties();
 
@@ -114,14 +117,16 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 
 	/**
 	 * @return bool
-	 * @description returns false, if dynamic template is needed, otherwise implement your own template by $this->setRowTemplate($a_template, $a_template_dir = "")
+	 * @description returns false, if dynamic template is needed, otherwise implement your own
+	 *              template by $this->setRowTemplate($a_template, $a_template_dir = "")
 	 */
 	abstract protected function initTableRowTemplate();
 
 
 	/**
 	 * @return bool
-	 * @description returns false, if global language is needed; implement your own language by setting $this->lng
+	 * @description returns false, if global language is needed; implement your own language by
+	 *              setting $this->lng
 	 */
 	abstract protected function initLanguage();
 
@@ -157,9 +162,9 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 			return false;
 		}
 		foreach (array_keys(array_shift($data)) as $key) {
-			$this->addColumn($this->lng->getDynamicTxt($key), $key);
+			$this->addColumn($this->lng->txt($key), $key);
 		}
-		$this->addColumn($this->lng->getDynamicTxt('actions'), 'actions');
+		$this->addColumn($this->lng->txt('actions'), 'actions');
 
 		return true;
 	}
@@ -180,9 +185,9 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 			$this->ctrl->setParameter($this->parent_obj, 'object_id', $a_set['id']);
 			$actions = new ilAdvancedSelectionListGUI();
 			$actions->setId('actions_' . self::$num);
-			$actions->setListTitle($this->pl->getDynamicTxt('actions'));
-			$actions->addItem($this->pl->getDynamicTxt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
-			$actions->addItem($this->pl->getDynamicTxt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
+			$actions->setListTitle($this->pl->txt('actions'));
+			$actions->addItem($this->pl->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
+			$actions->addItem($this->pl->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
 			$this->tpl->setCurrentBlock('cell');
 			$this->tpl->setVariable('VALUE', $actions->getHTML());
 			$this->tpl->parseCurrentBlock();
@@ -243,10 +248,10 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 		$hits = $ilUser->getPref('hits_per_page');
 		$parameters = explode(':', $_GET[$this->getNavParameter()]);
 		$return_values = array(
-			'from' => $parameters[2] ? $parameters[2] : 0,
-			'to' => $parameters[2] ? $parameters[2] + $hits - 1 : $hits - 1,
+			'from'       => $parameters[2] ? $parameters[2] : 0,
+			'to'         => $parameters[2] ? $parameters[2] + $hits - 1 : $hits - 1,
 			'sort_field' => $parameters[0] ? $parameters[0] : false,
-			'order' => $parameters[1] ? strtoupper($parameters[1]) : 'ASC'
+			'order'      => $parameters[1] ? strtoupper($parameters[1]) : 'ASC',
 		);
 
 		return $return_values;
@@ -264,5 +269,3 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 		return $array[$param];
 	}
 }
-
-?>

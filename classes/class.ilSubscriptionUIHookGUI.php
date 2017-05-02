@@ -3,6 +3,7 @@ require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
 require_once('./Modules/Course/classes/class.ilObjCourse.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
+
 /**
  * Class ilSubscriptionUIHookGUI
  *
@@ -73,6 +74,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		);
 
 		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
+
 		if ($this->checkContext($a_part, $locations)) {
 			$pl_obj = ilSubscriptionPlugin::getInstance();
 			$this->tabs->removeSubTab('srsubscription');
@@ -80,19 +82,12 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->ctrl->setTargetScript('ilias.php');
 			$this->initBaseClass();
 			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'obj_ref_id', $_GET['ref_id']);
-			if(subscr::is44()) {
-				$this->tabs->addSubTab('srsubscription', $pl_obj->getDynamicTxt('tab_usage_'
-					. msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
-					'ilRouterGUI',
-					'msSubscriptionGUI'
-				)), '', 'ilsubscriptiongui');
-			} else {
-				$this->tabs->addSubTab('srsubscription', $pl_obj->getDynamicTxt('tab_usage_'
-					. msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
-					'ilUIPluginRouterGUI',
-					'msSubscriptionGUI'
-				)), '', 'ilsubscriptiongui');
-			}
+
+			$this->tabs->addSubTab('srsubscription', $pl_obj->txt('tab_usage_'
+			                                                                . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
+				'ilUIPluginRouterGUI',
+				'msSubscriptionGUI',
+			)), '', 'ilsubscriptiongui');
 
 			if ($this->checkContext($a_part, $tab_highlight)) {
 				$this->tabs->activateSubTab('srsubscription');
@@ -122,7 +117,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		$check_cmd = in_array(array( $this->ctrl->getCmdClass(), $this->ctrl->getCmd() ), $context);
 		$check_cmd_class = in_array(array( $this->ctrl->getCmdClass(), '*' ), $context);
 		if (!$check_cmd AND !$check_cmd_class) {
-
 			return false;
 		}
 		if (!in_array($this->ctrl->getContextObjType(), array( 'grp', 'crs' ))) {
@@ -134,7 +128,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			return false;
 		}
 
-		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::get(msConfig::F_ACTIVATE_GROUPS)) {
+		if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::getValueByKey(msConfig::F_ACTIVATE_GROUPS)) {
 			return false;
 		}
 
@@ -152,11 +146,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->initBaseClass();
 			$this->ctrl->setTargetScript('./ilias.php');
 			$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $token);
-			if (subscr::is44()) {
-				$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );
-			}else {
-				$arr = array( 'ilUIPluginRouterGUI', 'subscrTriageGUI' );
-			}
+			$arr = array( 'ilUIPluginRouterGUI', 'subscrTriageGUI' );
 			$this->ctrl->redirectByClass($arr);
 		}
 
@@ -165,11 +155,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->initBaseClass();
 			$this->ctrl->setTargetScript('./ilias.php');
 			$this->ctrl->setParameterByClass('subscrTriageGUI', 'token', $token);
-			if (subscr::is44()) {
-				$arr = array( 'ilRouterGUI', 'subscrTriageGUI' );
-			}else {
-				$arr = array( 'ilUIPluginRouterGUI', 'subscrTriageGUI' );
-			}
+			$arr = array( 'ilUIPluginRouterGUI', 'subscrTriageGUI' );
+
 			$this->ctrl->redirectByClass($arr);
 		}
 	}
@@ -182,7 +169,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		if (!isset(self::$ignored_subtree)) {
 			global $tree;
 
-			foreach (explode(',', trim(msConfig::get('ignore_subtree'))) as $root_id) {
+			foreach (explode(',', trim(msConfig::getValueByKey('ignore_subtree'))) as $root_id) {
 				if (!$root_id) {
 					continue;
 				}
@@ -195,12 +182,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
 
 	protected function initBaseClass() {
-		if (subscr::is44()) {
-			$this->ctrl->initBaseClass('ilRouterGUI');
-		} else {
-			$this->ctrl->initBaseClass('ilUIPluginRouterGUI');
-		}
+		$this->ctrl->initBaseClass('ilUIPluginRouterGUI');
 	}
 }
-
-?>

@@ -1,6 +1,5 @@
 <?php
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
-subscr::loadActiveRecord();
+require_once('./Services/ActiveRecord/class.ActiveRecord.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Modules/Group/classes/class.ilGroupMembershipMailNotification.php');
@@ -110,7 +109,7 @@ class msSubscription extends ActiveRecord {
 				$status = $participants->add($usr_id, $this->getRole());
 				break;
 		}
-		if ($status AND msConfig::get(msConfig::F_SEND_MAILS)) {
+		if ($status AND msConfig::getValueByKey(msConfig::F_SEND_MAILS)) {
 			switch ($this->getContext()) {
 				case self::CONTEXT_CRS:
 					$participants->sendNotification($participants->NOTIFY_ACCEPT_USER, $usr_id);
@@ -168,13 +167,13 @@ class msSubscription extends ActiveRecord {
 	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(
 			'matching_string' => $input,
-			'obj_ref_id' => $obj_ref_id,
-			'deleted' => false
+			'obj_ref_id'      => $obj_ref_id,
+			'deleted'         => false,
 		);
 		$operators = array(
 			'matching_string' => 'LIKE',
-			'obj_ref_id' => '=',
-			'deleted' => '='
+			'obj_ref_id'      => '=',
+			'deleted'         => '=',
 		);
 		if (!msSubscription::where($where, $operators)->hasSets() AND $input != '') {
 			$msSubscription = new msSubscription();
