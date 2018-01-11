@@ -121,9 +121,6 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 		$msSubscription->setInvitationsSent(1);
 		$msSubscription->create();
 	}
-	if ($ilDB->tableExists('rep_robj_xmsb_tk_bak')) {
-		$ilDB->dropTable("rep_robj_xmsb_tk_bak");
-	}
 	$ilDB->renameTable('rep_robj_xmsb_token', 'rep_robj_xmsb_tk_bak');
 }
 ?>
