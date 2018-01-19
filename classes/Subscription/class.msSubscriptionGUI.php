@@ -58,25 +58,31 @@ class msSubscriptionGUI {
 	 * @var ilObjCourse|ilObjGroup
 	 */
 	protected $obj;
+	/**
+	 * @var ilObjUser
+	 */
+	protected $user;
+	/**
+	 * @var ilAccessHandler
+	 */
+	protected $access;
 
 
 	/**
 	 * @param $parent
 	 */
 	function __construct($parent = null) {
-		global $tpl, $ilCtrl, $ilToolbar, $ilTabs, $objDefinition;
+		global $DIC, $objDefinition;
 		/**
-		 * @var $tpl           ilTemplate
-		 * @var $ilCtrl        ilCtrl
-		 * @var $ilToolbar     ilToolbarGUI
-		 * @var $ilTabs        ilTabsGUI
 		 * @var $objDefinition ilObjectDefinition
 		 */
-		$this->tpl = $tpl;
-		$this->ctrl = $ilCtrl;
+		$this->tpl = $DIC->ui()->mainTemplate();
+		$this->ctrl = $DIC->ctrl();
 		$this->parent = $parent;
-		$this->toolbar = $ilToolbar;
-		$this->tabs = $ilTabs;
+		$this->toolbar = $DIC->toolbar();
+		$this->tabs = $DIC->tabs();
+		$this->user = $DIC->user();
+		$this->access = $DIC->access();
 		$this->obj_def = $objDefinition;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 		//		$this->pl->updateLanguageFiles();
@@ -154,10 +160,6 @@ class msSubscriptionGUI {
 	 * @param $cmd
 	 */
 	function performCommand($cmd) {
-		global $ilAccess;
-		/**
-		 * @var $ilAccess ilAccessHandler
-		 */
 		switch ($cmd) {
 			case 'showForm':
 			case 'sendForm':
@@ -166,7 +168,7 @@ class msSubscriptionGUI {
 			case 'removeUnregistered':
 			case 'clear':
 			case self::CMD_LNG:
-				if (!$ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
+				if (!$this->access->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->txt('main_no_access'));
 					ilUtil::redirect('index.php');
 
@@ -298,10 +300,6 @@ class msSubscriptionGUI {
 	 * @param bool $reinvite
 	 */
 	public function sendMail(msSubscription $msSubscription, $reinvite = false) {
-		global $ilUser;
-		/**
-		 * @var $ilUser ilObjUser
-		 */
 		if (msConfig::getValueByKey(msConfig::F_SYSTEM_USER)) {
 			$mail = new ilMail(msConfig::getValueByKey(msConfig::F_SYSTEM_USER));
 		} else {
@@ -314,8 +312,8 @@ class msSubscriptionGUI {
 			'inv_email' => $msSubscription->getMatchingString(),
 			'link'      => ILIAS_HTTP_PATH . '/goto.php?target=subscr_'
 			               . $msSubscription->getToken(),
-			'username'  => $ilUser->getFullname(),
-			'email'     => $ilUser->getEmail(),
+			'username'  => $this->user->getFullname(),
+			'email'     => $this->user->getEmail(),
 		);
 
 		$mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);

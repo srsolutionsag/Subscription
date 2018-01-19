@@ -28,17 +28,11 @@ class msTriage {
 
 	public function __construct() {
 		$this->initILIAS();
-		global $ilDB, $ilUser, $ilCtrl, $tpl;
-		/**
-		 * @var $ilDB   ilDB
-		 * @var $ilUser ilObjUser
-		 * @var $ilCtrl ilCtrl
-		 * @var $tpl    ilTemplate
-		 */
-		$this->db = $ilDB;
-		$this->tpl = $tpl;
-		$this->user = $ilUser;
-		$this->ctrl = $ilCtrl;
+		global $DIC;
+		$this->db = $DIC->database();
+		$this->tpl = $DIC->ui()->mainTemplate();
+		$this->user = $DIC->user();
+		$this->ctrl = $DIC->ctrl();
 		$this->pl = new ilSubscriptionPlugin();
 
 		$this->token = $_REQUEST['token'];
@@ -49,9 +43,8 @@ class msTriage {
 
 	public function initILIAS() {
 		chdir(substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], '/Customizing')));
-		global $ilCtrl;
 
-		if (!$ilCtrl instanceof ilCtrl) {
+		if (!$this->ctrl instanceof ilCtrl) {
 			//			echo "!!!";
 			//			exit;
 			require_once("Services/Init/classes/class.ilInitialisation.php");

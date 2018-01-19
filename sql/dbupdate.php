@@ -167,12 +167,9 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 <#13>
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-global $ilDB;
-/**
- * @var $ilDB ilDB
- */
+global $DIC;
 msSubscription::updateDB();
-$ilDB->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
+$DIC->database()->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
 ?>
 <#14>
 <?php

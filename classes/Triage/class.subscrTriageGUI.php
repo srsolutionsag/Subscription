@@ -25,17 +25,11 @@ class subscrTriageGUI {
 
 
 	public function __construct() {
-		global $ilDB, $ilUser, $ilCtrl, $tpl;
-		/**
-		 * @var $ilDB   ilDB
-		 * @var $ilUser ilObjUser
-		 * @var $ilCtrl ilCtrl
-		 * @var $tpl    ilTemplate
-		 */
-		$this->db = $ilDB;
-		$this->tpl = $tpl;
-		$this->user = $ilUser;
-		$this->ctrl = $ilCtrl;
+		global $DIC;
+		$this->db = $DIC->database();
+		$this->tpl = $DIC->ui()->mainTemplate();
+		$this->user = $DIC->user();
+		$this->ctrl = $DIC->ctrl();
 		$this->pl = ilSubscriptionPlugin::getInstance();
 
 		$this->token = $_REQUEST['token'];
