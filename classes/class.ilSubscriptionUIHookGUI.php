@@ -29,13 +29,18 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 * @var ilAccessHandler
 	 */
 	protected $access;
+	/**
+	 * @var ilTree
+	 */
+	protected $three;
 
 
 	public function __construct() {
-		global $ilCtrl, $ilTabs, $ilAccess;
-		$this->ctrl = $ilCtrl;
-		$this->tabs = $ilTabs;
-		$this->access = $ilAccess;
+		global $DIC;
+		$this->ctrl = $DIC->ctrl();
+		$this->tabs = $DIC->tabs();
+		$this->access = $DIC->access();
+		$this->tree =$DIC->repositoryTree();
 		$this->pl = ilSubscriptionPlugin::getInstance();
 	}
 
@@ -167,13 +172,11 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 */
 	protected function getIgnoredSubTree() {
 		if (!isset(self::$ignored_subtree)) {
-			global $tree;
-
 			foreach (explode(',', trim(msConfig::getValueByKey('ignore_subtree'))) as $root_id) {
 				if (!$root_id) {
 					continue;
 				}
-				self::$ignored_subtree = array_merge(self::$ignored_subtree, $tree->getSubTree($tree->getNodeData($root_id), false));
+				self::$ignored_subtree = array_merge(self::$ignored_subtree, $this->tree->getSubTree($this->tree->getNodeData($root_id), false));
 			}
 		}
 

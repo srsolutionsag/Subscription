@@ -32,10 +32,10 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
 
 
 	public function __construct() {
-		global $lng, $ilCtrl, $tpl;
-		$this->ctrl = $ilCtrl;
-		$this->lng = $lng;
-		$this->tpl = $tpl;
+		global $DIC;
+		$this->ctrl = $DIC->ctrl();
+		$this->lng = $DIC->language();
+		$this->tpl = $DIC->ui()->mainTemplate();
 		$this->pl = ilSubscriptionPlugin::getInstance();
 	}
 
