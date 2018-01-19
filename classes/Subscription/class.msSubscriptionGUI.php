@@ -61,7 +61,7 @@ class msSubscriptionGUI {
 	/**
 	 * @var ilObjUser
 	 */
-	protected $user;
+	protected $usr;
 	/**
 	 * @var ilAccessHandler
 	 */
@@ -81,7 +81,7 @@ class msSubscriptionGUI {
 		$this->parent = $parent;
 		$this->toolbar = $DIC->toolbar();
 		$this->tabs = $DIC->tabs();
-		$this->user = $DIC->user();
+		$this->usr = $DIC->user();
 		$this->access = $DIC->access();
 		$this->obj_def = $objDefinition;
 		$this->pl = ilSubscriptionPlugin::getInstance();
@@ -125,10 +125,7 @@ class msSubscriptionGUI {
 
 
 	private function initHeader() {
-		global $ilLocator;
-		/**
-		 * @var $ilLocator ilLocatorGUI
-		 */
+		global $DIC;
 		$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->obj->getType());
 		$this->tpl->setTitle($this->obj->getTitle());
 		$this->tpl->setDescription($this->obj->getDescription());
@@ -142,8 +139,8 @@ class msSubscriptionGUI {
 			'ilRepositoryGUI',
 			'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
 		), 'members'));
-		$ilLocator->addRepositoryItems($this->obj_ref_id);
-		$this->tpl->setLocator($ilLocator->getHTML());
+		$DIC["ilLocator"]->addRepositoryItems($this->obj_ref_id);
+		$this->tpl->setLocator($DIC["ilLocator"]->getHTML());
 		$this->tpl->addCss('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/templates/default/Subscription/main.css');
 	}
 
@@ -312,8 +309,8 @@ class msSubscriptionGUI {
 			'inv_email' => $msSubscription->getMatchingString(),
 			'link'      => ILIAS_HTTP_PATH . '/goto.php?target=subscr_'
 			               . $msSubscription->getToken(),
-			'username'  => $this->user->getFullname(),
-			'email'     => $this->user->getEmail(),
+			'username'  => $this->usr->getFullname(),
+			'email'     => $this->usr->getEmail(),
 		);
 
 		$mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);

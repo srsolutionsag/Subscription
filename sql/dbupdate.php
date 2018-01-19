@@ -136,7 +136,7 @@ if ($ilDB->tableExists('xunibas_subs_type')) {
 <#8>
 <?php
 //require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
-//$pl = new ilSubscriptionPlugin();
+//$pl = ilSubscriptionPlugin::getInstance();
 //$pl->updateLanguageFiles();
 ?>
 <#9>
