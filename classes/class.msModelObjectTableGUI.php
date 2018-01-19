@@ -42,6 +42,10 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 * @var int
 	 */
 	static $num = 0;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
 
 
 	/**
@@ -53,6 +57,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 		$this->tabs = $DIC->tabs();
 		$this->access = $DIC->access();
 		$this->usr = $DIC->user();
+		$this->ctrl = $DIC->ctrl();
 		if ($this->initLanguage() === false) {
 			$this->lng = $DIC->language();
 		}

@@ -21,6 +21,10 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @var ilSubscriptionPlugin
 	 */
 	protected $pl;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
 
 
 	/**
@@ -28,6 +32,8 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 */
 	public function __construct($parent_gui) {
 		parent::__construct();
+		global $DIC;
+		$this->ctrl = $DIC->ctrl();
 		$this->parent_gui = $parent_gui;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 		$this->ctrl->saveParameter($parent_gui, 'clip_ext_id');
