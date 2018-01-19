@@ -22,13 +22,16 @@ class subscrTriageGUI {
 	 * @var msSubscription
 	 */
 	protected $subscription;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
 
 
 	public function __construct() {
 		global $DIC;
 		$this->db = $DIC->database();
 		$this->tpl = $DIC->ui()->mainTemplate();
-		$this->user = $DIC->user();
 		$this->ctrl = $DIC->ctrl();
 		$this->pl = ilSubscriptionPlugin::getInstance();
 

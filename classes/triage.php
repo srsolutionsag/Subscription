@@ -24,6 +24,10 @@ class msTriage {
 	 * @var msSubscription
 	 */
 	protected $subscription;
+	/**
+	 * @var ilObjUser
+	 */
+	protected $usr;
 
 
 	public function __construct() {
@@ -31,9 +35,9 @@ class msTriage {
 		global $DIC;
 		$this->db = $DIC->database();
 		$this->tpl = $DIC->ui()->mainTemplate();
-		$this->user = $DIC->user();
+		$this->usr = $DIC->user();
 		$this->ctrl = $DIC->ctrl();
-		$this->pl = new ilSubscriptionPlugin();
+		$this->pl = ilSubscriptionPlugin::getInstance();
 
 		$this->token = $_REQUEST['token'];
 		$this->subscription = msSubscription::getInstanceByToken($this->token);
