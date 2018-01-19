@@ -374,10 +374,12 @@ class msSubscriptionGUI {
 
 
 	public function updateLanguageKey() {
-		global $ilLog;
+		global $DIC;
 		/**
 		 * @var $ilLog ilLog
 		 */
+		$ilLog = $DIC["ilLog"];
+
 		$ilLog->write('updateLanguageKey');
 		$ilLog->write(print_r($_POST, true));
 		exit;
