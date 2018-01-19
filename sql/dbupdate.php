@@ -101,14 +101,14 @@ if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
 
-msConfig::installDB();
+msConfig::updateDB();
 msConfig::set('use_email', true);
 msConfig::set('system_user', 6);
 
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-msSubscription::installDB();
+msSubscription::updateDB();
 if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 	$set = $ilDB->query('SELECT * FROM rep_robj_xmsb_token');
 	while ($rec = $ilDB->fetchObject($set)) {
