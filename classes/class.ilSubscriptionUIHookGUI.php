@@ -22,10 +22,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 */
 	protected $ctrl;
 	/**
-	 * @var $ilTabs
-	 */
-	protected $tabs;
-	/**
 	 * @var ilAccessHandler
 	 */
 	protected $access;
@@ -38,7 +34,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	public function __construct() {
 		global $DIC;
 		$this->ctrl = $DIC->ctrl();
-		$this->tabs = $DIC->tabs();
 		$this->access = $DIC->access();
 		$this->tree =$DIC->repositoryTree();
 		$this->pl = ilSubscriptionPlugin::getInstance();
@@ -51,6 +46,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 	 * @param array $a_par
 	 */
 	public function modifyGUI($a_comp, $a_part, $a_par = array()) {
+		global $DIC;
+
 		$locations = array(
 			array( 'ilobjgroupgui', 'members' ),
 			array( 'ilobjcoursegui', 'members' ),
@@ -81,21 +78,23 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 		$tab_highlight = array( array( 'ilsubscriptiongui', '*' ), );
 
 		if ($this->checkContext($a_part, $locations)) {
+			$tabs = $DIC->tabs();
+
 			$pl_obj = ilSubscriptionPlugin::getInstance();
-			$this->tabs->removeSubTab('srsubscription');
-			$this->tabs->activateTab('members');
+			$tabs->removeSubTab('srsubscription');
+			$tabs->activateTab('members');
 			$this->ctrl->setTargetScript('ilias.php');
 			$this->initBaseClass();
 			$this->ctrl->setParameterByClass('msSubscriptionGUI', 'obj_ref_id', $_GET['ref_id']);
 
-			$this->tabs->addSubTab('srsubscription', $pl_obj->txt('tab_usage_'
+			$tabs->addSubTab('srsubscription', $pl_obj->txt('tab_usage_'
 			                                                                . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(array(
 				'ilUIPluginRouterGUI',
 				'msSubscriptionGUI',
 			)), '', 'ilsubscriptiongui');
 
 			if ($this->checkContext($a_part, $tab_highlight)) {
-				$this->tabs->activateSubTab('srsubscription');
+				$tabs->activateSubTab('srsubscription');
 			}
 		}
 	}
