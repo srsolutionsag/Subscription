@@ -169,7 +169,7 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 global $DIC;
 msSubscription::updateDB();
-$DIC->database()->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
+$DIC->database()->manipulate('UPDATE ' . msSubscription::TABLE_NAME . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
 ?>
 <#14>
 <?php
@@ -180,8 +180,8 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 <#15>
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-if (! $ilDB->tableColumnExists(msSubscription::returnDbTableName(), 'matching_string')) {
-	$ilDB->modifyTableColumn(msSubscription::returnDbTableName(), 'matching_string', array(
+if (! $ilDB->tableColumnExists(msSubscription::TABLE_NAME, 'matching_string')) {
+	$ilDB->modifyTableColumn(msSubscription::TABLE_NAME, 'matching_string', array(
 		"length" => 1024,
 	));
 }
