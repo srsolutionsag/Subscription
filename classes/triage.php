@@ -28,7 +28,22 @@ class msTriage {
 	 * @var ilObjUser
 	 */
 	protected $usr;
-
+	/**
+	 * @var ilDB
+	 */
+	protected $db;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+	/**
+	 * @var ilTemplate
+	 */
+	protected $tpl;
+	/**
+	 * @var string
+	 */
+	protected $token;
 
 	public function __construct() {
 		$this->initILIAS();
@@ -41,7 +56,7 @@ class msTriage {
 
 		$this->token = $_REQUEST['token'];
 		$this->subscription = msSubscription::getInstanceByToken($this->token);
-		$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $_REQUEST['token']);
+		$this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $_REQUEST['token']);
 	}
 
 
@@ -92,7 +107,7 @@ class msTriage {
 			$cmd = $cmds[0];
 		}
 
-		if (in_array($cmd, get_class_methods('msTriage'))) {
+		if (in_array($cmd, get_class_methods(msTriage::class))) {
 			$this->{$cmd}();
 		}
 	}

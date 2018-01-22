@@ -76,8 +76,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		 */
 
 		$this->form->setFormAction($this->ctrl->getFormActionByClass(array(
-			'ilUIPluginRouterGUI',
-			'ilTokenRegistrationGUI',
+			ilUIPluginRouterGUI::class,
+			ilTokenRegistrationGUI::class,
 		)));
 
 		$username = $this->form->getItemByPostVar('username');

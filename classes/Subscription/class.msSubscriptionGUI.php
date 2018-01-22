@@ -23,17 +23,23 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
-
+	const CMD_CLEAR = 'clear';
+	const CMD_CONFIRM_DELETE = 'confirmDelete';
 	const CMD_DELETE = 'delete';
-	const CMD_KEEP = 'keep';
-	const CMD_SUBSCRIBE = 'subscribe';
+	const CMD_EDIT = 'edit';
 	const CMD_INVITE = 'invite';
-	const CMD_REINVITE = 'reinvite';
+	const CMD_KEEP = 'keep';
 	const CMD_LNG = 'updateLanguageKey';
+	const CMD_LIST_OBJECTS = 'listObjects';
+	const CMD_REINVITE = 'reinvite';
+	const CMD_REMOVE_UNREGISTERED = 'removeUnregistered';
+	const CMD_SEND_FORM = 'sendForm';
+	const CMD_SHOW_FORM = 'showForm';
+	const CMD_SUBSCRIBE = 'subscribe';
+	const CMD_TRIAGE = 'triage';
 	const SYSTEM_USER = 6;
 	const EMAIL_FIELD = 'sr_ms_email_list_field';
 	const MATRICULATION_FIELD = 'sr_ms_matriculation_list_field';
-	const CMD_LIST_OBJECTS = 'listObjects';
 	/**
 	 * @var ilTabsGUI
 	 */
@@ -136,7 +142,7 @@ class msSubscriptionGUI {
 		}
 		$this->tpl->setTitleIcon(ilUtil::getTypeIconPath($this->obj->getType(), $this->obj->getId(), 'big'));
 		$this->tabs->setBackTarget($this->pl->txt('main_back'), $this->ctrl->getLinkTargetByClass(array(
-			'ilRepositoryGUI',
+			ilRepositoryGUI::class,
 			'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
 		), 'members'));
 		$DIC["ilLocator"]->addRepositoryItems($this->obj_ref_id);
@@ -149,7 +155,7 @@ class msSubscriptionGUI {
 	 * @return string
 	 */
 	public function getStandardCommand() {
-		return 'showForm';
+		return self::CMD_SHOW_FORM;
 	}
 
 
@@ -158,12 +164,12 @@ class msSubscriptionGUI {
 	 */
 	function performCommand($cmd) {
 		switch ($cmd) {
-			case 'showForm':
-			case 'sendForm':
+			case self::CMD_SHOW_FORM:
+			case self::CMD_SEND_FORM:
 			case self::CMD_LIST_OBJECTS:
-			case 'triage':
-			case 'removeUnregistered':
-			case 'clear':
+			case self::CMD_TRIAGE:
+			case self::CMD_REMOVE_UNREGISTERED:
+			case self::CMD_CLEAR:
 			case self::CMD_LNG:
 				if (!$this->access->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->txt('main_no_access'));
@@ -203,7 +209,7 @@ class msSubscriptionGUI {
 			$te->setCols(100);
 			$this->form->addItem($te);
 		}
-		$this->form->addCommandButton('sendForm', $this->pl->txt('main_send_form'));
+		$this->form->addCommandButton(self::CMD_SEND_FORM, $this->pl->txt('main_send_form'));
 	}
 
 
@@ -340,7 +346,7 @@ class msSubscriptionGUI {
 		if (msSubscription::where($where)->count() > 0) {
 			$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
 		} else {
-			$this->ctrl->redirect($this, 'showForm');
+			$this->ctrl->redirect($this, self::CMD_SHOW_FORM);
 		}
 	}
 
@@ -361,7 +367,7 @@ class msSubscriptionGUI {
 
 		ilUtil::sendInfo($this->pl->txt("clear_info"), true);
 
-		$this->ctrl->redirect($this, 'showForm');
+		$this->ctrl->redirect($this, self::CMD_SHOW_FORM);
 	}
 
 

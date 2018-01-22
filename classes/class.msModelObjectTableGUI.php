@@ -190,8 +190,8 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 			$actions = new ilAdvancedSelectionListGUI();
 			$actions->setId('actions_' . self::$num);
 			$actions->setListTitle($this->pl->txt('actions'));
-			$actions->addItem($this->pl->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
-			$actions->addItem($this->pl->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
+			$actions->addItem($this->pl->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, msSubscriptionGUI::CMD_EDIT));
+			$actions->addItem($this->pl->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, msSubscriptionGUI::CMD_CONFIRM_DELETE));
 			$this->tpl->setCurrentBlock('cell');
 			$this->tpl->setVariable('VALUE', $actions->getHTML());
 			$this->tpl->parseCurrentBlock();
