@@ -175,7 +175,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @return mixed
 	 */
 	protected function fillValue($item, $array) {
-		if (get_class($item) != 'ilFormSectionHeaderGUI') {
+		if (get_class($item) != ilFormSectionHeaderGUI::class) {
 			$key = $item->getPostVar();
 			$array[$key] = msConfig::getValueByKey($key);
 			foreach ($item->getSubItems() as $sub_item) {
@@ -191,7 +191,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @param $item
 	 */
 	protected function writeValue($item) {
-		if (get_class($item) != 'ilFormSectionHeaderGUI') {
+		if (get_class($item) != ilFormSectionHeaderGUI::class) {
 			/**
 			 * @var $item ilCheckboxInputGUI
 			 */

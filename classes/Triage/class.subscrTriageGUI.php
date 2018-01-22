@@ -149,8 +149,8 @@ class subscrTriageGUI {
 
 
 	protected function redirectToTokenRegistrationGUI() {
-		$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $this->token);
-		$this->ctrl->redirectByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' ));
+		$this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $this->token);
+		$this->ctrl->redirectByClass(array( ilUIPluginRouterGUI::class, ilTokenRegistrationGUI::class ));
 	}
 
 
