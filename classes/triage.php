@@ -45,6 +45,7 @@ class msTriage {
 	 */
 	protected $token;
 
+
 	public function __construct() {
 		$this->initILIAS();
 		global $DIC;
@@ -94,6 +95,7 @@ class msTriage {
 		require_once('./Services/Utilities/classes/class.ilConfirmationGUI.php');
 		require_once('./Services/Object/classes/class.ilObject2.php');
 		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/TokenRegistration/class.ilTokenRegistrationGUI.php');
+		require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Triage/class.subscrTriageGUI.php';
 	}
 
 
@@ -107,8 +109,13 @@ class msTriage {
 			$cmd = $cmds[0];
 		}
 
-		if (in_array($cmd, get_class_methods(msTriage::class))) {
-			$this->{$cmd}();
+		switch ($cmd) {
+			case subscrTriageGUI::CMD_HAS_LOGIN:
+			case subscrTriageGUI::CMD_HAS_NO_LOGIN:
+				$this->{$cmd}();
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -144,12 +151,12 @@ class msTriage {
 		//$this->pl->txt('subscription_type_' . $this->subscription->getSubscriptionType()) . ': '
 		//.
 		$str = $this->subscription->getMatchingString() . ', Ziel: '
-		       . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
+			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
 		$de->setHeaderText($this->pl->txt('qst_already_account'));
-		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
-		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
+		$de->setConfirm($this->pl->txt('main_yes'), subscrTriageGUI::CMD_HAS_LOGIN);
+		$de->setCancel($this->pl->txt('main_no'), subscrTriageGUI::CMD_HAS_NO_LOGIN);
 
 		$this->tpl->setContent($de->getHTML());
 		$this->tpl->show();
@@ -157,9 +164,7 @@ class msTriage {
 
 
 	public function determineLogin() {
-		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType()
-		                                    == msAccountType::TYPE_SHIBBOLETH
-		) {
+		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
 			$this->redirectToLogin();
 		} else {
 			if (msConfig::getValueByKey('allow_registration')) {
@@ -175,8 +180,7 @@ class msTriage {
 
 	public function redirectToLogin() {
 		$this->setSubscriptionToDeleted();
-		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId()
-		        . '_rcode' . $this->getRegistrationCode();
+		$link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
 
 		ilUtil::redirect($link);
 	}
