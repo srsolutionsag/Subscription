@@ -34,7 +34,7 @@ if (!$ilDB->tableExists('rep_robj_xmsb_token')) {
 	$ilDB->createTable("rep_robj_xmsb_token", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_token", array("id"));
     if($ilDB->tableExists('rep_robj_xmsb_token_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_token_seq');
+        $ilDB->dropTable('rep_robj_xmsb_token_seq', false);
     }
 	$ilDB->createSequence("rep_robj_xmsb_token");
 }
@@ -78,7 +78,7 @@ if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 	$ilDB->createTable("rep_robj_xmsb_invt", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_invt", array("id"));
     if($ilDB->tableExists('rep_robj_xmsb_invt_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_invt_seq');
+        $ilDB->dropTable('rep_robj_xmsb_invt_seq', false);
     }
 	$ilDB->createSequence("rep_robj_xmsb_invt");
 }
@@ -122,7 +122,7 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 		$msSubscription->create();
 	}
 	if ($ilDB->tableExists('rep_robj_xmsb_tk_bak')) {
-		$ilDB->dropTable("rep_robj_xmsb_tk_bak");
+		$ilDB->dropTable("rep_robj_xmsb_tk_bak", false);
 	}
 	$ilDB->renameTable('rep_robj_xmsb_token', 'rep_robj_xmsb_tk_bak');
 }
@@ -130,7 +130,7 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 <#7>
 <?php
 if ($ilDB->tableExists('xunibas_subs_type')) {
-	$ilDB->dropTable("xunibas_subs_type");
+	$ilDB->dropTable("xunibas_subs_type", false);
 }
 ?>
 <#8>
