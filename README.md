@@ -23,4 +23,5 @@ Bitte beachten Sie, dass wir nur Institutionen, welche ein SLA abschliessen Unte
 
 ### Contact
 info@studer-raimann.ch  
-www.studer-raimann.ch 
+https://studer-raimann.ch  
+

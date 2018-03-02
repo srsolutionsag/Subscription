@@ -24,12 +24,15 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	public function __construct() {
+		/**
+		 * @var $ilCtrl ilCtrl
+		 */
 		ilInitialisation::initILIAS();
-		global $DIC;
+		global $ilCtrl;
 
 		parent::__construct();
 		$this->pl = ilSubscriptionPlugin::getInstance();
-		$this->ctrl = $DIC->ctrl();
+		$this->ctrl = $ilCtrl;
 		$this->token = $_GET['token'];
 		$this->subscription = msSubscription::where(array( 'token' => $this->token ))->first();
 		$this->ctrl->saveParameter($this, 'token');
@@ -76,8 +79,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		 */
 
 		$this->form->setFormAction($this->ctrl->getFormActionByClass(array(
-			ilUIPluginRouterGUI::class,
-			ilTokenRegistrationGUI::class,
+			'ilUIPluginRouterGUI',
+			'ilTokenRegistrationGUI',
 		)));
 
 		$username = $this->form->getItemByPostVar('username');

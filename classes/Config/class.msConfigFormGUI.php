@@ -18,11 +18,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 */
 	protected $parent_gui;
 	/**
-	 * @var ilSubscriptionPlugin
-	 */
-	protected $pl;
-	/**
-	 * @var ilCtrl
+	 * @var  ilCtrl
 	 */
 	protected $ctrl;
 
@@ -31,10 +27,9 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @param $parent_gui
 	 */
 	public function __construct($parent_gui) {
-		parent::__construct();
-		global $DIC;
-		$this->ctrl = $DIC->ctrl();
+		global $ilCtrl;
 		$this->parent_gui = $parent_gui;
+		$this->ctrl = $ilCtrl;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 		$this->ctrl->saveParameter($parent_gui, 'clip_ext_id');
 		$this->setFormAction($this->ctrl->getFormAction($parent_gui));
@@ -175,7 +170,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @return mixed
 	 */
 	protected function fillValue($item, $array) {
-		if (get_class($item) != ilFormSectionHeaderGUI::class) {
+		if (get_class($item) != 'ilFormSectionHeaderGUI') {
 			$key = $item->getPostVar();
 			$array[$key] = msConfig::getValueByKey($key);
 			foreach ($item->getSubItems() as $sub_item) {
@@ -191,7 +186,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 * @param $item
 	 */
 	protected function writeValue($item) {
-		if (get_class($item) != ilFormSectionHeaderGUI::class) {
+		if (get_class($item) != 'ilFormSectionHeaderGUI') {
 			/**
 			 * @var $item ilCheckboxInputGUI
 			 */

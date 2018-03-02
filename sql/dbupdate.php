@@ -34,7 +34,7 @@ if (!$ilDB->tableExists('rep_robj_xmsb_token')) {
 	$ilDB->createTable("rep_robj_xmsb_token", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_token", array("id"));
     if($ilDB->tableExists('rep_robj_xmsb_token_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_token_seq', false);
+        $ilDB->dropTable('rep_robj_xmsb_token_seq');
     }
 	$ilDB->createSequence("rep_robj_xmsb_token");
 }
@@ -78,7 +78,7 @@ if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 	$ilDB->createTable("rep_robj_xmsb_invt", $fields);
 	$ilDB->addPrimaryKey("rep_robj_xmsb_invt", array("id"));
     if($ilDB->tableExists('rep_robj_xmsb_invt_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_invt_seq', false);
+        $ilDB->dropTable('rep_robj_xmsb_invt_seq');
     }
 	$ilDB->createSequence("rep_robj_xmsb_invt");
 }
@@ -101,14 +101,14 @@ if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php');
 
-msConfig::updateDB();
+msConfig::installDB();
 msConfig::set('use_email', true);
 msConfig::set('system_user', 6);
 
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-msSubscription::updateDB();
+msSubscription::installDB();
 if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 	$set = $ilDB->query('SELECT * FROM rep_robj_xmsb_token');
 	while ($rec = $ilDB->fetchObject($set)) {
@@ -121,22 +121,19 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 		$msSubscription->setInvitationsSent(1);
 		$msSubscription->create();
 	}
-	if ($ilDB->tableExists('rep_robj_xmsb_tk_bak')) {
-		$ilDB->dropTable("rep_robj_xmsb_tk_bak", false);
-	}
 	$ilDB->renameTable('rep_robj_xmsb_token', 'rep_robj_xmsb_tk_bak');
 }
 ?>
 <#7>
 <?php
 if ($ilDB->tableExists('xunibas_subs_type')) {
-	$ilDB->dropTable("xunibas_subs_type", false);
+	$ilDB->dropTable("xunibas_subs_type");
 }
 ?>
 <#8>
 <?php
 //require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
-//$pl = ilSubscriptionPlugin::getInstance();
+//$pl = new ilSubscriptionPlugin();
 //$pl->updateLanguageFiles();
 ?>
 <#9>
@@ -167,9 +164,12 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 <#13>
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-global $DIC;
+global $ilDB;
+/**
+ * @var $ilDB ilDB
+ */
 msSubscription::updateDB();
-$DIC->database()->manipulate('UPDATE ' . msSubscription::TABLE_NAME . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
+$ilDB->manipulate('UPDATE ' . msSubscription::returnDbTableName() . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
 ?>
 <#14>
 <?php
@@ -180,8 +180,8 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 <#15>
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-if (! $ilDB->tableColumnExists(msSubscription::TABLE_NAME, 'matching_string')) {
-	$ilDB->modifyTableColumn(msSubscription::TABLE_NAME, 'matching_string', array(
+if (! $ilDB->tableColumnExists(msSubscription::returnDbTableName(), 'matching_string')) {
+	$ilDB->modifyTableColumn(msSubscription::returnDbTableName(), 'matching_string', array(
 		"length" => 1024,
 	));
 }

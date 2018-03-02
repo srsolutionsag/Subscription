@@ -27,6 +27,10 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 */
 	protected $filter_array = array();
 	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+	/**
 	 * @var ilTabsGUI
 	 */
 	protected $tabs;
@@ -35,17 +39,9 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 */
 	protected $access;
 	/**
-	 * @var ilObjUser
-	 */
-	protected $usr;
-	/**
 	 * @var int
 	 */
 	static $num = 0;
-	/**
-	 * @var ilCtrl
-	 */
-	protected $ctrl;
 
 
 	/**
@@ -53,13 +49,13 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 * @param string $a_parent_cmd
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd) {
-		global $DIC;
-		$this->tabs = $DIC->tabs();
-		$this->access = $DIC->access();
-		$this->usr = $DIC->user();
-		$this->ctrl = $DIC->ctrl();
+		global $ilCtrl, $ilTabs, $ilAccess;
+		$this->ctrl = $ilCtrl;
+		$this->tabs = $ilTabs;
+		$this->access = $ilAccess;
 		if ($this->initLanguage() === false) {
-			$this->lng = $DIC->language();
+			global $lng;
+			$this->lng = $lng;
 		}
 		$this->initTableProperties();
 		$this->setId($this->table_id);
@@ -190,8 +186,8 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 			$actions = new ilAdvancedSelectionListGUI();
 			$actions->setId('actions_' . self::$num);
 			$actions->setListTitle($this->pl->txt('actions'));
-			$actions->addItem($this->pl->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, msSubscriptionGUI::CMD_EDIT));
-			$actions->addItem($this->pl->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, msSubscriptionGUI::CMD_CONFIRM_DELETE));
+			$actions->addItem($this->pl->txt('edit'), 'edit', $this->ctrl->getLinkTarget($this->parent_obj, 'edit'));
+			$actions->addItem($this->pl->txt('delete'), 'delete', $this->ctrl->getLinkTarget($this->parent_obj, 'confirmDelete'));
 			$this->tpl->setCurrentBlock('cell');
 			$this->tpl->setVariable('VALUE', $actions->getHTML());
 			$this->tpl->parseCurrentBlock();
@@ -245,7 +241,11 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 * @return array
 	 */
 	public function getNavigationParametersAsArray() {
-		$hits = $this->usr->getPref('hits_per_page');
+		global $ilUser;
+		/**
+		 * @var $ilUser ilObjUser
+		 */
+		$hits = $ilUser->getPref('hits_per_page');
 		$parameters = explode(':', $_GET[$this->getNavParameter()]);
 		$return_values = array(
 			'from'       => $parameters[2] ? $parameters[2] : 0,

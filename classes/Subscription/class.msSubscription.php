@@ -14,7 +14,7 @@ require_once('./Modules/Course/classes/class.ilObjCourse.php');
  * @version
  */
 class msSubscription extends ActiveRecord {
-	const TABLE_NAME = 'rep_robj_xmsb_susc';
+
 	/**
 	 * @var array
 	 */
@@ -497,6 +497,6 @@ class msSubscription extends ActiveRecord {
 	 * @return string
 	 */
 	static function returnDbTableName() {
-		return self::TABLE_NAME;
+		return 'rep_robj_xmsb_susc';
 	}
 }
