@@ -146,10 +146,7 @@ class msConfig extends ActiveRecord {
 			return self::$ignore_chache[$check_ref_id];
 		}
 
-		global $tree;
-		/**
-		 * @var $tree ilTree
-		 */
+		global $DIC;
 
 		$subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
 		if (! is_array($subtrees) OR count($subtrees) == 0) {
@@ -163,7 +160,7 @@ class msConfig extends ActiveRecord {
 			if (!$ref_id) {
 				continue;
 			}
-			if ($tree->isGrandChild($ref_id, $check_ref_id)) {
+			if ($DIC->repositoryTree()->isGrandChild($ref_id, $check_ref_id)) {
 				$return = true;
 			}
 		}
