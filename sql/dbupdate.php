@@ -1,5 +1,6 @@
 <#1>
 <?php
+require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/TokenRegistration/class.msToken.php';
 /**
  * @var $ilDB ilDB
  */
@@ -30,19 +31,20 @@ $fields = array(
         'notnull' => false
     )
 );
-if (!$ilDB->tableExists('rep_robj_xmsb_token')) {
-	$ilDB->createTable("rep_robj_xmsb_token", $fields);
-	$ilDB->addPrimaryKey("rep_robj_xmsb_token", array("id"));
-    if($ilDB->tableExists('rep_robj_xmsb_token_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_token_seq', false);
+if (!$ilDB->tableExists(msToken::TABLE_NAME)) {
+	$ilDB->createTable(msToken::TABLE_NAME, $fields);
+	$ilDB->addPrimaryKey(msToken::TABLE_NAME, array("id"));
+    if($ilDB->tableExists(msToken::TABLE_NAME . '_seq')){
+        $ilDB->dropTable(msToken::TABLE_NAME . '_seq');
     }
-	$ilDB->createSequence("rep_robj_xmsb_token");
+	$ilDB->createSequence(msToken::TABLE_NAME);
 }
 
 ?>
 <#2>
 <?php
-$ilDB->addTableColumn("rep_robj_xmsb_token", "local_role",
+require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/TokenRegistration/class.msToken.php';
+$ilDB->addTableColumn(msToken::TABLE_NAME, "local_role",
     array (
         'type' => 'integer',
         'length' => 4,
@@ -52,6 +54,7 @@ $ilDB->addTableColumn("rep_robj_xmsb_token", "local_role",
 ?>
 <#3>
 <?php
+require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msInvitation.php';
 $fields = array(
 	'id' => array(
 		'type' => 'integer',
@@ -74,15 +77,14 @@ $fields = array(
 		'notnull' => false
 	)
 );
-if (!$ilDB->tableExists('rep_robj_xmsb_invt')) {
-	$ilDB->createTable("rep_robj_xmsb_invt", $fields);
-	$ilDB->addPrimaryKey("rep_robj_xmsb_invt", array("id"));
-    if($ilDB->tableExists('rep_robj_xmsb_invt_seq')){
-        $ilDB->dropTable('rep_robj_xmsb_invt_seq', false);
+if (!$ilDB->tableExists(msInvitation::TABLE_NAME)) {
+	$ilDB->createTable(msInvitation::TABLE_NAME, $fields);
+	$ilDB->addPrimaryKey(msInvitation::TABLE_NAME, array("id"));
+    if($ilDB->tableExists(msInvitation::TABLE_NAME . '_seq')){
+        $ilDB->dropTable(msInvitation::TABLE_NAME . '_seq');
     }
-	$ilDB->createSequence("rep_robj_xmsb_invt");
+	$ilDB->createSequence(msInvitation::TABLE_NAME);
 }
-
 ?>
 <#4>
 <?php
@@ -108,9 +110,11 @@ msConfig::set('system_user', 6);
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
+
+require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/TokenRegistration/class.msToken.php';
 msSubscription::updateDB();
-if ($ilDB->tableExists('rep_robj_xmsb_token')) {
-	$set = $ilDB->query('SELECT * FROM rep_robj_xmsb_token');
+if ($ilDB->tableExists(msToken::TABLE_NAME)) {
+	$set = $ilDB->query('SELECT * FROM ' . msToken::TABLE_NAME);
 	while ($rec = $ilDB->fetchObject($set)) {
 		$msSubscription = new msSubscription();
 		$msSubscription->setObjRefId($rec->course_ref);
@@ -124,7 +128,7 @@ if ($ilDB->tableExists('rep_robj_xmsb_token')) {
 	if ($ilDB->tableExists('rep_robj_xmsb_tk_bak')) {
 		$ilDB->dropTable("rep_robj_xmsb_tk_bak", false);
 	}
-	$ilDB->renameTable('rep_robj_xmsb_token', 'rep_robj_xmsb_tk_bak');
+	$ilDB->renameTable(msToken::TABLE_NAME, 'rep_robj_xmsb_tk_bak');
 }
 ?>
 <#7>
