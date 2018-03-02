@@ -145,9 +145,10 @@ class msSubscriptionGUI {
 			ilRepositoryGUI::class,
 			'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
 		), 'members'));
+
 		$DIC["ilLocator"]->addRepositoryItems($this->obj_ref_id);
 		$this->tpl->setLocator($DIC["ilLocator"]->getHTML());
-		$this->tpl->addCss('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/templates/default/Subscription/main.css');
+		$this->tpl->addCss($this->pl->getDirectory() . '/templates/default/Subscription/main.css');
 	}
 
 

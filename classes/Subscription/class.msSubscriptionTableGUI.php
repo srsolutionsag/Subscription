@@ -35,7 +35,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	protected function initTableData() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted'    => false,
+			'deleted' => false,
 		);
 		$data = array();
 
@@ -54,8 +54,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 			}
 			$row = $dat->__asArray();
 			$row['name'] = $dat->lookupName();
-			$row['status_sort'] = $this->pl->txt('main_user_status_'
-			                                               . $dat->getUserStatus());
+			$row['status_sort'] = $this->pl->txt('main_user_status_' . $dat->getUserStatus());
 			$row['in_ilias'] = $user_id ? 1 : 0;
 			$data[] = $row;
 		}
@@ -109,7 +108,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 
 	protected function initTableRowTemplate() {
-		$this->setRowTemplate('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/templates/default/Subscription/tpl.subscription_row.html');
+		$this->setRowTemplate($this->pl->getDirectory() . '/templates/default/Subscription/tpl.subscription_row.html');
 	}
 
 
@@ -141,14 +140,14 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 			case 'crs':
 				$roles = array(
 					IL_CRS_MEMBER => $this->pl->txt('main_role_' . IL_CRS_MEMBER),
-					IL_CRS_TUTOR  => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
-					IL_CRS_ADMIN  => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
+					IL_CRS_TUTOR => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
+					IL_CRS_ADMIN => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
 				);
 				break;
 			case 'grp':
 				$roles = array(
 					IL_GRP_MEMBER => $this->pl->txt('main_role_' . IL_GRP_MEMBER),
-					IL_GRP_ADMIN  => $this->pl->txt('main_role_' . IL_GRP_ADMIN),
+					IL_GRP_ADMIN => $this->pl->txt('main_role_' . IL_GRP_ADMIN),
 				);
 				break;
 		}
@@ -156,8 +155,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		$selection_menu = '';
 		foreach ($roles as $value => $role) {
 			$sel = ($selected == $value ? 'selected' : '');
-			$selection_menu .= '<option value=\'' . $value . '\' ' . $sel . '>' . $role
-			                   . '</option>';
+			$selection_menu .= '<option value=\'' . $value . '\' ' . $sel . '>' . $role . '</option>';
 		}
 
 		return $selection_menu;
@@ -171,19 +169,18 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		if ($this->getMailUsage()) {
 			$this->tpl->setCurrentBlock('email');
 			$this->tpl->setVariable('EMAIL', ($msSubscription->getSubscriptionType()
-			                                  == msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;'));
+			== msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;'));
 			$this->tpl->parseCurrentBlock();
 		}
 		if ($this->getMatriculationUsage()) {
 			$this->tpl->setCurrentBlock('matriculation');
 			$this->tpl->setVariable('MATRICULATION', ($msSubscription->getSubscriptionType()
-			                                          == msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;'));
+			== msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;'));
 			$this->tpl->parseCurrentBlock();
 		}
 		if ($this->getMatriculationAndMailUsage()) {
 			$this->tpl->setCurrentBlock('type');
-			$this->tpl->setVariable('TYPE', $this->pl->txt('subscription_type_'
-			                                                         . $msSubscription->getSubscriptionType()));
+			$this->tpl->setVariable('TYPE', $this->pl->txt('subscription_type_' . $msSubscription->getSubscriptionType()));
 			$this->tpl->parseCurrentBlock();
 		}
 		$this->tpl->setVariable('STATUS', $this->pl->txt('main_user_status_' . $msSubscription->getUserStatus()));
@@ -194,7 +191,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		}
 		$this->tpl->setVariable('USR_ID', 'obj_' . $msSubscription->getId());
 		$this->tpl->setVariable('STD_ROLE', msUserStatus::ROLE_MEMBER);
-		if (! $this->getMailUsage() OR ! msConfig::getValueByKey(msConfig::ENBL_INV)) {
+		if (!$this->getMailUsage() OR !msConfig::getValueByKey(msConfig::ENBL_INV)) {
 			$this->tpl->setVariable('DISABLE_NOMAIL', 'nomail');
 		}
 		$this->tpl->setVariable('CMD_INVITE', msSubscriptionGUI::CMD_INVITE);

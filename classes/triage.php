@@ -147,7 +147,7 @@ class msTriage {
 		$this->tpl->setTitle($this->pl->txt('triage_title'));
 
 		$de = new ilConfirmationGUI();
-		$de->setFormAction('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/triage.php');
+		$de->setFormAction($this->pl->getDirectory() . '/classes/triage.php');
 		//$this->pl->txt('subscription_type_' . $this->subscription->getSubscriptionType()) . ': '
 		//.
 		$str = $this->subscription->getMatchingString() . ', Ziel: '
