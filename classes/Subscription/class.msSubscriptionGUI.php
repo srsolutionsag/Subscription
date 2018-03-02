@@ -23,23 +23,17 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
-	const CMD_CLEAR = 'clear';
-	const CMD_CONFIRM_DELETE = 'confirmDelete';
+
 	const CMD_DELETE = 'delete';
-	const CMD_EDIT = 'edit';
-	const CMD_INVITE = 'invite';
 	const CMD_KEEP = 'keep';
-	const CMD_LNG = 'updateLanguageKey';
-	const CMD_LIST_OBJECTS = 'listObjects';
-	const CMD_REINVITE = 'reinvite';
-	const CMD_REMOVE_UNREGISTERED = 'removeUnregistered';
-	const CMD_SEND_FORM = 'sendForm';
-	const CMD_SHOW_FORM = 'showForm';
 	const CMD_SUBSCRIBE = 'subscribe';
-	const CMD_TRIAGE = 'triage';
+	const CMD_INVITE = 'invite';
+	const CMD_REINVITE = 'reinvite';
+	const CMD_LNG = 'updateLanguageKey';
 	const SYSTEM_USER = 6;
 	const EMAIL_FIELD = 'sr_ms_email_list_field';
 	const MATRICULATION_FIELD = 'sr_ms_matriculation_list_field';
+	const CMD_LIST_OBJECTS = 'listObjects';
 	/**
 	 * @var ilTabsGUI
 	 */
@@ -64,31 +58,25 @@ class msSubscriptionGUI {
 	 * @var ilObjCourse|ilObjGroup
 	 */
 	protected $obj;
-	/**
-	 * @var ilObjUser
-	 */
-	protected $usr;
-	/**
-	 * @var ilAccessHandler
-	 */
-	protected $access;
 
 
 	/**
 	 * @param $parent
 	 */
 	function __construct($parent = null) {
-		global $DIC, $objDefinition;
+		global $tpl, $ilCtrl, $ilToolbar, $ilTabs, $objDefinition;
 		/**
+		 * @var $tpl           ilTemplate
+		 * @var $ilCtrl        ilCtrl
+		 * @var $ilToolbar     ilToolbarGUI
+		 * @var $ilTabs        ilTabsGUI
 		 * @var $objDefinition ilObjectDefinition
 		 */
-		$this->tpl = $DIC->ui()->mainTemplate();
-		$this->ctrl = $DIC->ctrl();
+		$this->tpl = $tpl;
+		$this->ctrl = $ilCtrl;
 		$this->parent = $parent;
-		$this->toolbar = $DIC->toolbar();
-		$this->tabs = $DIC->tabs();
-		$this->usr = $DIC->user();
-		$this->access = $DIC->access();
+		$this->toolbar = $ilToolbar;
+		$this->tabs = $ilTabs;
 		$this->obj_def = $objDefinition;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 		//		$this->pl->updateLanguageFiles();
@@ -131,7 +119,10 @@ class msSubscriptionGUI {
 
 
 	private function initHeader() {
-		global $DIC;
+		global $ilLocator;
+		/**
+		 * @var $ilLocator ilLocatorGUI
+		 */
 		$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->obj->getType());
 		$this->tpl->setTitle($this->obj->getTitle());
 		$this->tpl->setDescription($this->obj->getDescription());
@@ -142,11 +133,11 @@ class msSubscriptionGUI {
 		}
 		$this->tpl->setTitleIcon(ilUtil::getTypeIconPath($this->obj->getType(), $this->obj->getId(), 'big'));
 		$this->tabs->setBackTarget($this->pl->txt('main_back'), $this->ctrl->getLinkTargetByClass(array(
-			ilRepositoryGUI::class,
+			'ilRepositoryGUI',
 			'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
 		), 'members'));
-		$DIC["ilLocator"]->addRepositoryItems($this->obj_ref_id);
-		$this->tpl->setLocator($DIC["ilLocator"]->getHTML());
+		$ilLocator->addRepositoryItems($this->obj_ref_id);
+		$this->tpl->setLocator($ilLocator->getHTML());
 		$this->tpl->addCss('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/templates/default/Subscription/main.css');
 	}
 
@@ -155,7 +146,7 @@ class msSubscriptionGUI {
 	 * @return string
 	 */
 	public function getStandardCommand() {
-		return self::CMD_SHOW_FORM;
+		return 'showForm';
 	}
 
 
@@ -163,15 +154,19 @@ class msSubscriptionGUI {
 	 * @param $cmd
 	 */
 	function performCommand($cmd) {
+		global $ilAccess;
+		/**
+		 * @var $ilAccess ilAccessHandler
+		 */
 		switch ($cmd) {
-			case self::CMD_SHOW_FORM:
-			case self::CMD_SEND_FORM:
+			case 'showForm':
+			case 'sendForm':
 			case self::CMD_LIST_OBJECTS:
-			case self::CMD_TRIAGE:
-			case self::CMD_REMOVE_UNREGISTERED:
-			case self::CMD_CLEAR:
+			case 'triage':
+			case 'removeUnregistered':
+			case 'clear':
 			case self::CMD_LNG:
-				if (!$this->access->checkAccess('write', '', $this->obj_ref_id)) {
+				if (!$ilAccess->checkAccess('write', '', $this->obj_ref_id)) {
 					ilUtil::sendFailure($this->pl->txt('main_no_access'));
 					ilUtil::redirect('index.php');
 
@@ -209,7 +204,7 @@ class msSubscriptionGUI {
 			$te->setCols(100);
 			$this->form->addItem($te);
 		}
-		$this->form->addCommandButton(self::CMD_SEND_FORM, $this->pl->txt('main_send_form'));
+		$this->form->addCommandButton('sendForm', $this->pl->txt('main_send_form'));
 	}
 
 
@@ -303,6 +298,10 @@ class msSubscriptionGUI {
 	 * @param bool $reinvite
 	 */
 	public function sendMail(msSubscription $msSubscription, $reinvite = false) {
+		global $ilUser;
+		/**
+		 * @var $ilUser ilObjUser
+		 */
 		if (msConfig::getValueByKey(msConfig::F_SYSTEM_USER)) {
 			$mail = new ilMail(msConfig::getValueByKey(msConfig::F_SYSTEM_USER));
 		} else {
@@ -315,8 +314,8 @@ class msSubscriptionGUI {
 			'inv_email' => $msSubscription->getMatchingString(),
 			'link'      => ILIAS_HTTP_PATH . '/goto.php?target=subscr_'
 			               . $msSubscription->getToken(),
-			'username'  => $this->usr->getFullname(),
-			'email'     => $this->usr->getEmail(),
+			'username'  => $ilUser->getFullname(),
+			'email'     => $ilUser->getEmail(),
 		);
 
 		$mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);
@@ -346,7 +345,7 @@ class msSubscriptionGUI {
 		if (msSubscription::where($where)->count() > 0) {
 			$this->ctrl->redirect($this, self::CMD_LIST_OBJECTS);
 		} else {
-			$this->ctrl->redirect($this, self::CMD_SHOW_FORM);
+			$this->ctrl->redirect($this, 'showForm');
 		}
 	}
 
@@ -367,7 +366,7 @@ class msSubscriptionGUI {
 
 		ilUtil::sendInfo($this->pl->txt("clear_info"), true);
 
-		$this->ctrl->redirect($this, self::CMD_SHOW_FORM);
+		$this->ctrl->redirect($this, 'showForm');
 	}
 
 
@@ -380,12 +379,10 @@ class msSubscriptionGUI {
 
 
 	public function updateLanguageKey() {
-		global $DIC;
+		global $ilLog;
 		/**
 		 * @var $ilLog ilLog
 		 */
-		$ilLog = $DIC["ilLog"];
-
 		$ilLog->write('updateLanguageKey');
 		$ilLog->write(print_r($_POST, true));
 		exit;

@@ -16,8 +16,8 @@ ilInitialisation::initILIAS();
 /**
  * @var $ilCtrl ilCtrl
  */
-$ilCtrl->initBaseClass(ilStartUpGUI::class);
+$ilCtrl->initBaseClass("ilStartUpGUI");
 $ilCtrl->setTargetScript("/ilias.php");
 $ilCtrl->setCmd("");
-$ilCtrl->setCmdClass(ilTokenRegistrationGUI::class);
+$ilCtrl->setCmdClass('ilTokenRegistrationGUI');
 $ilCtrl->callBaseClass();

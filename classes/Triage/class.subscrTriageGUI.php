@@ -14,8 +14,6 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class subscrTriageGUI {
 
-	const CMD_HAS_LOGIN = 'hasLogin';
-	const CMD_HAS_NO_LOGIN = 'hasNoLogin';
 	/**
 	 * @var ilSubscriptionPlugin
 	 */
@@ -24,17 +22,20 @@ class subscrTriageGUI {
 	 * @var msSubscription
 	 */
 	protected $subscription;
-	/**
-	 * @var ilCtrl
-	 */
-	protected $ctrl;
 
 
 	public function __construct() {
-		global $DIC;
-		$this->db = $DIC->database();
-		$this->tpl = $DIC->ui()->mainTemplate();
-		$this->ctrl = $DIC->ctrl();
+		global $ilDB, $ilUser, $ilCtrl, $tpl;
+		/**
+		 * @var $ilDB   ilDB
+		 * @var $ilUser ilObjUser
+		 * @var $ilCtrl ilCtrl
+		 * @var $tpl    ilTemplate
+		 */
+		$this->db = $ilDB;
+		$this->tpl = $tpl;
+		$this->user = $ilUser;
+		$this->ctrl = $ilCtrl;
 		$this->pl = ilSubscriptionPlugin::getInstance();
 
 		$this->token = $_REQUEST['token'];
@@ -48,14 +49,7 @@ class subscrTriageGUI {
 		if (!$this->subscription instanceof msSubscription) {
 			throw new ilException('This token has already been used');
 		}
-		switch ($cmd) {
-			case self::CMD_HAS_LOGIN:
-			case self::CMD_HAS_NO_LOGIN:
-				$this->{$cmd}();
-				break;
-			default:
-				break;
-		}
+		$this->{$cmd}();
 
 		$this->tpl->getStandardTemplate();
 		$this->tpl->show();
@@ -76,7 +70,8 @@ class subscrTriageGUI {
 		if (msConfig::getValueByKey('ask_for_login')) {
 			if ($this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
 				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.');
-				$this->tpl->setContent('<a href="' . $this->getLoginLonk() . '" class="submit">Login</a>');
+				$this->tpl->setContent('<a href="' . $this->getLoginLonk()
+				                       . '" class="submit">Login</a>');
 			} else {
 				$this->showLoginDecision();
 			}
@@ -97,19 +92,21 @@ class subscrTriageGUI {
 		$de->setFormAction($this->ctrl->getFormAction($this));
 
 		$str = $this->subscription->getMatchingString() . ', Ziel: '
-			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
+		       . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
 		$de->setHeaderText($this->pl->txt('qst_already_account'));
-		$de->setConfirm($this->pl->txt('main_yes'), self::CMD_HAS_LOGIN);
-		$de->setCancel($this->pl->txt('main_no'), self::CMD_HAS_NO_LOGIN);
+		$de->setConfirm($this->pl->txt('main_yes'), 'hasLogin');
+		$de->setCancel($this->pl->txt('main_no'), 'hasNoLogin');
 
 		$this->tpl->setContent($de->getHTML());
 	}
 
 
 	public function determineLogin() {
-		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
+		if (msConfig::checkShibboleth() AND $this->subscription->getAccountType()
+		                                    == msAccountType::TYPE_SHIBBOLETH
+		) {
 			$this->redirectToLogin();
 		} else {
 			if (msConfig::getValueByKey('allow_registration')) {
@@ -155,8 +152,8 @@ class subscrTriageGUI {
 
 
 	protected function redirectToTokenRegistrationGUI() {
-		$this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $this->token);
-		$this->ctrl->redirectByClass(array( ilUIPluginRouterGUI::class, ilTokenRegistrationGUI::class ));
+		$this->ctrl->setParameterByClass('ilTokenRegistrationGUI', 'token', $this->token);
+		$this->ctrl->redirectByClass(array( 'ilUIPluginRouterGUI', 'ilTokenRegistrationGUI' ));
 	}
 
 
@@ -164,7 +161,7 @@ class subscrTriageGUI {
 	 * @return string
 	 */
 	protected function getLoginLonk() {
-		return msConfig::getPath() . 'goto.php?target' . $this->subscription->getContextAsString() . '_' . $this->subscription->getObjRefId()
-			. '_rcode' . $this->getRegistrationCode();
+		return msConfig::getPath() . 'goto.php?target' . $this->subscription->getContextAsString()
+		       . '_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
 	}
 }
