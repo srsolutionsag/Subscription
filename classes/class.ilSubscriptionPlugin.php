@@ -27,9 +27,35 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 
 
 	/**
+	 * @var ilDB
+	 */
+	protected $db;
+
+
+	public function __construct() {
+		parent::__construct();
+
+		global $DIC;
+
+		$this->db = $DIC->database();
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function getPluginName() {
 		return 'Subscription';
+	}
+
+
+	protected function beforeUninstall() {
+		require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php';
+		require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php';
+
+		$this->db->dropTable(msConfig::TABLE_NAME, false);
+		$this->db->dropTable(msSubscription::TABLE_NAME, false);
+
+		return true;
 	}
 }
