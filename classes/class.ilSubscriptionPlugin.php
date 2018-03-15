@@ -8,6 +8,8 @@ require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php
  */
 class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 
+	const PLUGIN_ID = 'subscription';
+	const PLUGIN_NAME = 'Subscription';
 	/**
 	 * @var ilSubscriptionPlugin
 	 */
@@ -45,7 +47,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	 * @return string
 	 */
 	public function getPluginName() {
-		return 'Subscription';
+		return self::PLUGIN_NAME;
 	}
 
 
