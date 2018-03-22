@@ -46,6 +46,10 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 * @var ilCtrl
 	 */
 	protected $ctrl;
+	/**
+	 * @var ilSubscriptionPlugin
+	 */
+	protected $pl;
 
 
 	/**
@@ -61,6 +65,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 		if ($this->initLanguage() === false) {
 			$this->lng = $DIC->language();
 		}
+		$this->pl = ilSubscriptionPlugin::getInstance();
 		$this->initTableProperties();
 		$this->setId($this->table_id);
 		$this->setTitle($this->table_title);
@@ -248,10 +253,10 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 		$hits = $this->usr->getPref('hits_per_page');
 		$parameters = explode(':', $_GET[$this->getNavParameter()]);
 		$return_values = array(
-			'from'       => $parameters[2] ? $parameters[2] : 0,
-			'to'         => $parameters[2] ? $parameters[2] + $hits - 1 : $hits - 1,
+			'from' => $parameters[2] ? $parameters[2] : 0,
+			'to' => $parameters[2] ? $parameters[2] + $hits - 1 : $hits - 1,
 			'sort_field' => $parameters[0] ? $parameters[0] : false,
-			'order'      => $parameters[1] ? strtoupper($parameters[1]) : 'ASC',
+			'order' => $parameters[1] ? strtoupper($parameters[1]) : 'ASC',
 		);
 
 		return $return_values;
