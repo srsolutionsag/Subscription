@@ -1,6 +1,4 @@
 <?php
-require_once('./Modules/Course/classes/class.ilCourseParticipants.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
 
 /**
  * Class msUserStatus
@@ -91,13 +89,13 @@ class msUserStatus {
 			}
 		} elseif ($this->getType() == self::EMAIL) {
 			$where = array(
-				'matching_string'  => $this->getInput(),
-				'obj_ref_id'       => $this->getCrsRefId(),
+				'matching_string' => $this->getInput(),
+				'obj_ref_id' => $this->getCrsRefId(),
 				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string'  => 'LIKE',
-				'obj_ref_id'       => '=',
+				'matching_string' => 'LIKE',
+				'obj_ref_id' => '=',
 				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
@@ -162,13 +160,13 @@ class msUserStatus {
 			}
 		} else {
 			$where = array(
-				'matching_string'  => $mail,
-				'obj_ref_id'       => $crs_ref_id,
+				'matching_string' => $mail,
+				'obj_ref_id' => $crs_ref_id,
 				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string'  => 'LIKE',
-				'obj_ref_id'       => '=',
+				'matching_string' => 'LIKE',
+				'obj_ref_id' => '=',
 				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
@@ -230,8 +228,7 @@ class msUserStatus {
 		global $DIC;
 		$ilDB = $DIC->database();
 
-		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE '
-		                    . $ilDB->quote($mail, 'text'));
+		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE ' . $ilDB->quote($mail, 'text'));
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
 		}
@@ -250,8 +247,7 @@ class msUserStatus {
 		global $DIC;
 		$ilDB = $DIC->database();
 
-		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE '
-		                    . $ilDB->quote($mail, 'text'));
+		$set = $ilDB->query('SELECT usr_id FROM usr_data WHERE email LIKE ' . $ilDB->quote($mail, 'text'));
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
 		}
@@ -372,8 +368,7 @@ class msUserStatus {
 		global $DIC;
 		$ilDB = $DIC->database();
 
-		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE '
-		         . $ilDB->quote($value, 'text') . ' AND active = 1';
+		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text') . ' AND active = 1';
 		$set = $ilDB->query($query);
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;

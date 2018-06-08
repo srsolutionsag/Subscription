@@ -1,8 +1,5 @@
 <?php
-require_once('Services/Form/classes/class.ilPropertyFormGUI.php');
-require_once('./Services/Component/classes/class.ilPluginConfigGUI.php');
-require_once('class.ilSubscriptionPlugin.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfigFormGUI.php');
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * Example configuration user interface class

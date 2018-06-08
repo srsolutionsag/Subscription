@@ -1,17 +1,6 @@
 <?php
 // ini_set('display_errors', 'stdout');
-
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-require_once('./Services/Form/classes/class.ilPropertyFormGUI.php');
-require_once('class.msSubscription.php');
-require_once('class.msSubscriptionTableGUI.php');
-require_once('./Services/Object/classes/class.ilObjectListGUIFactory.php');
-require_once('./Services/Component/classes/class.ilComponent.php');
-@include_once('./Services/Link/classes/class.ilLink.php');
-require_once('./Services/Mail/classes/class.ilMail.php');
-require_once('./Services/Object/classes/class.ilObject2.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.ilSubscriptionPlugin.php');
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * GUI-Class msSubscriptionGUI
@@ -23,6 +12,7 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @ilCtrl_isCalledBy msSubscriptionGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class msSubscriptionGUI {
+
 	const CMD_CLEAR = 'clear';
 	const CMD_CONFIRM_DELETE = 'confirmDelete';
 	const CMD_DELETE = 'delete';
@@ -77,7 +67,7 @@ class msSubscriptionGUI {
 	/**
 	 * @param $parent
 	 */
-	function __construct($parent = null) {
+	function __construct($parent = NULL) {
 		global $DIC, $objDefinition;
 		/**
 		 * @var $objDefinition ilObjectDefinition
@@ -96,8 +86,7 @@ class msSubscriptionGUI {
 		$this->obj_ref_id = $_GET['obj_ref_id'];
 		$this->obj = ilObjectFactory::getInstanceByRefId($this->obj_ref_id);
 		$class_name = $this->obj_def->getClassName($this->obj->getType());
-		$this->ctrl->setParameterByClass('ilObj' . $class_name
-		                                 . 'GUI', 'ref_id', $this->obj_ref_id);
+		$this->ctrl->setParameterByClass('ilObj' . $class_name . 'GUI', 'ref_id', $this->obj_ref_id);
 	}
 
 
@@ -301,7 +290,7 @@ class msSubscriptionGUI {
 
 	/**
 	 * @param msSubscription $msSubscription
-	 * @param bool $reinvite
+	 * @param bool           $reinvite
 	 */
 	public function sendMail(msSubscription $msSubscription, $reinvite = false) {
 		if (msConfig::getValueByKey(msConfig::F_SYSTEM_USER)) {
@@ -312,12 +301,11 @@ class msSubscriptionGUI {
 
 		$sf = array(
 			'obj_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getObjRefId())),
-			'role'      => $this->pl->txt('main_role_' . $msSubscription->getRole()),
+			'role' => $this->pl->txt('main_role_' . $msSubscription->getRole()),
 			'inv_email' => $msSubscription->getMatchingString(),
-			'link'      => ILIAS_HTTP_PATH . '/goto.php?target=subscr_'
-			               . $msSubscription->getToken(),
-			'username'  => $this->usr->getFullname(),
-			'email'     => $this->usr->getEmail(),
+			'link' => ILIAS_HTTP_PATH . '/goto.php?target=subscr_' . $msSubscription->getToken(),
+			'username' => $this->usr->getFullname(),
+			'email' => $this->usr->getEmail(),
 		);
 
 		$mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);
@@ -330,7 +318,7 @@ class msSubscriptionGUI {
 	protected function removeUnregistered() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted'    => false,
+			'deleted' => false,
 		);
 		/**
 		 * @var $msSubscription msSubscription
@@ -355,7 +343,7 @@ class msSubscriptionGUI {
 	protected function clear() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted'    => false,
+			'deleted' => false,
 		);
 
 		/**

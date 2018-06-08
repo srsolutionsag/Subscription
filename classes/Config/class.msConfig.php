@@ -1,5 +1,4 @@
 <?php
-require_once('./Services/ActiveRecord/class.ActiveRecord.php');
 
 /**
  * Class msConfig
@@ -30,21 +29,29 @@ class msConfig extends ActiveRecord {
 	const F_IGNORE_SUBTREE = 'ignore_subtree';
 	const F_IGNORE_SUBTREE_ACTIVE = 'activate_ignore_subtree';
 	const TABLE_NAME = 'rep_robj_xmsb_conf';
-	/**
-	 * @var bool
-	 */
-	protected $ar_safe_read = false;
 
 
 	/**
 	 * @return string
-	 * @description Return the Name of your Database Table
 	 */
-	static function returnDbTableName() {
+	public function getConnectorContainerName() {
 		return self::TABLE_NAME;
 	}
 
 
+	/**
+	 * @return string
+	 * @deprecated
+	 */
+	public static function returnDbTableName() {
+		return self::TABLE_NAME;
+	}
+
+
+	/**
+	 * @var bool
+	 */
+	protected $ar_safe_read = false;
 	/**
 	 * @var array
 	 */
@@ -139,7 +146,7 @@ class msConfig extends ActiveRecord {
 	 * @return bool
 	 */
 	public static function isInIgnoredSubtree($check_ref_id) {
-		if (! self::getValueByKey(self::F_IGNORE_SUBTREE_ACTIVE)) {
+		if (!self::getValueByKey(self::F_IGNORE_SUBTREE_ACTIVE)) {
 			return false;
 		}
 		if (isset(self::$ignore_chache[$check_ref_id])) {
@@ -149,7 +156,7 @@ class msConfig extends ActiveRecord {
 		global $DIC;
 
 		$subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
-		if (! is_array($subtrees) OR count($subtrees) == 0) {
+		if (!is_array($subtrees) OR count($subtrees) == 0) {
 			self::$ignore_chache[$check_ref_id] = false;
 
 			return false;

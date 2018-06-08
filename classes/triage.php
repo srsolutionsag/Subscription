@@ -89,13 +89,9 @@ class msTriage {
 		//			$_POST['password'] = 'anonymous';
 		//			require_once('./include/inc.header.php');
 		//		}
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
 		require_once('./Services/Form/classes/class.ilPropertyFormGUI.php');
 		require_once('./Services/Utilities/classes/class.ilConfirmationGUI.php');
 		require_once('./Services/Object/classes/class.ilObject2.php');
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/TokenRegistration/class.ilTokenRegistrationGUI.php');
-		require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Triage/class.subscrTriageGUI.php';
 	}
 
 

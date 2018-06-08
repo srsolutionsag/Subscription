@@ -1,8 +1,5 @@
 <?php
 
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.msModelObjectTableGUI.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-require_once('class.msSubscription.php');
 
 /**
  * Class emSubscriptionTableGUI

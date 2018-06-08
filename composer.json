@@ -1,0 +1,29 @@
+{
+  "autoload": {
+    "classmap": [
+      "./classes/",
+      "../../../../../../../Modules/Course/classes/class.ilCourseParticipants.php",
+      "../../../../../../../Modules/Course/classes/class.ilObjCourse.php",
+      "../../../../../../../Modules/Group/classes/class.ilGroupMembershipMailNotification.php",
+      "../../../../../../../Modules/Group/classes/class.ilGroupParticipants.php",
+      "../../../../../../../Services/ActiveRecord/class.ActiveRecord.php",
+      "../../../../../../../Services/Component/classes/class.ilComponent.php",
+      "../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php",
+      "../../../../../../../Services/Init/classes/class.ilStartUpGUI.php",
+      "../../../../../../../Services/Link/classes/class.ilLink.php",
+      "../../../../../../../Services/Mail/classes/class.ilMail.php",
+      "../../../../../../../Services/Object/classes/class.ilObject2.php",
+      "../../../../../../../Services/Object/classes/class.ilObjectListGUIFactory.php",
+      "../../../../../../../Services/Registration/classes/class.ilAccountRegistrationGUI.php",
+      "../../../../../../../Services/Table/classes/class.ilTable2GUI.php",
+      "../../../../../../../Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php",
+      "../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php",
+      "../../../../../../../Services/Utilities/classes/class.ilConfirmationGUI.php"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "classmap-authoritative": true
+  }
+}

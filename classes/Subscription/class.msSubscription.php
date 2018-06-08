@@ -1,9 +1,4 @@
 <?php
-require_once('./Services/ActiveRecord/class.ActiveRecord.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
-require_once('./Modules/Group/classes/class.ilGroupMembershipMailNotification.php');
-require_once('./Modules/Course/classes/class.ilObjCourse.php');
 
 /**
  * msSubscription
@@ -14,6 +9,7 @@ require_once('./Modules/Course/classes/class.ilObjCourse.php');
  * @version
  */
 class msSubscription extends ActiveRecord {
+
 	const TABLE_NAME = 'rep_robj_xmsb_susc';
 	/**
 	 * @var array
@@ -27,6 +23,25 @@ class msSubscription extends ActiveRecord {
 	const DELIMITER = '|';
 	const CONTEXT_CRS = 1;
 	const CONTEXT_GRP = 2;
+
+
+	/**
+	 * @return string
+	 */
+	public function getConnectorContainerName() {
+		return self::TABLE_NAME;
+	}
+
+
+	/**
+	 * @return string
+	 * @deprecated
+	 */
+	public static function returnDbTableName() {
+		return self::TABLE_NAME;
+	}
+
+
 	/**
 	 * @var msUserStatus
 	 */
@@ -167,13 +182,13 @@ class msSubscription extends ActiveRecord {
 	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(
 			'matching_string' => $input,
-			'obj_ref_id'      => $obj_ref_id,
-			'deleted'         => false,
+			'obj_ref_id' => $obj_ref_id,
+			'deleted' => false,
 		);
 		$operators = array(
 			'matching_string' => 'LIKE',
-			'obj_ref_id'      => '=',
-			'deleted'         => '=',
+			'obj_ref_id' => '=',
+			'deleted' => '=',
 		);
 		if (!msSubscription::where($where, $operators)->hasSets() AND $input != '') {
 			$msSubscription = new msSubscription();
@@ -490,13 +505,5 @@ class msSubscription extends ActiveRecord {
 			case self::CONTEXT_GRP:
 				return 'grp';
 		}
-	}
-
-
-	/**
-	 * @return string
-	 */
-	static function returnDbTableName() {
-		return self::TABLE_NAME;
 	}
 }
