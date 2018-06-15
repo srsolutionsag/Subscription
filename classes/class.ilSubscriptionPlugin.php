@@ -57,7 +57,6 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	protected function beforeUninstall() {
 		$this->db->dropTable(msConfig::TABLE_NAME, false);
 		$this->db->dropTable(msSubscription::TABLE_NAME, false);
-		$this->db->dropTable(xUnibasSubsType::TABLE_NAME, false);
 
 		return true;
 	}
