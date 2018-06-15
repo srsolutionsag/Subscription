@@ -35,7 +35,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 			$this->displayForm();
 		}
-		//		$this->tpl->getStandardTemplate();
 		$this->tpl->show();
 
 		return true;
