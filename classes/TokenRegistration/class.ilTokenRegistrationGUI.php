@@ -1,13 +1,4 @@
 <?php
-require_once('./Services/Registration/classes/class.ilAccountRegistrationGUI.php');
-require_once('./Modules/Course/classes/class.ilCourseParticipants.php');
-require_once('./Modules/Group/classes/class.ilGroupParticipants.php');
-require_once('./Services/Link/classes/class.ilLink.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/AccountType/class.msAccountType.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/UserStatus/class.msUserStatus.php');
-require_once('./Services/Init/classes/class.ilStartUpGUI.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
 
 /**
  * Class ilTokenRegistrationGUI
@@ -44,7 +35,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 			$this->displayForm();
 		}
-//		$this->tpl->getStandardTemplate();
 		$this->tpl->show();
 
 		return true;
@@ -63,6 +53,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 	/**
 	 * @param bool $a_force_code
+	 *
 	 * @throws \ilException
 	 */
 	protected function __initForm($a_force_code = false) {
@@ -117,9 +108,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
 			$this->tpl->getStandardTemplate();
 			$this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
-		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED
-		          OR $this->subscription->getUserStatus() == msUserStatus::STATUS_ALREADY_ASSIGNED
-		) {
+		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR $this->subscription->getUserStatus()
+			== msUserStatus::STATUS_ALREADY_ASSIGNED) {
 			$this->assignUser();
 			$this->redirectToCourse();
 		} else {
@@ -158,8 +148,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		switch ($this->subscription->getSubscriptionType()) {
 			case msSubscription::TYPE_EMAIL:
 				if ($_POST['usr_email'] != $matchingString
-				    || $_POST['usr_email_retype'] != $matchingString
-				) {
+					|| $_POST['usr_email_retype'] != $matchingString) {
 					throw new ilException('no valid email!');
 				}
 				break;

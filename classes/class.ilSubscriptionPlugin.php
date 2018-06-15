@@ -1,5 +1,5 @@
 <?php
-require_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php');
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
 
 /**
  * Class ilSubscriptionPlugin
@@ -51,10 +51,10 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	}
 
 
+	/**
+	 * @return bool
+	 */
 	protected function beforeUninstall() {
-		require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Config/class.msConfig.php';
-		require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php';
-
 		$this->db->dropTable(msConfig::TABLE_NAME, false);
 		$this->db->dropTable(msSubscription::TABLE_NAME, false);
 

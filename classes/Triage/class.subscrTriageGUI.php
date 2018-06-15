@@ -1,8 +1,4 @@
 <?php
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/Subscription/class.msSubscription.php');
-require_once('./Services/Utilities/classes/class.ilConfirmationGUI.php');
-require_once('./Services/Object/classes/class.ilObject2.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/classes/class.subscr.php');
 
 /**
  * Class subscrTriageGUI
@@ -16,6 +12,11 @@ class subscrTriageGUI {
 
 	const CMD_HAS_LOGIN = 'hasLogin';
 	const CMD_HAS_NO_LOGIN = 'hasNoLogin';
+	const CMD_START = 'start';
+	/**
+	 * @var string
+	 */
+	protected $token;
 	/**
 	 * @var ilSubscriptionPlugin
 	 */
@@ -37,18 +38,19 @@ class subscrTriageGUI {
 		$this->ctrl = $DIC->ctrl();
 		$this->pl = ilSubscriptionPlugin::getInstance();
 
-		$this->token = $_REQUEST['token'];
+		$this->token = (string)$_REQUEST['token'];
 		$this->subscription = msSubscription::getInstanceByToken($this->token);
 		$this->ctrl->setParameter($this, 'token', $this->token);
 	}
 
 
 	public function executeCommand() {
-		$cmd = $this->ctrl->getCmd('start');
+		$cmd = $this->ctrl->getCmd(self::CMD_START);
 		if (!$this->subscription instanceof msSubscription) {
 			throw new ilException('This token has already been used');
 		}
 		switch ($cmd) {
+			case self::CMD_START:
 			case self::CMD_HAS_LOGIN:
 			case self::CMD_HAS_NO_LOGIN:
 				$this->{$cmd}();
