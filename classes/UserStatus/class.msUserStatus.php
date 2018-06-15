@@ -368,7 +368,7 @@ class msUserStatus {
 		global $DIC;
 		$ilDB = $DIC->database();
 
-		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text') . ' AND active = 1';
+		$query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text');
 		$set = $ilDB->query($query);
 		while ($rec = $ilDB->fetchObject($set)) {
 			return $rec->usr_id;
