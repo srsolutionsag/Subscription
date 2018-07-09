@@ -41,7 +41,6 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
         'msUserStatus' => __DIR__ . '/../..' . '/classes/UserStatus/class.msUserStatus.php',
         'subscr' => __DIR__ . '/../..' . '/classes/class.subscr.php',
         'subscrTriageGUI' => __DIR__ . '/../..' . '/classes/Triage/class.subscrTriageGUI.php',
-        'xUnibasSubsType' => __DIR__ . '/../..' . '/classes/Subscription/class.xUnibasSubsType.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
