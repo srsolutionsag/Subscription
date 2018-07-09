@@ -40,5 +40,4 @@ return array(
     'msUserStatus' => $baseDir . '/classes/UserStatus/class.msUserStatus.php',
     'subscr' => $baseDir . '/classes/class.subscr.php',
     'subscrTriageGUI' => $baseDir . '/classes/Triage/class.subscrTriageGUI.php',
-    'xUnibasSubsType' => $baseDir . '/classes/Subscription/class.xUnibasSubsType.php',
 );
