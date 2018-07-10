@@ -123,8 +123,8 @@ if ($ilDB->tableExists(msToken::TABLE_NAME)) {
 ?>
 <#7>
 <?php
-require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
-$ilDB->dropTable(xUnibasSubsType::TABLE_NAME, false);
+//require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
+//$ilDB->dropTable(xUnibasSubsType::TABLE_NAME, false);
 ?>
 <#8>
 <?php
