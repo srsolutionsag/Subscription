@@ -10,6 +10,7 @@
 class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
 	const TAB_SRSUBSCRIPTION = 'srsubscription';
+	const TAB_MEMBERS = 'members';
 	/**
 	 * @var array
 	 */
@@ -82,7 +83,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 
 			$pl_obj = ilSubscriptionPlugin::getInstance();
 			$tabs->removeSubTab(self::TAB_SRSUBSCRIPTION);
-			$tabs->activateTab('members');
+			$tabs->activateTab(self::TAB_MEMBERS);
 			$this->ctrl->setTargetScript('ilias.php');
 			$this->initBaseClass();
 			$this->ctrl->setParameterByClass(msSubscriptionGUI::class, 'obj_ref_id', $_GET['ref_id']);
@@ -149,7 +150,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$this->initBaseClass();
 			$this->ctrl->setTargetScript('./ilias.php');
 			$this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $token);
-			$arr = array( ilUIPluginRouterGUI::class, 'subscrTriageGUI' );
+			$arr = array( ilUIPluginRouterGUI::class, subscrTriageGUI::class );
 			$this->ctrl->redirectByClass($arr);
 		}
 
@@ -157,8 +158,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI {
 			$token = $matches[1];
 			$this->initBaseClass();
 			$this->ctrl->setTargetScript('./ilias.php');
-			$this->ctrl->setParameterByClass('subscrTriageGUI', 'token', $token);
-			$arr = array( ilUIPluginRouterGUI::class, 'subscrTriageGUI' );
+			$this->ctrl->setParameterByClass(subscrTriageGUI::class, 'token', $token);
+			$arr = array( ilUIPluginRouterGUI::class, subscrTriageGUI::class );
 
 			$this->ctrl->redirectByClass($arr);
 		}

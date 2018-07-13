@@ -21,7 +21,7 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
         'ilObject2' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObject2.php',
         'ilObjectListGUIFactory' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObjectListGUIFactory.php',
         'ilPluginConfigGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php',
-        'ilStartUpGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Init/classes/class.ilStartUpGUI.php',
+        ilStartUpGUI::class => __DIR__ . '/../..' . '/../../../../../../../Services/Init/classes/class.ilStartUpGUI.php',
         'ilSubscriptionConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionConfigGUI.php',
         'ilSubscriptionPlugin' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionPlugin.php',
         'ilSubscriptionUIHookGUI' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionUIHookGUI.php',
@@ -40,7 +40,7 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
         'msTriage' => __DIR__ . '/../..' . '/classes/triage.php',
         'msUserStatus' => __DIR__ . '/../..' . '/classes/UserStatus/class.msUserStatus.php',
         'subscr' => __DIR__ . '/../..' . '/classes/class.subscr.php',
-        'subscrTriageGUI' => __DIR__ . '/../..' . '/classes/Triage/class.subscrTriageGUI.php',
+        subscrTriageGUI::class => __DIR__ . '/../..' . '/classes/Triage/class.subscrTriageGUI.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

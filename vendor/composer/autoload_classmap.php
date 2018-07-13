@@ -20,7 +20,7 @@ return array(
     'ilObject2' => $baseDir . '/../../../../../../../Services/Object/classes/class.ilObject2.php',
     'ilObjectListGUIFactory' => $baseDir . '/../../../../../../../Services/Object/classes/class.ilObjectListGUIFactory.php',
     'ilPluginConfigGUI' => $baseDir . '/../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php',
-    'ilStartUpGUI' => $baseDir . '/../../../../../../../Services/Init/classes/class.ilStartUpGUI.php',
+    ilStartUpGUI::class => $baseDir . '/../../../../../../../Services/Init/classes/class.ilStartUpGUI.php',
     'ilSubscriptionConfigGUI' => $baseDir . '/classes/class.ilSubscriptionConfigGUI.php',
     'ilSubscriptionPlugin' => $baseDir . '/classes/class.ilSubscriptionPlugin.php',
     'ilSubscriptionUIHookGUI' => $baseDir . '/classes/class.ilSubscriptionUIHookGUI.php',
@@ -39,5 +39,5 @@ return array(
     'msTriage' => $baseDir . '/classes/triage.php',
     'msUserStatus' => $baseDir . '/classes/UserStatus/class.msUserStatus.php',
     'subscr' => $baseDir . '/classes/class.subscr.php',
-    'subscrTriageGUI' => $baseDir . '/classes/Triage/class.subscrTriageGUI.php',
+    subscrTriageGUI::class => $baseDir . '/classes/Triage/class.subscrTriageGUI.php',
 );

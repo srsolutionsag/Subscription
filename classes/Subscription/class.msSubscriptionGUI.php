@@ -93,7 +93,7 @@ class msSubscriptionGUI {
 	 */
 	public function executeCommand() {
 		if (!$this->pl->isActive()) {
-			ilUtil::sendFailure('Active Plugin first', true);
+			ilUtil::sendFailure('Active Plugin first', true); // TODO: Translate
 			ilUtil::redirect('index.php');
 		}
 

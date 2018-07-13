@@ -77,7 +77,7 @@ class subscrTriageGUI {
 	public function start() {
 		if (msConfig::getValueByKey('ask_for_login')) {
 			if ($this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
-				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.');
+				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.'); // TODO: Translate
 				$this->tpl->setContent('<a href="' . $this->getLoginLonk() . '" class="submit">Login</a>');
 			} else {
 				$this->showLoginDecision();

@@ -34,6 +34,9 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	protected $db;
 
 
+	/**
+	 *
+	 */
 	public function __construct() {
 		parent::__construct();
 
@@ -56,7 +59,9 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
 	 */
 	protected function beforeUninstall() {
 		$this->db->dropTable(msConfig::TABLE_NAME, false);
+		$this->db->dropTable(msInvitation::TABLE_NAME, false);
 		$this->db->dropTable(msSubscription::TABLE_NAME, false);
+		$this->db->dropTable(msToken::TABLE_NAME, false);
 
 		return true;
 	}
