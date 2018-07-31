@@ -47,9 +47,9 @@ class msUserStatus {
 
 
 	/**
-	 * @param $input
-	 * @param $type
-	 * @param $crs_ref_id
+	 * @param string $input
+	 * @param string $type
+	 * @param int    $crs_ref_id
 	 */
 	public function __construct($input, $type, $crs_ref_id) {
 		$this->setCrsRefId($crs_ref_id);
@@ -119,7 +119,7 @@ class msUserStatus {
 
 	protected function initRole() {
 		/**
-		 * @var $crs ilObjCourse
+		 * @var ilObjCourse $crs
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->getCrsRefId());
 		$members = ilCourseParticipants::_getInstanceByObjId($crs->getId());
@@ -144,8 +144,8 @@ class msUserStatus {
 
 
 	/**
-	 * @param $mail
-	 * @param $crs_ref_id
+	 * @param string $mail
+	 * @param int    $crs_ref_id
 	 *
 	 * @deprecated
 	 * @return int
@@ -179,15 +179,15 @@ class msUserStatus {
 
 
 	/**
-	 * @param $mail
-	 * @param $crs_id
+	 * @param string $mail
+	 * @param int    $crs_id
 	 *
 	 * @deprecated
 	 * @return int
 	 */
 	public static function getRoleForMail($mail, $crs_id) {
 		/**
-		 * @var $crs ilObjCourse
+		 * @var ilObjCourse $crs
 		 */
 		$usr_id = self::lookupUsrIdByEmail($mail);
 		$crs = ilObjectFactory::getInstanceByRefId($crs_id);
@@ -209,8 +209,8 @@ class msUserStatus {
 
 
 	/**
-	 * @param $mail
-	 * @param $crs_id
+	 * @param string $mail
+	 * @param int    $crs_id
 	 *
 	 * @deprecated
 	 */
@@ -219,7 +219,7 @@ class msUserStatus {
 
 
 	/**
-	 * @param $mail
+	 * @param string $mail
 	 *
 	 * @deprecated
 	 * @return bool
@@ -238,7 +238,7 @@ class msUserStatus {
 
 
 	/**
-	 * @param $mail
+	 * @param string $mail
 	 *
 	 * @deprecated
 	 * @return bool
@@ -359,8 +359,8 @@ class msUserStatus {
 	//
 
 	/**
-	 * @param $field
-	 * @param $value
+	 * @param string $field
+	 * @param string $value
 	 *
 	 * @return bool
 	 */

@@ -78,7 +78,7 @@ class msConfig extends ActiveRecord {
 
 
 	/**
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return array|string
 	 */
@@ -90,8 +90,8 @@ class msConfig extends ActiveRecord {
 
 
 	/**
-	 * @param $name
-	 * @param $value
+	 * @param string $name
+	 * @param string $value
 	 */
 	public static function set($name, $value) {
 		$obj = new self($name);
@@ -141,7 +141,7 @@ class msConfig extends ActiveRecord {
 
 
 	/**
-	 * @param $check_ref_id
+	 * @param int $check_ref_id
 	 *
 	 * @return bool
 	 */

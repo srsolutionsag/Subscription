@@ -96,7 +96,7 @@ class msTriage {
 
 
 	/**
-	 * @param $cmd
+	 * @param string $cmd
 	 */
 	public function performCommand($cmd) {
 
@@ -187,7 +187,7 @@ class msTriage {
 	 */
 	protected function getRegistrationCode() {
 		/**
-		 * @var $crs ilObjCourse
+		 * @var ilObjCourse $crs
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
 		if (!$crs->isRegistrationAccessCodeEnabled()) {

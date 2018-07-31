@@ -138,7 +138,7 @@ class subscrTriageGUI {
 	 */
 	protected function getRegistrationCode() {
 		/**
-		 * @var $crs ilObjCourse
+		 * @var ilObjCourse $crs
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
 		if (!$crs->isRegistrationAccessCodeEnabled()) {

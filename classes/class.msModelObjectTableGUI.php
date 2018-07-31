@@ -51,7 +51,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param        $a_parent_obj
+	 * @param object $a_parent_obj
 	 * @param string $a_parent_cmd
 	 */
 	public function __construct($a_parent_obj, $a_parent_cmd) {
@@ -139,7 +139,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param $a_set
+	 * @param array $a_set
 	 *
 	 * @return bool
 	 * @description implement your woen fillRow or return false
@@ -152,7 +152,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 	 */
 	final function addFilterItemToForm(ilFormPropertyGUI $item) {
 		/**
-		 * @var $item ilTextInputGUI
+		 * @var ilTextInputGUI $item
 		 */
 		$this->addFilterItem($item);
 		$item->readFromSession();
@@ -203,7 +203,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param $value
+	 * @param string $value
 	 */
 	public function addCell($value) {
 		$this->tpl->setCurrentBlock('cell');
@@ -262,7 +262,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param $param
+	 * @param string $param
 	 *
 	 * @return mixed
 	 */

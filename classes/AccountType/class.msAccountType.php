@@ -28,8 +28,8 @@ class msAccountType {
 
 
 	/**
-	 * @param $matching_string
-	 * @param $subscription_type
+	 * @param string $matching_string
+	 * @param string $subscription_type
 	 */
 	public function __construct($matching_string, $subscription_type) {
 		$this->setMatchingString($matching_string);
@@ -118,7 +118,7 @@ class msAccountType {
 				$domains = array();
 				foreach ($xml->children() as $child) {
 					/**
-					 * @var $child SimpleXMLElement
+					 * @var SimpleXMLElement $child
 					 */
 					$domains[] = $child->__toString();
 				}

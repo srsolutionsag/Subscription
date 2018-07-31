@@ -25,7 +25,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 
 	/**
-	 * @param $parent_gui
+	 * @param ilSubscriptionConfigGUI $parent_gui
 	 */
 	public function __construct($parent_gui) {
 		parent::__construct();
@@ -40,7 +40,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 
 	/**
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return mixed
 	 */
@@ -166,12 +166,12 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 
 	/**
-	 * @param $item
-	 * @param $array
+	 * @param ilFormPropertyGUI $item
+	 * @param array             $array
 	 *
 	 * @return mixed
 	 */
-	protected function fillValue($item, $array) {
+	protected function fillValue(ilFormPropertyGUI $item, array $array) {
 		if (get_class($item) != ilFormSectionHeaderGUI::class) {
 			$key = $item->getPostVar();
 			$array[$key] = msConfig::getValueByKey($key);
@@ -185,12 +185,12 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 
 
 	/**
-	 * @param $item
+	 * @param ilFormPropertyGUI $item
 	 */
 	protected function writeValue($item) {
 		if (get_class($item) != ilFormSectionHeaderGUI::class) {
 			/**
-			 * @var $item ilCheckboxInputGUI
+			 * @var ilCheckboxInputGUI $item
 			 */
 			$key = $item->getPostVar();
 			msConfig::set($key, $this->getInput($key));

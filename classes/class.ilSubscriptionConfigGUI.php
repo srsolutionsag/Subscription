@@ -37,7 +37,7 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
 
 
 	/**
-	 * @param $cmd
+	 * @param string $cmd
 	 */
 	public function performCommand($cmd) {
 		switch ($cmd) {
