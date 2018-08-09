@@ -51,6 +51,7 @@ main_role_3#:#Tutor
 main_role_4#:#Administrator
 main_role_5#:#Member
 main_send_form#:#List Users
+main_send_table_remove_unregistered#:#MISSING main_send_table_remove_unregistered
 main_send_table_clear#:#Clear
 main_send_table_usage_1#:#Assign
 main_send_table_usage_2#:#Assign and invite
@@ -80,3 +81,5 @@ tab_usage_1#:#メールリストで受講者を追加
 tab_usage_2#:#Subscription with matriculation list
 tab_usage_3#:#Subscription with Mail or Matriculation
 triage_title#:#Invitation to ILIAS-Course
+remove_unregistered_info#:#MISSING remove_unregistered_info
+clear_info#:#MISSING clear_info
