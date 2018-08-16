@@ -38,6 +38,9 @@ class msAccountType {
 	}
 
 
+	/**
+	 *
+	 */
 	public function initAccountType() {
 		if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL AND msConfig::getValueByKey('shibboleth')) {
 			self::readDomains();
@@ -46,7 +49,7 @@ class msAccountType {
 				if (strpos($this->getMatchingString(), $aai)) {
 					$this->setAccountType(self::TYPE_SHIBBOLETH);
 
-					return true;
+					return;
 				}
 			}
 		}
