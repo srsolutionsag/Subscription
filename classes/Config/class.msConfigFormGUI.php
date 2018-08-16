@@ -171,7 +171,7 @@ class msConfigFormGUI extends ilPropertyFormGUI {
 	 *
 	 * @return mixed
 	 */
-	protected function fillValue(ilFormPropertyGUI $item, array $array) {
+	protected function fillValue($item, array $array) {
 		if (get_class($item) != ilFormSectionHeaderGUI::class) {
 			$key = $item->getPostVar();
 			$array[$key] = msConfig::getValueByKey($key);
