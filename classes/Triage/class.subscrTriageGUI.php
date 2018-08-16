@@ -98,7 +98,7 @@ class subscrTriageGUI {
 		$de = new ilConfirmationGUI();
 		$de->setFormAction($this->ctrl->getFormAction($this));
 
-		$str = $this->subscription->getMatchingString() . ', Ziel: '
+		$str = $this->subscription->getMatchingString() . ', Ziel: ' // TODO: Translate
 			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 

@@ -146,7 +146,7 @@ class msTriage {
 		$de->setFormAction($this->pl->getDirectory() . '/classes/triage.php');
 		//$this->pl->txt('subscription_type_' . $this->subscription->getSubscriptionType()) . ': '
 		//.
-		$str = $this->subscription->getMatchingString() . ', Ziel: '
+		$str = $this->subscription->getMatchingString() . ', Ziel: ' // TODO: Translate
 			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
