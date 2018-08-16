@@ -109,7 +109,7 @@ class msAccountType {
 	 * @return array
 	 */
 	protected static function readDomains() {
-		if (!isset(self::$domains)) {
+		if (count(self::$domains) == 0) {
 			if (msConfig::checkShibboleth()) {
 				$xslt = new XSLTProcessor();
 				$xslt->importStylesheet(new SimpleXMLElement(file_get_contents('domain_to_idp_entityid.xsl', true)));
