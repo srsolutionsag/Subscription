@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Class emSubscriptionTableGUI
  *
@@ -39,7 +38,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		$user_ids = array();
 		foreach (msSubscription::where($where)->orderBy('matching_string')->get() as $dat) {
 			/**
-			 * @var $dat msSubscription
+			 * @var msSubscription $dat
 			 */
 			// SW: Remove duplicated users, see bug https://jira.studer-raimann.ch/browse/PLMSC-11
 			$user_id = $dat->user_status_object->getUsrId();
@@ -117,7 +116,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 	protected function fillTableRow($a_set) {
 		/**
-		 * @var $msSubscription msSubscription
+		 * @var msSubscription $msSubscription
 		 */
 		$msSubscription = msSubscription::find($a_set['id']);
 		$this->fillStandardFields($msSubscription);
@@ -198,7 +197,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 
 	/**
-	 * @param $msSubscription msSubscription
+	 * @param msSubscription $msSubscription
 	 */
 	protected function fillActions(msSubscription $msSubscription) {
 		switch ($msSubscription->getUserStatus()) {

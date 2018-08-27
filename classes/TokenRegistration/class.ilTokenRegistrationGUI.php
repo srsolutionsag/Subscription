@@ -42,7 +42,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 
 
 	/**
-	 * @param $a_usr_id
+	 * @param int $a_usr_id
 	 */
 	public function activateUser($a_usr_id) {
 		$user = new ilObjUser($a_usr_id);
@@ -62,8 +62,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		}
 		parent::__initForm();
 		/**
-		 * @var $form      ilPropertyFormGUI
-		 * @var $usr_email ilTextInputGUI
+		 * @var ilPropertyFormGUI $form
+		 * @var ilTextInputGUI    $usr_email
 		 */
 
 		$this->form->setFormAction($this->ctrl->getFormActionByClass(array(

@@ -28,8 +28,8 @@ class msAccountType {
 
 
 	/**
-	 * @param $matching_string
-	 * @param $subscription_type
+	 * @param string $matching_string
+	 * @param string $subscription_type
 	 */
 	public function __construct($matching_string, $subscription_type) {
 		$this->setMatchingString($matching_string);
@@ -38,6 +38,9 @@ class msAccountType {
 	}
 
 
+	/**
+	 *
+	 */
 	public function initAccountType() {
 		if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL AND msConfig::getValueByKey('shibboleth')) {
 			self::readDomains();
@@ -46,7 +49,7 @@ class msAccountType {
 				if (strpos($this->getMatchingString(), $aai)) {
 					$this->setAccountType(self::TYPE_SHIBBOLETH);
 
-					return true;
+					return;
 				}
 			}
 		}
@@ -109,7 +112,7 @@ class msAccountType {
 	 * @return array
 	 */
 	protected static function readDomains() {
-		if (!isset(self::$domains)) {
+		if (count(self::$domains) == 0) {
 			if (msConfig::checkShibboleth()) {
 				$xslt = new XSLTProcessor();
 				$xslt->importStylesheet(new SimpleXMLElement(file_get_contents('domain_to_idp_entityid.xsl', true)));
@@ -118,7 +121,7 @@ class msAccountType {
 				$domains = array();
 				foreach ($xml->children() as $child) {
 					/**
-					 * @var $child SimpleXMLElement
+					 * @var SimpleXMLElement $child
 					 */
 					$domains[] = $child->__toString();
 				}

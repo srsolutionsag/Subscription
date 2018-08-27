@@ -77,7 +77,7 @@ class subscrTriageGUI {
 	public function start() {
 		if (msConfig::getValueByKey('ask_for_login')) {
 			if ($this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
-				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.');
+				ilUtil::sendInfo('Ihre E-Mailadresse wurde als SwitchAAI-Adresse erkannt. Sie können sich direkt einloggen. Klicken Sie auf Login und wählen Sie Ihre Home-Organisation aus.'); // TODO: Translate
 				$this->tpl->setContent('<a href="' . $this->getLoginLonk() . '" class="submit">Login</a>');
 			} else {
 				$this->showLoginDecision();
@@ -98,7 +98,7 @@ class subscrTriageGUI {
 		$de = new ilConfirmationGUI();
 		$de->setFormAction($this->ctrl->getFormAction($this));
 
-		$str = $this->subscription->getMatchingString() . ', Ziel: '
+		$str = $this->subscription->getMatchingString() . ', Ziel: ' // TODO: Translate
 			. ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
 		$de->addItem('token', $this->token, $str);
 
@@ -138,7 +138,7 @@ class subscrTriageGUI {
 	 */
 	protected function getRegistrationCode() {
 		/**
-		 * @var $crs ilObjCourse
+		 * @var ilObjCourse $crs
 		 */
 		$crs = ilObjectFactory::getInstanceByRefId($this->subscription->getObjRefId());
 		if (!$crs->isRegistrationAccessCodeEnabled()) {

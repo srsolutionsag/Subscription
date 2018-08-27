@@ -63,12 +63,12 @@ class msSubscriptionGUI {
 
 
 	/**
-	 * @param $parent
+	 * @param null $parent
 	 */
 	function __construct($parent = NULL) {
 		global $DIC, $objDefinition;
 		/**
-		 * @var $objDefinition ilObjectDefinition
+		 * @var ilObjectDefinition $objDefinition
 		 */
 		$this->tpl = $DIC->ui()->mainTemplate();
 		$this->ctrl = $DIC->ctrl();
@@ -93,7 +93,7 @@ class msSubscriptionGUI {
 	 */
 	public function executeCommand() {
 		if (!$this->pl->isActive()) {
-			ilUtil::sendFailure('Active Plugin first', true);
+			ilUtil::sendFailure('Active Plugin first', true); // TODO: Translate
 			ilUtil::redirect('index.php');
 		}
 
@@ -148,7 +148,7 @@ class msSubscriptionGUI {
 
 
 	/**
-	 * @param $cmd
+	 * @param string $cmd
 	 */
 	function performCommand($cmd) {
 		switch ($cmd) {
@@ -241,7 +241,7 @@ class msSubscriptionGUI {
 		foreach ($_POST as $k => $v) {
 			if (preg_match("/obj_([0-9]*)/um", $k, $m)) {
 				/**
-				 * @var $obj msSubscription
+				 * @var msSubscription $obj
 				 */
 				$obj = msSubscription::find($m[1]);
 				$obj->setRole($v['role']);
@@ -319,7 +319,7 @@ class msSubscriptionGUI {
 			'deleted' => false,
 		);
 		/**
-		 * @var $msSubscription msSubscription
+		 * @var msSubscription $msSubscription
 		 */
 		foreach (msSubscription::where($where)->get() as $msSubscription) {
 			if ($msSubscription->isDeletable()) {
@@ -345,7 +345,7 @@ class msSubscriptionGUI {
 		);
 
 		/**
-		 * @var $msSubscription msSubscription
+		 * @var msSubscription $msSubscription
 		 */
 		foreach (msSubscription::where($where)->get() as $msSubscription) {
 			$msSubscription->setDeleted(true);
@@ -359,7 +359,7 @@ class msSubscriptionGUI {
 
 
 	/**
-	 * @return \ilObjCourse|\ilObjGroup
+	 * @return ilObjCourse|ilObjGroup
 	 */
 	public function getObj() {
 		return $this->obj;
@@ -369,7 +369,7 @@ class msSubscriptionGUI {
 	public function updateLanguageKey() {
 		global $DIC;
 		/**
-		 * @var $ilLog ilLog
+		 * @var ilLog $ilLog
 		 */
 		$ilLog = $DIC["ilLog"];
 

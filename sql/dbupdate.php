@@ -2,7 +2,7 @@
 <?php
 require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
 /**
- * @var $ilDB ilDB
+ * @var ilDB $ilDB
  */
 $fields = array(
     'id' => array(

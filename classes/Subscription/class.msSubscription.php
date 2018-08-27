@@ -76,7 +76,7 @@ class msSubscription extends ActiveRecord {
 	//
 
 	/**
-	 * @param $token
+	 * @param string $token
 	 *
 	 * @return msSubscription
 	 */
@@ -107,7 +107,7 @@ class msSubscription extends ActiveRecord {
 
 	public function assignToObject() {
 		/**
-		 * @var $participants ilCourseParticipants
+		 * @var ilCourseParticipants $participants
 		 */
 		$obj_id = ilObject::_lookupObjId($this->getObjRefId());
 		$usr_id = $this->user_status_object->getUsrId();
@@ -142,8 +142,8 @@ class msSubscription extends ActiveRecord {
 	// Helpers
 	//
 	/**
-	 * @param      $email
-	 * @param bool $use_old
+	 * @param string $email
+	 * @param bool   $use_old
 	 *
 	 * @return array
 	 */
@@ -161,7 +161,8 @@ class msSubscription extends ActiveRecord {
 
 
 	/**
-	 * @param $matriculation
+	 * @param
+	 * $matriculation
 	 *
 	 * @return array
 	 */
@@ -174,10 +175,10 @@ class msSubscription extends ActiveRecord {
 
 
 	/**
-	 * @param     $obj_ref_id
-	 * @param     $input
-	 * @param int $type
-	 * @param     $context
+	 * @param int    $obj_ref_id
+	 * @param string $input
+	 * @param int    $type
+	 * @param string $context
 	 */
 	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(
