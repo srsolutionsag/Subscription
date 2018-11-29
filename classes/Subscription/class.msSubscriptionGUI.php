@@ -245,6 +245,7 @@ class msSubscriptionGUI {
 				 */
 				$obj = msSubscription::find($m[1]);
 				$obj->setRole($v['role']);
+
 				switch ($v['cmd']) {
 					case self::CMD_DELETE:
 						$obj->setDeleted(true);

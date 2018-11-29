@@ -17,6 +17,13 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 	 */
 	protected $pl;
 
+	public function __construct($a_parent_obj, $a_parent_cmd) {
+		parent::__construct($a_parent_obj, $a_parent_cmd);
+
+		$this->setSelectAllCheckbox('obj');
+
+	}
+
 
 	/**
 	 * @return bool
@@ -60,6 +67,11 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 
 
 	protected function initTableColumns() {
+		$this->addColumn($this->pl->txt('main_tblh_subscribe'));
+
+		if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
+			$this->addColumn($this->pl->txt('main_tblh_invite'));
+		}
 		if ($this->getMailUsage()) {
 			$this->addColumn($this->pl->txt('main_tblh_email'), 'matching_string');
 		}
@@ -75,11 +87,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI {
 		}
 		$this->addColumn($this->pl->txt('main_tblh_status'), 'status_sort');
 
-		$this->addColumn($this->pl->txt('main_tblh_subscribe'));
 
-		if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
-			$this->addColumn($this->pl->txt('main_tblh_invite'));
-		}
 		$this->addColumn($this->pl->txt('main_tblh_role'));
 	}
 
