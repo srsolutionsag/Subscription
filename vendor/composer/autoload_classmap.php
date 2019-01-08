@@ -27,6 +27,7 @@ return array(
     'ilTable2GUI' => $baseDir . '/../../../../../../../Services/Table/classes/class.ilTable2GUI.php',
     'ilTokenRegistrationGUI' => $baseDir . '/classes/TokenRegistration/class.ilTokenRegistrationGUI.php',
     'ilUIHookPluginGUI' => $baseDir . '/../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php',
+    'ilUserInterfaceHookPlugin' => $baseDir . '/../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php',
     'msAccountType' => $baseDir . '/classes/AccountType/class.msAccountType.php',
     'msConfig' => $baseDir . '/classes/Config/class.msConfig.php',
     'msConfigFormGUI' => $baseDir . '/classes/Config/class.msConfigFormGUI.php',

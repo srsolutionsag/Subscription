@@ -28,6 +28,7 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
         'ilTable2GUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Table/classes/class.ilTable2GUI.php',
         'ilTokenRegistrationGUI' => __DIR__ . '/../..' . '/classes/TokenRegistration/class.ilTokenRegistrationGUI.php',
         'ilUIHookPluginGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php',
+        'ilUserInterfaceHookPlugin' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php',
         'msAccountType' => __DIR__ . '/../..' . '/classes/AccountType/class.msAccountType.php',
         'msConfig' => __DIR__ . '/../..' . '/classes/Config/class.msConfig.php',
         'msConfigFormGUI' => __DIR__ . '/../..' . '/classes/Config/class.msConfigFormGUI.php',
