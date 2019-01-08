@@ -18,7 +18,8 @@
       "../../../../../../../Services/Table/classes/class.ilTable2GUI.php",
       "../../../../../../../Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php",
       "../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php",
-      "../../../../../../../Services/Utilities/classes/class.ilConfirmationGUI.php"
+      "../../../../../../../Services/Utilities/classes/class.ilConfirmationGUI.php",
+      "../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php"
     ]
   },
   "config": {
