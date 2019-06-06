@@ -96,7 +96,7 @@ class msConfig extends ActiveRecord {
 	public static function set($name, $value) {
 		$obj = new self($name);
 		$obj->setConfigValue($value);
-		if (self::where(array( 'config_key' => $name ))->hasSets()) {
+		if (self::where(array('config_key' => $name))->hasSets()) {
 			$obj->update();
 		} else {
 			$obj->create();

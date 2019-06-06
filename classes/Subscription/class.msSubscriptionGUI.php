@@ -65,7 +65,7 @@ class msSubscriptionGUI {
 	/**
 	 * @param null $parent
 	 */
-	function __construct($parent = NULL) {
+	function __construct($parent = null) {
 		global $DIC, $objDefinition;
 		/**
 		 * @var ilObjectDefinition $objDefinition
@@ -119,19 +119,24 @@ class msSubscriptionGUI {
 
 	private function initHeader() {
 		global $DIC;
-		$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->obj->getType());
+		// $list_gui->setParentRefId($_GET['obj_ref_id']);
 		$this->tpl->setTitle($this->obj->getTitle());
 		$this->tpl->setDescription($this->obj->getDescription());
 		if (ilObject::_lookupType($this->obj->getId()) == 'crs') {
+			$list_gui = ilObjectListGUIFactory::_getListGUIByType($this->obj->getType()); // currently not working
 			if ($this->obj->getOfflineStatus()) {
-				$this->tpl->setAlertProperties($list_gui->getAlertProperties());
+				// $this->tpl->setAlertProperties($list_gui->getAlertProperties());
 			}
 		}
 		$this->tpl->setTitleIcon(ilUtil::getTypeIconPath($this->obj->getType(), $this->obj->getId(), 'big'));
-		$this->tabs->setBackTarget($this->pl->txt('main_back'), $this->ctrl->getLinkTargetByClass(array(
-			ilRepositoryGUI::class,
-			'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
-		), 'members'));
+		$this->tabs->setBackTarget(
+			$this->pl->txt('main_back'), $this->ctrl->getLinkTargetByClass(
+			array(
+				ilRepositoryGUI::class,
+				'ilObj' . $this->obj_def->getClassName($this->obj->getType()) . 'GUI',
+			), 'members'
+		)
+		);
 
 		$DIC["ilLocator"]->addRepositoryItems($this->obj_ref_id);
 		$this->tpl->setLocator($DIC["ilLocator"]->getHTML());
@@ -300,24 +305,24 @@ class msSubscriptionGUI {
 
 		$sf = array(
 			'obj_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getObjRefId())),
-			'role' => $this->pl->txt('main_role_' . $msSubscription->getRole()),
+			'role'      => $this->pl->txt('main_role_' . $msSubscription->getRole()),
 			'inv_email' => $msSubscription->getMatchingString(),
-			'link' => ILIAS_HTTP_PATH . '/goto.php?target=subscr_' . $msSubscription->getToken(),
-			'username' => $this->usr->getFullname(),
-			'email' => $this->usr->getEmail(),
+			'link'      => ILIAS_HTTP_PATH . '/goto.php?target=subscr_' . $msSubscription->getToken(),
+			'username'  => $this->usr->getFullname(),
+			'email'     => $this->usr->getEmail(),
 		);
 
 		$mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);
 		$mail_body = preg_replace("/\\\\n/um", "\n", $mail_body);
 		$subject = $reinvite ? $this->pl->txt('main_notification_subject_reinvite') : $this->pl->txt('main_notification_subject');
-		$mail->sendMail($msSubscription->getMatchingString(), '', '', $subject, $mail_body, false, array( 'normal' ));
+		$mail->sendMail($msSubscription->getMatchingString(), '', '', $subject, $mail_body, false, array('normal'));
 	}
 
 
 	protected function removeUnregistered() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted' => false,
+			'deleted'    => false,
 		);
 		/**
 		 * @var msSubscription $msSubscription
@@ -342,7 +347,7 @@ class msSubscriptionGUI {
 	protected function clear() {
 		$where = array(
 			'obj_ref_id' => $_GET['obj_ref_id'],
-			'deleted' => false,
+			'deleted'    => false,
 		);
 
 		/**
