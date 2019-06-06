@@ -14,10 +14,11 @@ class msSubscription extends ActiveRecord {
 	/**
 	 * @var array
 	 */
-	protected static $deletable_status = array(
-		msUserStatus::STATUS_USER_NOT_ASSIGNABLE,
-		msUserStatus::STATUS_USER_CAN_BE_INVITED,
-	);
+	protected static $deletable_status
+		= array(
+			msUserStatus::STATUS_USER_NOT_ASSIGNABLE,
+			msUserStatus::STATUS_USER_CAN_BE_INVITED,
+		);
 	const TYPE_EMAIL = 1;
 	const TYPE_MATRICULATION = 2;
 	const DELIMITER = '|';
@@ -81,7 +82,7 @@ class msSubscription extends ActiveRecord {
 	 * @return msSubscription
 	 */
 	public static function getInstanceByToken($token) {
-		$where = array( 'token' => $token );
+		$where = array('token' => $token);
 		$obj = self::where($where)->first();
 		if ($obj) {
 			$obj->read();
@@ -183,13 +184,13 @@ class msSubscription extends ActiveRecord {
 	public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context) {
 		$where = array(
 			'matching_string' => $input,
-			'obj_ref_id' => $obj_ref_id,
-			'deleted' => false,
+			'obj_ref_id'      => $obj_ref_id,
+			'deleted'         => false,
 		);
 		$operators = array(
 			'matching_string' => 'LIKE',
-			'obj_ref_id' => '=',
-			'deleted' => '=',
+			'obj_ref_id'      => '=',
+			'deleted'         => '=',
 		);
 		if (!msSubscription::where($where, $operators)->hasSets() AND $input != '') {
 			$msSubscription = new msSubscription();
@@ -210,7 +211,7 @@ class msSubscription extends ActiveRecord {
 	 */
 	public static function generateToken() {
 		$token = sha1(microtime() * rand(1, 10000));
-		while (self::where(array( 'token' => $token ))->hasSets()) {
+		while (self::where(array('token' => $token))->hasSets()) {
 			$token = sha1(microtime() * rand(1, 10000));
 		}
 
@@ -284,7 +285,7 @@ class msSubscription extends ActiveRecord {
 	 * @db_fieldtype        integer
 	 * @db_length           1
 	 */
-	protected $role = IL_OBJ_MEMBER;
+	protected $role = 2;
 	/**
 	 * @var bool
 	 *

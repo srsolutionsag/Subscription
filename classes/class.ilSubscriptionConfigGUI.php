@@ -1,5 +1,5 @@
 <?php
-
+require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
 /**
  * Example configuration user interface class
  *

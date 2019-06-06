@@ -1,4 +1,5 @@
 <?php
+require_once('./Services/Membership/classes/class.ilParticipants.php');
 
 /**
  * Class msUserStatus
@@ -17,9 +18,9 @@ class msUserStatus {
 	const STATUS_USER_NOT_ASSIGNABLE = 6;
 	//
 	const ROLE_NONE = 0;
-	const ROLE_MEMBER = IL_CRS_MEMBER;
-	const ROLE_TUTOR = IL_CRS_TUTOR;
-	const ROLE_ADMIN = IL_CRS_ADMIN;
+	const ROLE_MEMBER = 2;
+	const ROLE_TUTOR = 3;
+	const ROLE_ADMIN = 1;
 	/**
 	 * @var int
 	 */
@@ -89,13 +90,13 @@ class msUserStatus {
 			}
 		} elseif ($this->getType() == self::EMAIL) {
 			$where = array(
-				'matching_string' => $this->getInput(),
-				'obj_ref_id' => $this->getCrsRefId(),
+				'matching_string'  => $this->getInput(),
+				'obj_ref_id'       => $this->getCrsRefId(),
 				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string' => 'LIKE',
-				'obj_ref_id' => '=',
+				'matching_string'  => 'LIKE',
+				'obj_ref_id'       => '=',
 				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
@@ -147,8 +148,8 @@ class msUserStatus {
 	 * @param string $mail
 	 * @param int    $crs_ref_id
 	 *
-	 * @deprecated
 	 * @return int
+	 * @deprecated
 	 */
 	public static function getUserStatusForMail($mail, $crs_ref_id) {
 		$usr_id = self::lookupUsrIdByEmail($mail);
@@ -160,13 +161,13 @@ class msUserStatus {
 			}
 		} else {
 			$where = array(
-				'matching_string' => $mail,
-				'obj_ref_id' => $crs_ref_id,
+				'matching_string'  => $mail,
+				'obj_ref_id'       => $crs_ref_id,
 				'invitations_sent' => '1',
 			);
 			$op = array(
-				'matching_string' => 'LIKE',
-				'obj_ref_id' => '=',
+				'matching_string'  => 'LIKE',
+				'obj_ref_id'       => '=',
 				'invitations_sent' => '=',
 			);
 			if (msSubscription::where($where, $op)->hasSets()) {
@@ -182,8 +183,8 @@ class msUserStatus {
 	 * @param string $mail
 	 * @param int    $crs_id
 	 *
-	 * @deprecated
 	 * @return int
+	 * @deprecated
 	 */
 	public static function getRoleForMail($mail, $crs_id) {
 		/**
@@ -221,8 +222,8 @@ class msUserStatus {
 	/**
 	 * @param string $mail
 	 *
-	 * @deprecated
 	 * @return bool
+	 * @deprecated
 	 */
 	public static function lookupUsrIdByEmail($mail) {
 		global $DIC;
@@ -240,8 +241,8 @@ class msUserStatus {
 	/**
 	 * @param string $mail
 	 *
-	 * @deprecated
 	 * @return bool
+	 * @deprecated
 	 */
 	public static function lookupUsrIdByMatriculation($mail) {
 		global $DIC;

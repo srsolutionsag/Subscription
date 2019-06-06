@@ -22,7 +22,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		$this->pl = ilSubscriptionPlugin::getInstance();
 		$this->ctrl = $DIC->ctrl();
 		$this->token = $_GET['token'];
-		$this->subscription = msSubscription::where(array( 'token' => $this->token ))->first();
+		$this->subscription = msSubscription::where(array('token' => $this->token))->first();
 		$this->ctrl->saveParameter($this, 'token');
 	}
 
@@ -66,10 +66,14 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		 * @var ilTextInputGUI    $usr_email
 		 */
 
-		$this->form->setFormAction($this->ctrl->getFormActionByClass(array(
-			ilUIPluginRouterGUI::class,
-			ilTokenRegistrationGUI::class,
-		)));
+		$this->form->setFormAction(
+			$this->ctrl->getFormActionByClass(
+				array(
+					ilUIPluginRouterGUI::class,
+					ilTokenRegistrationGUI::class,
+				)
+			)
+		);
 
 		$username = $this->form->getItemByPostVar('username');
 		$username->setValue($this->subscription->getMatchingString());
@@ -109,7 +113,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 			$this->tpl->getStandardTemplate();
 			$this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
 		} elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR $this->subscription->getUserStatus()
-			== msUserStatus::STATUS_ALREADY_ASSIGNED) {
+			== msUserStatus::STATUS_ALREADY_ASSIGNED
+		) {
 			$this->assignUser();
 			$this->redirectToCourse();
 		} else {
@@ -148,7 +153,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI {
 		switch ($this->subscription->getSubscriptionType()) {
 			case msSubscription::TYPE_EMAIL:
 				if ($_POST['usr_email'] != $matchingString
-					|| $_POST['usr_email_retype'] != $matchingString) {
+					|| $_POST['usr_email_retype'] != $matchingString
+				) {
 					throw new ilException('no valid email!');
 				}
 				break;
