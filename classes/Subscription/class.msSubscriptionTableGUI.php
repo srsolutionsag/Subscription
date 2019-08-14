@@ -8,8 +8,6 @@
 class msSubscriptionTableGUI extends msModelObjectTableGUI
 {
 
-    const ICON_OFF = 'icon_led_off_s.png';
-    const ICON_ON = 'icon_led_on_s.png';
     const DISABLED = 'disabled';
     const CHECKED = 'checked';
     const STD_ROLE = IL_CRS_MEMBER;
@@ -226,7 +224,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
     {
         switch ($msSubscription->getUserStatus()) {
             case msUserStatus::STATUS_ALREADY_ASSIGNED:
-                $this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_ON));
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_yes'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'yes');
                 $this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
@@ -235,14 +232,12 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
                 $this->tpl->setVariable('CMD', msSubscriptionGUI::CMD_DELETE);
                 break;
             case msUserStatus::STATUS_USER_CAN_BE_ASSIGNED:
-                $this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_ON));
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_yes'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'yes');
                 $this->tpl->setVariable('DISABLED_INV', self::DISABLED);
                 $this->tpl->setVariable('CHECKED_SUB', self::CHECKED);
                 break;
             case msUserStatus::STATUS_ALREADY_INVITED:
-                $this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
                 $this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
@@ -251,7 +246,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
                 $this->tpl->setVariable('CMD_INVITE', msSubscriptionGUI::CMD_REINVITE);
                 break;
             case msUserStatus::STATUS_USER_CAN_BE_INVITED:
-                $this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
                 $this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
@@ -263,7 +257,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
                 break;
             case msUserStatus::STATUS_USER_NOT_INVITABLE:
             case msUserStatus::STATUS_USER_NOT_ASSIGNABLE:
-                $this->tpl->setVariable('USER_EXISTS', ilUtil::getImagePath(self::ICON_OFF));
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
                 $this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
