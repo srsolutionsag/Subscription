@@ -31,6 +31,7 @@ main_field_emails_title#:#E-Mails
 main_field_matriculation_info#:#Seperated List of Matriculations (Comma, Semicolon, ...)
 main_field_matriculation_title#:#Matriculations
 main_form_info_usage_1#:#Insert a list of E-Mail addresses, which you'd like to assign as a member. Existing users can be assigned, non existing can be invited.
+main_form_info_usage_1_no_invitation#:#Insert a list of E-Mail addresses, which you'd like to assign as a member. Existing users can be assigned.
 main_form_info_usage_2#:#Insert a list of matriculations, which you'd like to assign as a member. Existing users can be assigned.
 main_form_info_usage_3#:#Insert a list of matriculations or e-mails, which you'd like to assign as a member. Existing users can be assigned.
 main_form_title_usage_1#:#Subscription with E-Mail list

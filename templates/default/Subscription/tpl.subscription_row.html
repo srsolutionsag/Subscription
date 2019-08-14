@@ -1,7 +1,8 @@
 <tr class="{ROW_CSS}">
-	<td  style="display: none;" class="std small"><input type="hidden" name="{USR_ID}[cmd]" value="{CMD}"><img src="{USER_EXISTS}"></td>
-	<td class="std small"><input type="checkbox" {DISABLED_SUB} {CHECKED_SUB} name="{USR_ID}[cmd]" value="{CMD_SUBSCRIBE}" ></td>
-	<td class="std small {DISABLE_NOMAIL}"><input type="checkbox" {DISABLED_INV} {CHECKED_INV} name="{USR_ID}[cmd]" value="{CMD_INVITE}" ></td>
+	<td class="std small">
+		<input type="hidden" name="{USR_ID}[cmd]" value="{CMD}"> <input type="checkbox" {DISABLED_SUB} {CHECKED_SUB} name="{USR_ID}[cmd]" value="{CMD_SUBSCRIBE}">
+	</td>
+	<td class="std small {DISABLE_NOMAIL}"><input type="checkbox" {DISABLED_INV} {CHECKED_INV} name="{USR_ID}[cmd]" value="{CMD_INVITE}"></td>
 	<!-- BEGIN email -->
 	<td class="std small">{EMAIL}</td>
 	<!-- END email -->
@@ -11,14 +12,10 @@
 	<!-- BEGIN type -->
 	<td class="std small">{TYPE}</td>
 	<!-- END type -->
-
 	<td class="std small {USER_EXISTS_STRING_CLASS}">{USER_EXISTS_STRING}</td>
 	<!-- BEGIN name -->
 	<td class="std small">{NAME}</td>
 	<!-- END name -->
 	<td class="std small">{STATUS}</td>
-
-	<td class="std small"><input type="hidden" name="{USR_ID}[role]" value="{STD_ROLE}"><select name='{USR_ID}[role]'  {DISABLED_ROLE}>
-		{OPTIONS}
-	</select></td>
+	<td class="std small"><input type="hidden" name="{USR_ID}[role]" value="{STD_ROLE}"><select name='{USR_ID}[role]' {DISABLED_ROLE}> {OPTIONS} </select></td>
 </tr>
