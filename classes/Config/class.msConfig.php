@@ -13,7 +13,7 @@ class msConfig extends ActiveRecord
     const TYPE_USAGE_MAIL = 1;
     const TYPE_USAGE_MATRICULATION = 2;
     const TYPE_USAGE_BOTH = 3;
-    const ENBL_INV = 'enable_invitation';
+    const F_ENABLE_SENDING_INVITATIONS = 'enable_invitation';
     const F_ALLOW_REGISTRATION = 'allow_registration';
     const F_ASK_FOR_LOGIN = 'ask_for_login';
     const F_FIXED_EMAIL = 'fixed_email';
@@ -22,8 +22,8 @@ class msConfig extends ActiveRecord
     const F_USE_MATRICULATION = 'use_matriculation';
     const F_SHOW_NAMES = 'show_names';
     const F_SYSTEM_USER = 'system_user';
-    const F_USE_EMAIL = 'use_email';
-    const F_SEND_MAILS = 'send_mails';
+    const F_USE_EMAIL_FOR_USERS = 'use_email';
+    const F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION = 'send_mails';
     const F_PURGE = 'purge';
     const F_ACTIVATE_GROUPS = 'activate_groups';
     const F_ACTIVATE_COURSES = 'activate_courses';
@@ -87,7 +87,7 @@ class msConfig extends ActiveRecord
      */
     public static function getValueByKey($key)
     {
-        $obj = new self($key);
+        $obj = self::findOrGetInstance($key);
 
         return $obj->getConfigValue();
     }
@@ -134,13 +134,13 @@ class msConfig extends ActiveRecord
     {
         $usage_type = self::TYPE_NO_USAGE;
 
-        if (self::getValueByKey(self::F_USE_EMAIL)) {
+        if (self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
             $usage_type = self::TYPE_USAGE_MAIL;
         }
         if (self::getValueByKey(self::F_USE_MATRICULATION)) {
             $usage_type = self::TYPE_USAGE_MATRICULATION;
         }
-        if (self::getValueByKey(self::F_USE_MATRICULATION) AND self::getValueByKey(self::F_USE_EMAIL)) {
+        if (self::getValueByKey(self::F_USE_MATRICULATION) AND self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
             $usage_type = self::TYPE_USAGE_BOTH;
         }
 

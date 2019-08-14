@@ -66,9 +66,9 @@ class msConfigFormGUI extends ilPropertyFormGUI
         $ti->setTitle($this->txt('header_input'));
         $this->addItem($ti);
 
-        $cb_mail = new ilCheckboxInputGUI($this->txt(msConfig::F_USE_EMAIL), msConfig::F_USE_EMAIL);
+        $cb_mail = new ilCheckboxInputGUI($this->txt(msConfig::F_USE_EMAIL_FOR_USERS), msConfig::F_USE_EMAIL_FOR_USERS);
         {
-            $cb_enable_invitation = new ilCheckboxInputGUI($this->txt(msConfig::ENBL_INV), msConfig::ENBL_INV);
+            $cb_enable_invitation = new ilCheckboxInputGUI($this->txt(msConfig::F_ENABLE_SENDING_INVITATIONS), msConfig::F_ENABLE_SENDING_INVITATIONS);
             {
                 $cb_reg = new ilCheckboxInputGUI($this->txt(msConfig::F_ALLOW_REGISTRATION), msConfig::F_ALLOW_REGISTRATION);
                 $ask_for_login = new ilCheckboxInputGUI($this->txt(msConfig::F_ASK_FOR_LOGIN), msConfig::F_ASK_FOR_LOGIN);
@@ -115,7 +115,7 @@ class msConfigFormGUI extends ilPropertyFormGUI
         }
         $this->addItem($activate_ignore_subtree);
 
-        $cb_send_mails = new ilCheckboxInputGUI($this->txt(msConfig::F_SEND_MAILS), msConfig::F_SEND_MAILS);
+        $cb_send_mails = new ilCheckboxInputGUI($this->txt(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION), msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION);
         $this->addItem($cb_send_mails);
 
         $this->addCommandButtons();

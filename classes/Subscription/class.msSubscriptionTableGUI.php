@@ -72,7 +72,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
     {
         $this->addColumn($this->pl->txt('main_tblh_subscribe'));
 
-        if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
+        if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             $this->addColumn($this->pl->txt('main_tblh_invite'));
         }
         if ($this->getMailUsage()) {
@@ -106,7 +106,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
     {
         $this->addCommandButton(msSubscriptionGUI::CMD_REMOVE_UNREGISTERED, $this->pl->txt('main_send_table_remove_unregistered'));
         $this->addCommandButton(msSubscriptionGUI::CMD_CLEAR, $this->pl->txt('main_send_table_clear'));
-        if (msConfig::getValueByKey(msConfig::F_USE_EMAIL) AND msConfig::getValueByKey(msConfig::ENBL_INV)) {
+        if (msConfig::getValueByKey(msConfig::F_USE_EMAIL_FOR_USERS) AND msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             $this->addCommandButton(msSubscriptionGUI::CMD_TRIAGE, $this->pl->txt('main_send_table_usage_2'));
         } else {
             $this->addCommandButton(msSubscriptionGUI::CMD_TRIAGE, $this->pl->txt('main_send_table_usage_1'));
@@ -208,7 +208,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         }
         $this->tpl->setVariable('USR_ID', 'obj_' . $msSubscription->getId());
         $this->tpl->setVariable('STD_ROLE', msUserStatus::ROLE_MEMBER);
-        if (!$this->getMailUsage() OR !msConfig::getValueByKey(msConfig::ENBL_INV)) {
+        if (!$this->getMailUsage() OR !msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             $this->tpl->setVariable('DISABLE_NOMAIL', 'nomail');
         }
         $this->tpl->setVariable('CMD_INVITE', msSubscriptionGUI::CMD_INVITE);
@@ -249,7 +249,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
                 $this->tpl->setVariable('USER_EXISTS_STRING', $this->pl->txt('main_no'));
                 $this->tpl->setVariable('USER_EXISTS_STRING_CLASS', 'no');
                 $this->tpl->setVariable('DISABLED_SUB', self::DISABLED);
-                if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
+                if (msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
                     $this->tpl->setVariable('CHECKED_INV', self::CHECKED);
                 } else {
                     $this->tpl->setVariable('CHECKED_INV', self::DISABLED);

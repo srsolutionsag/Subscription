@@ -31,6 +31,7 @@ main_field_emails_title#:#E-Mailadressen
 main_field_matriculation_info#:#Komma-separiert, mit neuer Zeile, Semikolon oder Leerschlag
 main_field_matriculation_title#:#Matrikelnummern
 main_form_info_usage_1#:#Fügen Sie hier eine Liste von E-Mailadressen ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. Personen, welche noch keinen Account in ILIAS haben, können per E-Mail eingeladen werden.
+main_form_info_usage_1_no_invitation#:#Fügen Sie hier eine Liste von E-Mailadressen ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden.
 main_form_info_usage_2#:#Fügen Sie hier eine Liste von Matrikelnummern ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
 main_form_info_usage_3#:#Fügen Sie hier eine Liste von Matrikelnummern oder E-Mailadressen ein, die Sie als Mitglieder hinzufügen möchten. Personen, welche bereits über einen Account in ILIAS verfügen, können direkt eingeschrieben werden. 
 main_form_title_usage_1#:#Mitglied(er) per E-Mail einladen

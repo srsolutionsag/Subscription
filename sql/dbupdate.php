@@ -142,12 +142,12 @@ msSubscription::updateDB();
 <#10>
 <?php
 require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
-msConfig::set(msConfig::ENBL_INV, true);
+msConfig::set(msConfig::F_ENABLE_SENDING_INVITATIONS, true);
 ?>
 <#11>
 <?php
 require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
-msConfig::set(msConfig::F_SEND_MAILS, false);
+msConfig::set(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION, false);
 ?>
 <#12>
 <?php

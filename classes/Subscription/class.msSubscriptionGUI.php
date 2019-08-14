@@ -182,7 +182,8 @@ class msSubscriptionGUI
     public function showForm()
     {
         $this->initForm();
-        ilUtil::sendInfo($this->pl->txt('main_form_info_usage_' . msConfig::getUsageType()));
+        $txt = $this->getInfoMessage();
+        ilUtil::sendInfo($txt);
         $this->tpl->setContent($this->form->getHTML());
     }
 
@@ -281,7 +282,7 @@ class msSubscriptionGUI
                 $obj->update();
             }
         }
-        if (msConfig::getValueByKey(msConfig::ENBL_INV)) {
+        if (msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             ilUtil::sendInfo($this->pl->txt('main_msg_emails_sent_usage_' . msConfig::getUsageType()), true);
         } else {
             ilUtil::sendInfo($this->pl->txt('main_msg_triage_finished'), true);
@@ -398,5 +399,24 @@ class msSubscriptionGUI
         $ilLog->write('updateLanguageKey');
         $ilLog->write(print_r($_POST, true));
         exit;
+    }
+
+
+    /**
+     * @return string
+     */
+    private function getInfoMessage()
+    {
+        if (msConfig::getUsageType() == msConfig::TYPE_USAGE_MAIL || msConfig::getUsageType() == msConfig::TYPE_USAGE_BOTH) {
+            if (msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
+                $txt = $this->pl->txt('main_form_info_usage_' . msConfig::TYPE_USAGE_MAIL);
+            } else {
+                $txt = $this->pl->txt('main_form_info_usage_' . msConfig::TYPE_USAGE_MAIL . "_no_invitation");
+            }
+        } else {
+            $txt = $this->pl->txt('main_form_info_usage_' . msConfig::getUsageType());
+        }
+
+        return $txt;
     }
 }
