@@ -12,22 +12,30 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
 
     const TAB_SRSUBSCRIPTION = 'srsubscription';
     const TAB_MEMBERS = 'members';
+    const CONTEXT_OBJECT_COURSE = 'crs';
+    const CONTEXT_OBJECT_GROUP = 'grp';
+    const PART_SUB_TABS = 'sub_tabs';
+    const REF_ID = 'ref_id';
     /**
      * @var array
      */
     protected static $ignored_subtree = array();
     /**
+     * @var ilSubscriptionPlugin
+     */
+    private $pl;
+    /**
      * @var ilCtrl
      */
-    protected $ctrl;
+    private $ctrl;
     /**
      * @var ilAccessHandler
      */
-    protected $access;
+    private $access;
     /**
      * @var ilTree
      */
-    protected $three;
+    private $tree;
 
 
     public function __construct()
@@ -58,10 +66,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             array(ilObjGroupGUI::class, 'membersGallery'),
             array(ilObjGroupGUI::class, 'mailMembers'),
             array(ilSessionOverviewGUI::class, 'listSessions'),
-            array('iluimasssubscriptiongui', 'members'),
-            array('iluimasssubscriptiongui', 'membersGallery'),
+            array(msSubscriptionGUI::class, '*'),
             array(ilCourseParticipantsGroupsTableGUI::class, '*'),
-            array('ilsubscriptiongui', '*'),
             array(ilObjCourseGUI::class, 'editMember'),
             array(ilObjCourseGUI::class, 'updateMembers'),
             array(ilObjCourseGUI::class, 'deleteMembers'),
@@ -81,7 +87,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             }, $locations
         );
 
-        $tab_highlight = array(array('ilsubscriptiongui', '*'),);
+        $tab_highlight = array(array(msSubscriptionGUI::class, '*'),);
 
         if ($this->checkContext($a_part, $locations)) {
             $tabs = $DIC->tabs();
@@ -91,7 +97,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             $tabs->activateTab(self::TAB_MEMBERS);
             $this->ctrl->setTargetScript('ilias.php');
             $this->initBaseClass();
-            $this->ctrl->setParameterByClass(msSubscriptionGUI::class, 'obj_ref_id', $_GET['ref_id']);
+            $this->ctrl->setParameterByClass(msSubscriptionGUI::class, 'obj_ref_id', $_GET[self::REF_ID]);
 
             $tabs->addSubTab(
                 self::TAB_SRSUBSCRIPTION, $pl_obj->txt('tab_usage_' . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(
@@ -99,7 +105,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
                     ilUIPluginRouterGUI::class,
                     msSubscriptionGUI::class,
                 )
-            ), '', 'ilsubscriptiongui'
+            ), ''
             );
 
             if ($this->checkContext($a_part, $tab_highlight)) {
@@ -124,29 +130,37 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
      */
     protected function checkContext($a_part, array $context)
     {
-        if ($a_part != 'sub_tabs') {
+        if ($a_part != self::PART_SUB_TABS) {
+            return false;
+        }
+
+        if (msConfig::getUsageType() === msConfig::TYPE_NO_USAGE) {
             return false;
         }
 
         $check_cmd = in_array(array($this->ctrl->getCmdClass(), $this->ctrl->getCmd()), $context);
         $check_cmd_class = in_array(array($this->ctrl->getCmdClass(), '*'), $context);
-        if (!$check_cmd AND !$check_cmd_class) {
+        if (!$check_cmd && !$check_cmd_class) {
             return false;
         }
-        if (!in_array($this->ctrl->getContextObjType(), array('grp', 'crs'))) {
+        if (!in_array($this->ctrl->getContextObjType(), array(self::CONTEXT_OBJECT_GROUP, self::CONTEXT_OBJECT_COURSE))) {
             return false;
         }
 
-        $ref_id = $_GET['ref_id'];
+        $ref_id = $_GET[self::REF_ID];
         if (!$this->access->checkAccess('write', '', $ref_id)) {
             return false;
         }
 
-        if ($this->ctrl->getContextObjType() == 'grp' AND !msConfig::getValueByKey(msConfig::F_ACTIVATE_GROUPS)) {
+        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_COURSE && !msConfig::getValueByKey(msConfig::F_ACTIVATE_COURSES)) {
             return false;
         }
 
-        if (msConfig::isInIgnoredSubtree($_GET['ref_id'])) {
+        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_GROUP && !msConfig::getValueByKey(msConfig::F_ACTIVATE_GROUPS)) {
+            return false;
+        }
+
+        if (msConfig::isInIgnoredSubtree($ref_id)) {
             return false;
         }
 
@@ -183,7 +197,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     protected function getIgnoredSubTree()
     {
         if (!isset(self::$ignored_subtree)) {
-            foreach (explode(',', trim(msConfig::getValueByKey('ignore_subtree'))) as $root_id) {
+            foreach (explode(',', trim(msConfig::getValueByKey(msConfig::F_IGNORE_SUBTREE))) as $root_id) {
                 if (!$root_id) {
                     continue;
                 }
