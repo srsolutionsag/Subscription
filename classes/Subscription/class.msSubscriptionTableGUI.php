@@ -10,7 +10,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
 
     const DISABLED = 'disabled';
     const CHECKED = 'checked';
-    const STD_ROLE = IL_CRS_MEMBER;
+    const STD_ROLE = 2; // IL_CRS_MEMBER
     /**
      * @var ilSubscriptionPlugin
      */

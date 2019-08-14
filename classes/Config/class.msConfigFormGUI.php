@@ -55,7 +55,6 @@ class msConfigFormGUI extends ilPropertyFormGUI
     private function initForm()
     {
         $this->setTitle($this->txt('conf_title'));
-        $this->setDescription($this->txt('conf_description'));
 
         $activate_courses = new ilCheckboxInputGUI($this->txt(msConfig::F_ACTIVATE_COURSES), msConfig::F_ACTIVATE_COURSES);
         $this->addItem($activate_courses);

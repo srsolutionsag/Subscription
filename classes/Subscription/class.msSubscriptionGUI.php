@@ -104,9 +104,6 @@ class msSubscriptionGUI
         $this->ctrl->saveParameter($this, 'obj_ref_id');
         $this->ctrl->setContext($this->obj->getId(), $this->obj->getType());
         $cmd = ($this->ctrl->getCmd()) ? $this->ctrl->getCmd() : $this->getStandardCommand();
-        if ($_GET['rl'] == 'true') {
-            $this->pl->updateLanguages();
-        }
         switch ($cmd) {
             default:
                 $this->performCommand($cmd);
