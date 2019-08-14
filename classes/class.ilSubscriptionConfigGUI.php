@@ -1,5 +1,6 @@
 <?php
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
+
 /**
  * Example configuration user interface class
  *
@@ -8,66 +9,72 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  * @version $Id$
  *
  */
-class ilSubscriptionConfigGUI extends ilPluginConfigGUI {
+class ilSubscriptionConfigGUI extends ilPluginConfigGUI
+{
 
-	const CMD_CANCEL = 'cancel';
-	const CMD_CONFIGURE = 'configure';
-	const CMD_SAVE = 'save';
-	/**
-	 * @var ilCtrl
-	 */
-	protected $ctrl;
-	/**
-	 * @var ilLanguage
-	 */
-	protected $lng;
-	/**
-	 * @var ilTemplate
-	 */
-	protected $tpl;
-
-
-	public function __construct() {
-		global $DIC;
-		$this->ctrl = $DIC->ctrl();
-		$this->lng = $DIC->language();
-		$this->tpl = $DIC->ui()->mainTemplate();
-		$this->pl = ilSubscriptionPlugin::getInstance();
-	}
+    const CMD_CANCEL = 'cancel';
+    const CMD_CONFIGURE = 'configure';
+    const CMD_SAVE = 'save';
+    /**
+     * @var ilCtrl
+     */
+    protected $ctrl;
+    /**
+     * @var ilLanguage
+     */
+    protected $lng;
+    /**
+     * @var ilTemplate
+     */
+    protected $tpl;
 
 
-	/**
-	 * @param string $cmd
-	 */
-	public function performCommand($cmd) {
-		switch ($cmd) {
-			case self::CMD_CONFIGURE:
-			case self::CMD_SAVE:
-			case self::CMD_CANCEL:
-				$this->$cmd();
-				break;
-		}
-	}
+    public function __construct()
+    {
+        global $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->pl = ilSubscriptionPlugin::getInstance();
+    }
 
 
-	public function configure() {
-		$form = new msConfigFormGUI($this);
-		$form->fillForm();
-		$this->tpl->setContent($form->getHTML());
-	}
+    /**
+     * @param string $cmd
+     */
+    public function performCommand($cmd)
+    {
+        switch ($cmd) {
+            case self::CMD_CONFIGURE:
+            case self::CMD_SAVE:
+            case self::CMD_CANCEL:
+                $this->$cmd();
+                break;
+        }
+    }
 
 
-	protected function save() {
-		$form = new msConfigFormGUI($this);
-		$form->setValuesByPost();
-		if ($form->saveObject()) {
-			$this->ctrl->redirect($this, self::CMD_CONFIGURE);
-		}
-		$this->tpl->setContent($form->getHTML());
-	}
+    public function configure()
+    {
+        $form = new msConfigFormGUI($this);
+        $form->fillForm();
+        $this->tpl->setContent($form->getHTML());
+    }
 
 
-	protected function cancel() {
-		$this->ctrl->redirect($this, self::CMD_CONFIGURE);
-	}
+    protected function save()
+    {
+        $form = new msConfigFormGUI($this);
+        $form->setValuesByPost();
+        if ($form->saveObject()) {
+            $this->ctrl->redirect($this, self::CMD_CONFIGURE);
+        }
+        $this->tpl->setContent($form->getHTML());
+    }
+
+
+    protected function cancel()
+    {
+        $this->ctrl->redirect($this, self::CMD_CONFIGURE);
+    }
 }

@@ -6,63 +6,68 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  *
  * @author Fabian Schmid <fs@studer-raimann.ch>
  */
-class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin {
+class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
+{
 
-	const PLUGIN_ID = 'subscription';
-	const PLUGIN_NAME = 'Subscription';
-	/**
-	 * @var ilSubscriptionPlugin
-	 */
-	protected static $instance;
-
-
-	/**
-	 * @return ilSubscriptionPlugin
-	 */
-	public static function getInstance() {
-		if (!isset(self::$instance)) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
+    const PLUGIN_ID = 'subscription';
+    const PLUGIN_NAME = 'Subscription';
+    /**
+     * @var ilSubscriptionPlugin
+     */
+    protected static $instance;
 
 
-	/**
-	 * @var ilDB
-	 */
-	protected $db;
+    /**
+     * @return ilSubscriptionPlugin
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
 
 
-	/**
-	 *
-	 */
-	public function __construct() {
-		parent::__construct();
-
-		global $DIC;
-
-		$this->db = $DIC->database();
-	}
+    /**
+     * @var ilDB
+     */
+    protected $db;
 
 
-	/**
-	 * @return string
-	 */
-	public function getPluginName() {
-		return self::PLUGIN_NAME;
-	}
+    /**
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        global $DIC;
+
+        $this->db = $DIC->database();
+    }
 
 
-	/**
-	 * @return bool
-	 */
-	protected function beforeUninstall() {
-		$this->db->dropTable(msConfig::TABLE_NAME, false);
-		$this->db->dropTable(msInvitation::TABLE_NAME, false);
-		$this->db->dropTable(msSubscription::TABLE_NAME, false);
-		$this->db->dropTable(msToken::TABLE_NAME, false);
+    /**
+     * @return string
+     */
+    public function getPluginName()
+    {
+        return self::PLUGIN_NAME;
+    }
 
-		return true;
-	}
+
+    /**
+     * @return bool
+     */
+    protected function beforeUninstall()
+    {
+        $this->db->dropTable(msConfig::TABLE_NAME, false);
+        $this->db->dropTable(msInvitation::TABLE_NAME, false);
+        $this->db->dropTable(msSubscription::TABLE_NAME, false);
+        $this->db->dropTable(msToken::TABLE_NAME, false);
+
+        return true;
+    }
 }
