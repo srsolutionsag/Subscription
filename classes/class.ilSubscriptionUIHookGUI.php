@@ -96,7 +96,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             $tabs->removeSubTab(self::TAB_SRSUBSCRIPTION);
             $tabs->activateTab(self::TAB_MEMBERS);
             $this->ctrl->setTargetScript('ilias.php');
-            $this->initBaseClass();
             $this->ctrl->setParameterByClass(msSubscriptionGUI::class, 'obj_ref_id', $_GET[self::REF_ID]);
 
             $tabs->addSubTab(
