@@ -110,11 +110,12 @@ class msSubscriptionGUI
                 break;
         }
 
-//        since ILIAS6 deprecated
-//        $this->tpl->getStandardTemplate();
-//        $this->tpl->show();
-
-        $this->tpl->printToStdout();
+        if (version_compare(ILIAS_VERSION_NUMERIC, '6.0') >= 0) {
+            $this->tpl->printToStdout();
+        } else {
+            $this->tpl->getStandardTemplate();
+            $this->tpl->show();
+        }
 
         return true;
     }
