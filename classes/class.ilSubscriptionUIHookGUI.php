@@ -41,9 +41,15 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     public function __construct()
     {
         global $DIC;
-        $this->ctrl = $DIC->ctrl();
-        $this->access = $DIC->access();
-        $this->tree = $DIC->repositoryTree();
+        if ($DIC->offsetExists('ilCtrl')) {
+            $this->ctrl = $DIC->ctrl();
+        }
+        if ($DIC->offsetExists('ilAccess')) {
+            $this->access = $DIC->access();
+        }
+        if ($DIC->offsetExists('tree')) {
+            $this->tree = $DIC->repositoryTree();
+        }
         $this->pl = ilSubscriptionPlugin::getInstance();
     }
 
