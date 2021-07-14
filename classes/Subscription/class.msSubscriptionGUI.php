@@ -332,7 +332,7 @@ class msSubscriptionGUI
         $mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);
         $mail_body = preg_replace("/\\\\n/um", "\n", $mail_body);
         $subject = $reinvite ? $this->pl->txt('main_notification_subject_reinvite') : $this->pl->txt('main_notification_subject');
-        $mail->sendMail($msSubscription->getMatchingString(), '', '', $subject, $mail_body, false, array('normal'));
+        $mail->sendMail($msSubscription->getMatchingString(), '', '', $subject, $mail_body, [], false);
     }
 
 

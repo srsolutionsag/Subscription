@@ -14,7 +14,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
      */
     protected $subscription;
 
-
     public function __construct()
     {
         ilInitialisation::initILIAS();
@@ -38,7 +37,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 
             $this->displayForm();
         }
-        $this->tpl->show();
+        $this->tpl->printToStdout();
 
         return true;
     }
@@ -116,7 +115,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     public function displayForm()
     {
         if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
-            $this->tpl->getStandardTemplate();
             $this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
         } elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR $this->subscription->getUserStatus()
             == msUserStatus::STATUS_ALREADY_ASSIGNED

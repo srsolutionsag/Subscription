@@ -62,8 +62,7 @@ class subscrTriageGUI
                 break;
         }
 
-        $this->tpl->getStandardTemplate();
-        $this->tpl->show();
+        $this->tpl->printToStdout();
     }
 
 
@@ -98,8 +97,6 @@ class subscrTriageGUI
 
     protected function showLoginDecision()
     {
-        $this->tpl->getStandardTemplate();
-        $this->tpl->setVariable('BASE', msConfig::getPath());
         $this->tpl->setTitle($this->pl->txt('triage_title'));
 
         $de = new ilConfirmationGUI();
@@ -114,6 +111,7 @@ class subscrTriageGUI
         $de->setCancel($this->pl->txt('main_no'), self::CMD_HAS_NO_LOGIN);
 
         $this->tpl->setContent($de->getHTML());
+        $this->tpl->printToStdout();
     }
 
 

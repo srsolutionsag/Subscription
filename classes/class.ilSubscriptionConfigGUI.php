@@ -24,7 +24,7 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
      */
     protected $lng;
     /**
-     * @var ilTemplate
+     * @var ilGlobalTemplateInterface
      */
     protected $tpl;
 
@@ -32,6 +32,7 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
     public function __construct()
     {
         global $DIC;
+
         $this->ctrl = $DIC->ctrl();
         $this->lng = $DIC->language();
         $this->tpl = $DIC->ui()->mainTemplate();
