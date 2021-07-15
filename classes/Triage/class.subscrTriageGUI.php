@@ -101,6 +101,7 @@ class subscrTriageGUI
 
         $de = new ilConfirmationGUI();
         $de->setFormAction($this->ctrl->getFormAction($this));
+        $de->setFormName('testerei');
 
         $str = $this->subscription->getMatchingString() . ', Ziel: ' // TODO: Translate
             . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
@@ -111,7 +112,6 @@ class subscrTriageGUI
         $de->setCancel($this->pl->txt('main_no'), self::CMD_HAS_NO_LOGIN);
 
         $this->tpl->setContent($de->getHTML());
-        $this->tpl->printToStdout();
     }
 
 

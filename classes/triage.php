@@ -117,6 +117,8 @@ class msTriage
             default:
                 break;
         }
+
+        $this->tpl->printToStdout();
     }
 
 
@@ -161,7 +163,6 @@ class msTriage
         $de->setCancel($this->pl->txt('main_no'), subscrTriageGUI::CMD_HAS_NO_LOGIN);
 
         $this->tpl->setContent($de->getHTML());
-        $this->tpl->printToStdout();
     }
 
 

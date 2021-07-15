@@ -30,16 +30,24 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 
     public function executeCommand()
     {
+        /**
+         * @var $k ilCtrl
+         */
+        $k = $this->ctrl;
+        $x = $k->getCallHistory();
+        $j = $k->getCmd();
+
         $cmd = $this->ctrl->getCmd();
-        if ($cmd) {
-            $this->$cmd();
-        } else {
-
-            $this->displayForm();
+        switch ($cmd) {
+            case 'saveForm':
+                $this->{$cmd}();
+                break;
+            default:
+                $this->displayForm();
+                break;
         }
-        $this->tpl->printToStdout();
 
-        return true;
+        $this->tpl->printToStdout();
     }
 
 
@@ -71,11 +79,9 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
          */
 
         $this->form->setFormAction(
-            $this->ctrl->getFormActionByClass(
-                array(
-                    ilUIPluginRouterGUI::class,
-                    ilTokenRegistrationGUI::class,
-                )
+            $this->ctrl->getFormAction(
+                $this,
+                'saveForm'
             )
         );
 
@@ -122,7 +128,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             $this->assignUser();
             $this->redirectToCourse();
         } else {
-            parent::displayForm();
+            $form_template = parent::displayForm();
+            $this->tpl->setContent($form_template->get());
         }
     }
 
