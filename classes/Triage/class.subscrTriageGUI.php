@@ -101,7 +101,6 @@ class subscrTriageGUI
 
         $de = new ilConfirmationGUI();
         $de->setFormAction($this->ctrl->getFormAction($this));
-        $de->setFormName('testerei');
 
         $str = $this->subscription->getMatchingString() . ', Ziel: ' // TODO: Translate
             . ilObject2::_lookupTitle(ilObject2::_lookupObjId($this->subscription->getObjRefId()));
