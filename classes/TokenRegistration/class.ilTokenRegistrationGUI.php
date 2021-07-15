@@ -30,13 +30,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 
     public function executeCommand()
     {
-        /**
-         * @var $k ilCtrl
-         */
-        $k = $this->ctrl;
-        $x = $k->getCallHistory();
-        $j = $k->getCmd();
-
         $cmd = $this->ctrl->getCmd();
         switch ($cmd) {
             case 'saveForm':
