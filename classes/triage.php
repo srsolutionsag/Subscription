@@ -30,7 +30,7 @@ class msTriage
      */
     protected $usr;
     /**
-     * @var ilDB
+     * @var ilDBInterface
      */
     protected $db;
     /**
@@ -38,7 +38,7 @@ class msTriage
      */
     protected $ctrl;
     /**
-     * @var ilTemplate
+     * @var ilGlobalTemplateInterface
      */
     protected $tpl;
     /**
@@ -117,6 +117,8 @@ class msTriage
             default:
                 break;
         }
+
+        $this->tpl->printToStdout();
     }
 
 
@@ -146,8 +148,6 @@ class msTriage
 
     protected function showLoginDecision()
     {
-        $this->tpl->getStandardTemplate();
-        $this->tpl->setVariable('BASE', msConfig::getPath());
         $this->tpl->setTitle($this->pl->txt('triage_title'));
 
         $de = new ilConfirmationGUI();
@@ -163,7 +163,6 @@ class msTriage
         $de->setCancel($this->pl->txt('main_no'), subscrTriageGUI::CMD_HAS_NO_LOGIN);
 
         $this->tpl->setContent($de->getHTML());
-        $this->tpl->show();
     }
 
 

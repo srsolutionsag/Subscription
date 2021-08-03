@@ -14,7 +14,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
      */
     protected $subscription;
 
-
     public function __construct()
     {
         ilInitialisation::initILIAS();
@@ -32,15 +31,16 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     public function executeCommand()
     {
         $cmd = $this->ctrl->getCmd();
-        if ($cmd) {
-            $this->$cmd();
-        } else {
-
-            $this->displayForm();
+        switch ($cmd) {
+            case 'saveForm':
+                $this->{$cmd}();
+                break;
+            default:
+                $this->displayForm();
+                break;
         }
-        $this->tpl->show();
 
-        return true;
+        $this->tpl->printToStdout();
     }
 
 
@@ -72,11 +72,9 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
          */
 
         $this->form->setFormAction(
-            $this->ctrl->getFormActionByClass(
-                array(
-                    ilUIPluginRouterGUI::class,
-                    ilTokenRegistrationGUI::class,
-                )
+            $this->ctrl->getFormAction(
+                $this,
+                'saveForm'
             )
         );
 
@@ -116,7 +114,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     public function displayForm()
     {
         if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
-            $this->tpl->getStandardTemplate();
             $this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
         } elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR $this->subscription->getUserStatus()
             == msUserStatus::STATUS_ALREADY_ASSIGNED
@@ -124,7 +121,8 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             $this->assignUser();
             $this->redirectToCourse();
         } else {
-            parent::displayForm();
+            $form_template = parent::displayForm();
+            $this->tpl->setContent($form_template->get());
         }
     }
 

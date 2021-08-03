@@ -31,7 +31,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
 
 
     /**
-     * @var ilDB
+     * @var ilDBInterface
      */
     protected $db;
 
