@@ -2,7 +2,7 @@
 <?php
 require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
 /**
- * @var ilDB $ilDB
+ * @var ilDBInterface $ilDB
  */
 $fields = array(
     'id' => array(
@@ -162,7 +162,7 @@ msConfig::set(msConfig::F_ACTIVATE_GROUPS, false);
 require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php';
 global $DIC;
 msSubscription::updateDB();
-$DIC->database()->manipulate('UPDATE ' . msSubscription::TABLE_NAME . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS));
+$DIC->database()->manipulate('UPDATE ' . msSubscription::TABLE_NAME . ' SET context = ' . $ilDB->quote(msSubscription::CONTEXT_CRS, ilDBConstants::T_INTEGER));
 ?>
 <#14>
 <?php
