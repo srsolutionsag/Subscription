@@ -8,7 +8,6 @@
  */
 class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 {
-
     /**
      * @var msSubscription
      */
@@ -28,7 +27,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     }
 
 
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $cmd = $this->ctrl->getCmd();
         switch ($cmd) {
@@ -60,12 +59,12 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
      *
      * @throws \ilException
      */
-    protected function __initForm($a_force_code = false)
+    protected function internalInitForm($a_force_code = false)
     {
         if ($this->subscription->getDeleted()) {
             throw new ilException('this token is no longer valid');
         }
-        parent::__initForm();
+        parent::initForm();
         /**
          * @var ilPropertyFormGUI $form
          * @var ilTextInputGUI    $usr_email
@@ -111,11 +110,11 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     }
 
 
-    public function displayForm()
+    public function displayForm(): ilGlobalTemplateInterface
     {
-        if (!$this->subscription OR $this->subscription->getDeleted() == 1) {
+        if (!$this->subscription or $this->subscription->getDeleted() == 1) {
             $this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
-        } elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED OR $this->subscription->getUserStatus()
+        } elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED or $this->subscription->getUserStatus()
             == msUserStatus::STATUS_ALREADY_ASSIGNED
         ) {
             $this->assignUser();
@@ -124,6 +123,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             $form_template = parent::displayForm();
             $this->tpl->setContent($form_template->get());
         }
+        return $this->tpl;
     }
 
 
@@ -154,7 +154,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     }
 
 
-    public function saveForm()
+    public function saveForm(): ilGlobalTemplateInterface
     {
         $matchingString = $this->subscription->getMatchingString();
         switch ($this->subscription->getSubscriptionType()) {
@@ -175,6 +175,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             $this->assignUser();
             $this->redirectToCourse();
         }
+        return $this->tpl;
     }
 
 

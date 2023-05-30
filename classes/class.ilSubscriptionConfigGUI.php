@@ -1,4 +1,5 @@
 <?php
+
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
 
 /**
@@ -11,10 +12,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilSubscriptionConfigGUI extends ilPluginConfigGUI
 {
-
-    const CMD_CANCEL = 'cancel';
-    const CMD_CONFIGURE = 'configure';
-    const CMD_SAVE = 'save';
+    public const CMD_CANCEL = 'cancel';
+    public const CMD_CONFIGURE = 'configure';
+    public const CMD_SAVE = 'save';
     /**
      * @var ilCtrl
      */
@@ -43,7 +43,7 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
     /**
      * @param string $cmd
      */
-    public function performCommand($cmd)
+    public function performCommand(string $cmd): void
     {
         switch ($cmd) {
             case self::CMD_CONFIGURE:

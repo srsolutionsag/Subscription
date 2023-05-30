@@ -1,4 +1,5 @@
 <?php
+
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
 
 /**
@@ -8,9 +9,8 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
 {
-
-    const PLUGIN_ID = 'subscription';
-    const PLUGIN_NAME = 'Subscription';
+    public const PLUGIN_ID = 'subscription';
+    public const PLUGIN_NAME = 'Subscription';
     /**
      * @var ilSubscriptionPlugin
      */
@@ -29,30 +29,10 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
         return self::$instance;
     }
 
-
-    /**
-     * @var ilDBInterface
-     */
-    protected $db;
-
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        global $DIC;
-
-        $this->db = $DIC->database();
-    }
-
-
     /**
      * @return string
      */
-    public function getPluginName()
+    public function getPluginName(): string
     {
         return self::PLUGIN_NAME;
     }
@@ -61,7 +41,7 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
     /**
      * @return bool
      */
-    protected function beforeUninstall()
+    protected function beforeUninstall(): bool
     {
         $this->db->dropTable(msConfig::TABLE_NAME, false);
         $this->db->dropTable(msInvitation::TABLE_NAME, false);

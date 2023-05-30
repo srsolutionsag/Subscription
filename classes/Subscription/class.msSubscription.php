@@ -10,8 +10,7 @@
  */
 class msSubscription extends ActiveRecord
 {
-
-    const TABLE_NAME = 'rep_robj_xmsb_susc';
+    public const TABLE_NAME = 'rep_robj_xmsb_susc';
     /**
      * @var array
      */
@@ -20,17 +19,17 @@ class msSubscription extends ActiveRecord
             msUserStatus::STATUS_USER_NOT_ASSIGNABLE,
             msUserStatus::STATUS_USER_CAN_BE_INVITED,
         );
-    const TYPE_EMAIL = 1;
-    const TYPE_MATRICULATION = 2;
-    const DELIMITER = '|';
-    const CONTEXT_CRS = 1;
-    const CONTEXT_GRP = 2;
+    public const TYPE_EMAIL = 1;
+    public const TYPE_MATRICULATION = 2;
+    public const DELIMITER = '|';
+    public const CONTEXT_CRS = 1;
+    public const CONTEXT_GRP = 2;
 
 
     /**
      * @return string
      */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
@@ -40,7 +39,7 @@ class msSubscription extends ActiveRecord
      * @return string
      * @deprecated
      */
-    public static function returnDbTableName()
+    public static function returnDbTableName(): string
     {
         return self::TABLE_NAME;
     }
@@ -56,17 +55,14 @@ class msSubscription extends ActiveRecord
     public $account_type_object;
 
 
-    public function afterObjectLoad()
+    public function afterObjectLoad(): void
     {
         $this->user_status_object = new msUserStatus($this->getMatchingString(), $this->getSubscriptionType(), $this->getObjRefId());
         $this->account_type_object = new msAccountType($this->getMatchingString(), $this->getSubscriptionType());
     }
 
 
-    /**
-     * @var bool
-     */
-    protected $ar_safe_read = false;
+    protected bool $ar_safe_read = false;
 
 
     /**
@@ -133,10 +129,10 @@ class msSubscription extends ActiveRecord
                 $status = $participants->add($usr_id, $this->getRole());
                 break;
         }
-        if ($status AND msConfig::getValueByKey(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION)) {
+        if ($status and msConfig::getValueByKey(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION)) {
             switch ($this->getContext()) {
                 case self::CONTEXT_CRS:
-                    $participants->sendNotification($participants->NOTIFY_ACCEPT_USER, $usr_id);
+                    $participants->sendNotification(ilGroupMembershipMailNotification::TYPE_ACCEPTED_SUBSCRIPTION_MEMBER, $usr_id);
                     break;
                 case self::CONTEXT_GRP:
                     $participants->sendNotification(ilGroupMembershipMailNotification::TYPE_ADMISSION_MEMBER, $usr_id);
@@ -203,7 +199,7 @@ class msSubscription extends ActiveRecord
             'obj_ref_id'      => '=',
             'deleted'         => '=',
         );
-        if (!msSubscription::where($where, $operators)->hasSets() AND $input != '') {
+        if (!msSubscription::where($where, $operators)->hasSets() and $input != '') {
             $msSubscription = new msSubscription();
             $msSubscription->setMatchingString($input);
             $status = new msUserStatus($input, $type, $obj_ref_id);
@@ -231,7 +227,7 @@ class msSubscription extends ActiveRecord
     }
 
 
-    public function create()
+    public function create(): void
     {
         $this->setToken(self::generateToken());
         parent::create();

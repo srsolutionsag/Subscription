@@ -8,7 +8,6 @@
  */
 abstract class msModelObjectTableGUI extends ilTable2GUI
 {
-
     /**
      * @var string
      */
@@ -40,11 +39,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI
     /**
      * @var int
      */
-    static $num = 0;
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
+    public static $num = 0;
     /**
      * @var ilSubscriptionPlugin
      */
@@ -152,7 +147,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI
     /**
      * @param ilFormPropertyGUI $item
      */
-    final function addFilterItemToForm(ilFormPropertyGUI $item)
+    final public function addFilterItemToForm(ilFormPropertyGUI $item)
     {
         /**
          * @var ilTextInputGUI $item
@@ -166,7 +161,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI
     /**
      * @return bool
      */
-    final function initStandardTableColumns()
+    final public function initStandardTableColumns()
     {
         $data = $this->getData();
         if (count($data) === 0) {
@@ -187,7 +182,7 @@ abstract class msModelObjectTableGUI extends ilTable2GUI
      * @internal    param array $_set
      * @description override, when using own columns
      */
-    final function fillRow($a_set)
+    protected function fillRow(array $a_set): void
     {
         if ($this->fillTableRow($a_set) === false) {
             self::$num++;

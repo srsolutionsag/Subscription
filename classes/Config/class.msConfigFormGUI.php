@@ -10,7 +10,6 @@
  */
 class msConfigFormGUI extends ilPropertyFormGUI
 {
-
     /**
      * @var ilSubscriptionConfigGUI
      */
@@ -19,10 +18,6 @@ class msConfigFormGUI extends ilPropertyFormGUI
      * @var ilSubscriptionPlugin
      */
     protected $pl;
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
 
 
     /**

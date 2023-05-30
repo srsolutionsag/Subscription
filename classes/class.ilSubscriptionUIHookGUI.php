@@ -9,13 +9,12 @@
  */
 class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
 {
-
-    const TAB_SRSUBSCRIPTION = 'srsubscription';
-    const TAB_MEMBERS = 'members';
-    const CONTEXT_OBJECT_COURSE = 'crs';
-    const CONTEXT_OBJECT_GROUP = 'grp';
-    const PART_SUB_TABS = 'sub_tabs';
-    const REF_ID = 'ref_id';
+    public const TAB_SRSUBSCRIPTION = 'srsubscription';
+    public const TAB_MEMBERS = 'members';
+    public const CONTEXT_OBJECT_COURSE = 'crs';
+    public const CONTEXT_OBJECT_GROUP = 'grp';
+    public const PART_SUB_TABS = 'sub_tabs';
+    public const REF_ID = 'ref_id';
     /**
      * @var array
      */
@@ -54,13 +53,11 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     }
 
 
-    /**
-     * @param string $a_comp
-     * @param string $a_part
-     * @param array  $a_par
-     */
-    public function modifyGUI($a_comp, $a_part, $a_par = array())
-    {
+    public function modifyGUI(
+        string $a_comp,
+        string $a_part,
+        array $a_par = []
+    ): void {
         global $DIC;
 
         $locations = array(
@@ -90,7 +87,8 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
         $locations = array_map(
             function ($c) {
                 return array(strtolower($c[0]), $c[1]); // ::class no lower case
-            }, $locations
+            },
+            $locations
         );
 
         $tab_highlight = array(array(msSubscriptionGUI::class, '*'),);
@@ -105,12 +103,15 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             $this->ctrl->setParameterByClass(msSubscriptionGUI::class, 'obj_ref_id', $_GET[self::REF_ID]);
 
             $tabs->addSubTab(
-                self::TAB_SRSUBSCRIPTION, $pl_obj->txt('tab_usage_' . msConfig::getUsageType()), $this->ctrl->getLinkTargetByClass(
-                array(
+                self::TAB_SRSUBSCRIPTION,
+                $pl_obj->txt('tab_usage_' . msConfig::getUsageType()),
+                $this->ctrl->getLinkTargetByClass(
+                    array(
                     ilUIPluginRouterGUI::class,
                     msSubscriptionGUI::class,
                 )
-            ), ''
+                ),
+                ''
             );
 
             if ($this->checkContext($a_part, $tab_highlight)) {
@@ -173,7 +174,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     }
 
 
-    public function gotoHook()
+    public function gotoHook(): void
     {
         if (preg_match("/tokenreg_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
             $token = $matches[1];

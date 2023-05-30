@@ -6,29 +6,12 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
 {
-    public static $classMap = array (
-        'ActiveRecord' => __DIR__ . '/../..' . '/../../../../../../../Services/ActiveRecord/class.ActiveRecord.php',
-        'ilAccountRegistrationGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Registration/classes/class.ilAccountRegistrationGUI.php',
-        'ilAdvancedSelectionListGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/AdvancedSelectionList/classes/class.ilAdvancedSelectionListGUI.php',
-        'ilComponent' => __DIR__ . '/../..' . '/../../../../../../../Services/Component/classes/class.ilComponent.php',
-        'ilConfirmationGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Utilities/classes/class.ilConfirmationGUI.php',
-        'ilCourseParticipants' => __DIR__ . '/../..' . '/../../../../../../../Modules/Course/classes/class.ilCourseParticipants.php',
-        'ilGroupMembershipMailNotification' => __DIR__ . '/../..' . '/../../../../../../../Modules/Group/classes/class.ilGroupMembershipMailNotification.php',
-        'ilGroupParticipants' => __DIR__ . '/../..' . '/../../../../../../../Modules/Group/classes/class.ilGroupParticipants.php',
-        'ilLink' => __DIR__ . '/../..' . '/../../../../../../../Services/Link/classes/class.ilLink.php',
-        'ilMail' => __DIR__ . '/../..' . '/../../../../../../../Services/Mail/classes/class.ilMail.php',
-        'ilObjCourse' => __DIR__ . '/../..' . '/../../../../../../../Modules/Course/classes/class.ilObjCourse.php',
-        'ilObject2' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObject2.php',
-        'ilObjectListGUIFactory' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObjectListGUIFactory.php',
-        'ilPluginConfigGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php',
-        'ilStartUpGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Init/classes/class.ilStartUpGUI.php',
+    public static $classMap = array(
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'ilSubscriptionConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionConfigGUI.php',
         'ilSubscriptionPlugin' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionPlugin.php',
         'ilSubscriptionUIHookGUI' => __DIR__ . '/../..' . '/classes/class.ilSubscriptionUIHookGUI.php',
-        'ilTable2GUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Table/classes/class.ilTable2GUI.php',
         'ilTokenRegistrationGUI' => __DIR__ . '/../..' . '/classes/TokenRegistration/class.ilTokenRegistrationGUI.php',
-        'ilUIHookPluginGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php',
-        'ilUserInterfaceHookPlugin' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php',
         'msAccountType' => __DIR__ . '/../..' . '/classes/AccountType/class.msAccountType.php',
         'msConfig' => __DIR__ . '/../..' . '/classes/Config/class.msConfig.php',
         'msConfigFormGUI' => __DIR__ . '/../..' . '/classes/Config/class.msConfigFormGUI.php',
@@ -40,7 +23,6 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
         'msToken' => __DIR__ . '/../..' . '/classes/TokenRegistration/class.msToken.php',
         'msTriage' => __DIR__ . '/../..' . '/classes/triage.php',
         'msUserStatus' => __DIR__ . '/../..' . '/classes/UserStatus/class.msUserStatus.php',
-        'subscr' => __DIR__ . '/../..' . '/classes/class.subscr.php',
         'subscrTriageGUI' => __DIR__ . '/../..' . '/classes/Triage/class.subscrTriageGUI.php',
     );
 
@@ -48,7 +30,6 @@ class ComposerStaticInit7246d24444fae423574d19d31fb5bd09
     {
         return \Closure::bind(function () use ($loader) {
             $loader->classMap = ComposerStaticInit7246d24444fae423574d19d31fb5bd09::$classMap;
-
         }, null, ClassLoader::class);
     }
 }

@@ -2,13 +2,13 @@
 
 // SimpleXLSX php class v0.4
 // MS Excel 2007 workbooks reader
-// Example: 
+// Example:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rows() );
-// Example 2: 
+// Example 2:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rowsEx() );
-// Example 3: 
+// Example 3:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rows(2) ); // second worksheet
 //
@@ -17,39 +17,38 @@
 
 class SimpleXLSX
 {
-
     // Don't remove this string! Created by Sergey Schuchkin from http://www.sibvison.ru - professional php developers team 2010-2011
     private $sheets;
     private $hyperlinks;
     private $package;
     private $sharedstrings;
     // scheme
-    const SCHEMA_OFFICEDOCUMENT = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument';
-    const SCHEMA_RELATIONSHIP = 'http://schemas.openxmlformats.org/package/2006/relationships';
-    const SCHEMA_SHAREDSTRINGS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
-    const SCHEMA_WORKSHEETRELATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
+    public const SCHEMA_OFFICEDOCUMENT = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument';
+    public const SCHEMA_RELATIONSHIP = 'http://schemas.openxmlformats.org/package/2006/relationships';
+    public const SCHEMA_SHAREDSTRINGS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
+    public const SCHEMA_WORKSHEETRELATION = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
 
 
-    function __construct($filename)
+    public function __construct($filename)
     {
         $this->_unzip($filename);
         $this->_parse();
     }
 
 
-    function sheets()
+    public function sheets()
     {
         return $this->sheets;
     }
 
 
-    function sheetsCount()
+    public function sheetsCount()
     {
         return count($this->sheets);
     }
 
 
-    function worksheet($worksheet_id)
+    public function worksheet($worksheet_id)
     {
         if (isset($this->sheets[$worksheet_id])) {
             $ws = $this->sheets[$worksheet_id];
@@ -68,7 +67,7 @@ class SimpleXLSX
     }
 
 
-    function dimension($worksheet_id = 1)
+    public function dimension($worksheet_id = 1)
     {
         $ws = $this->worksheet($worksheet_id);
         $ref = (string) $ws->dimension['ref'];
@@ -80,18 +79,16 @@ class SimpleXLSX
 
 
     // sheets numeration: 1,2,3....
-    function rows($worksheet_id = 1)
+    public function rows($worksheet_id = 1)
     {
-
         $ws = $this->worksheet($worksheet_id);
 
         $rows = array();
         $curR = 0;
 
         foreach ($ws->sheetData->row as $row) {
-
             foreach ($row->c as $c) {
-                list($curC,) = $this->_columnIndex((string) $c['r']);
+                list($curC, ) = $this->_columnIndex((string) $c['r']);
                 $rows[$curR][$curC] = $this->value($c);
             }
 
@@ -102,7 +99,7 @@ class SimpleXLSX
     }
 
 
-    function rowsEx($worksheet_id = 1)
+    public function rowsEx($worksheet_id = 1)
     {
         $rows = array();
         $curR = 0;
@@ -110,9 +107,8 @@ class SimpleXLSX
             return false;
         }
         foreach ($ws->sheetData->row as $row) {
-
             foreach ($row->c as $c) {
-                list($curC,) = $this->_columnIndex((string) $c['r']);
+                list($curC, ) = $this->_columnIndex((string) $c['r']);
                 $rows[$curR][$curC] = array(
                     'name'  => (string) $c['r'],
                     'value' => $this->value($c),
@@ -127,11 +123,9 @@ class SimpleXLSX
 
 
     // thx Gonzo
-    function _columnIndex($cell = 'A1')
+    public function _columnIndex($cell = 'A1')
     {
-
         if (preg_match("/([A-Z]+)(\d+)/", $cell, $matches)) {
-
             $col = $matches[1];
             $row = $matches[2];
 
@@ -139,7 +133,7 @@ class SimpleXLSX
             $index = 0;
 
             for ($i = $colLen - 1; $i >= 0; $i--) {
-                $index += (ord($col{$i}) - 64) * pow(26, $colLen - $i - 1);
+                $index += (ord($col[$i]) - 64) * pow(26, $colLen - $i - 1);
             }
 
             return array($index - 1, $row - 1);
@@ -149,7 +143,7 @@ class SimpleXLSX
     }
 
 
-    function value($cell)
+    public function value($cell)
     {
         // Determine data type
         $dataType = (string) $cell["t"];
@@ -205,8 +199,8 @@ class SimpleXLSX
                         $value = (int) $value;
                     } elseif ($value == (float) $value) {
                         $value = (float) $value;
-                    } elseif ($value == (double) $value) {
-                        $value = (double) $value;
+                    } elseif ($value == (float) $value) {
+                        $value = (float) $value;
                     }
                 }
         }
@@ -215,13 +209,13 @@ class SimpleXLSX
     }
 
 
-    function href($cell)
+    public function href($cell)
     {
         return isset($this->hyperlinks[(string) $cell['r']]) ? $this->hyperlinks[(string) $cell['r']] : '';
     }
 
 
-    function _unzip($filename)
+    public function _unzip($filename)
     {
         // Clear current file
         $this->datasec = array();
@@ -351,12 +345,14 @@ class SimpleXLSX
             $aI['D'] = $vZ;
 
             // DOS to UNIX timestamp
-            $aI['T'] = mktime(($aP['FT'] & 0xf800) >> 11,
+            $aI['T'] = mktime(
+                ($aP['FT'] & 0xf800) >> 11,
                 ($aP['FT'] & 0x07e0) >> 5,
                 ($aP['FT'] & 0x001f) << 1,
                 ($aP['FD'] & 0x01e0) >> 5,
                 ($aP['FD'] & 0x001f),
-                (($aP['FD'] & 0xfe00) >> 9) + 1980);
+                (($aP['FD'] & 0xfe00) >> 9) + 1980
+            );
 
             //$this->Entries[] = &new SimpleUnzipEntry($aI);
             $this->package['entries'][] = array(
@@ -371,13 +367,13 @@ class SimpleXLSX
     }
 
 
-    function getPackage()
+    public function getPackage()
     {
         return $this->package;
     }
 
 
-    function getEntryData($name)
+    public function getEntryData($name)
     {
         $dir = dirname($name);
         $name = basename($name);
@@ -389,7 +385,7 @@ class SimpleXLSX
     }
 
 
-    function unixstamp($excelDateTime)
+    public function unixstamp($excelDateTime)
     {
         $d = floor($excelDateTime); // seconds since 1900
         $t = $excelDateTime - $d;
@@ -398,7 +394,7 @@ class SimpleXLSX
     }
 
 
-    function _parse()
+    public function _parse()
     {
         // Document data holders
         $this->sharedstrings = array();
@@ -458,5 +454,3 @@ class SimpleXLSX
         return implode(' ', $value);
     }
 }
-
-?>

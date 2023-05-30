@@ -8,34 +8,33 @@
  */
 class msConfig extends ActiveRecord
 {
-
-    const TYPE_NO_USAGE = 0;
-    const TYPE_USAGE_MAIL = 1;
-    const TYPE_USAGE_MATRICULATION = 2;
-    const TYPE_USAGE_BOTH = 3;
-    const F_ENABLE_SENDING_INVITATIONS = 'enable_invitation';
-    const F_ALLOW_REGISTRATION = 'allow_registration';
-    const F_ASK_FOR_LOGIN = 'ask_for_login';
-    const F_FIXED_EMAIL = 'fixed_email';
-    const F_SHIBBOLETH = 'shibboleth';
-    const F_METADATA_XML = 'metadata_xml';
-    const F_USE_MATRICULATION = 'use_matriculation';
-    const F_SHOW_NAMES = 'show_names';
-    const F_SYSTEM_USER = 'system_user';
-    const F_USE_EMAIL_FOR_USERS = 'use_email';
-    const F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION = 'send_mails';
-    const F_PURGE = 'purge';
-    const F_ACTIVATE_GROUPS = 'activate_groups';
-    const F_ACTIVATE_COURSES = 'activate_courses';
-    const F_IGNORE_SUBTREE = 'ignore_subtree';
-    const F_IGNORE_SUBTREE_ACTIVE = 'activate_ignore_subtree';
-    const TABLE_NAME = 'rep_robj_xmsb_conf';
+    public const TYPE_NO_USAGE = 0;
+    public const TYPE_USAGE_MAIL = 1;
+    public const TYPE_USAGE_MATRICULATION = 2;
+    public const TYPE_USAGE_BOTH = 3;
+    public const F_ENABLE_SENDING_INVITATIONS = 'enable_invitation';
+    public const F_ALLOW_REGISTRATION = 'allow_registration';
+    public const F_ASK_FOR_LOGIN = 'ask_for_login';
+    public const F_FIXED_EMAIL = 'fixed_email';
+    public const F_SHIBBOLETH = 'shibboleth';
+    public const F_METADATA_XML = 'metadata_xml';
+    public const F_USE_MATRICULATION = 'use_matriculation';
+    public const F_SHOW_NAMES = 'show_names';
+    public const F_SYSTEM_USER = 'system_user';
+    public const F_USE_EMAIL_FOR_USERS = 'use_email';
+    public const F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION = 'send_mails';
+    public const F_PURGE = 'purge';
+    public const F_ACTIVATE_GROUPS = 'activate_groups';
+    public const F_ACTIVATE_COURSES = 'activate_courses';
+    public const F_IGNORE_SUBTREE = 'ignore_subtree';
+    public const F_IGNORE_SUBTREE_ACTIVE = 'activate_ignore_subtree';
+    public const TABLE_NAME = 'rep_robj_xmsb_conf';
 
 
     /**
      * @return string
      */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
@@ -45,16 +44,12 @@ class msConfig extends ActiveRecord
      * @return string
      * @deprecated
      */
-    public static function returnDbTableName()
+    public static function returnDbTableName(): string
     {
         return self::TABLE_NAME;
     }
 
-
-    /**
-     * @var bool
-     */
-    protected $ar_safe_read = false;
+    protected bool $ar_safe_read = false;
     /**
      * @var array
      */
@@ -114,7 +109,7 @@ class msConfig extends ActiveRecord
      */
     public static function checkShibboleth()
     {
-        return self::getValueByKey(self::F_SHIBBOLETH) AND is_readable(self::getValueByKey(self::F_METADATA_XML));
+        return self::getValueByKey(self::F_SHIBBOLETH) and is_readable(self::getValueByKey(self::F_METADATA_XML));
     }
 
 
@@ -140,7 +135,7 @@ class msConfig extends ActiveRecord
         if (self::getValueByKey(self::F_USE_MATRICULATION)) {
             $usage_type = self::TYPE_USAGE_MATRICULATION;
         }
-        if (self::getValueByKey(self::F_USE_MATRICULATION) AND self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
+        if (self::getValueByKey(self::F_USE_MATRICULATION) and self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
             $usage_type = self::TYPE_USAGE_BOTH;
         }
 
@@ -165,7 +160,7 @@ class msConfig extends ActiveRecord
         global $DIC;
 
         $subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
-        if (!is_array($subtrees) OR count($subtrees) == 0) {
+        if (!is_array($subtrees) or count($subtrees) == 0) {
             self::$ignore_chache[$check_ref_id] = false;
 
             return false;
