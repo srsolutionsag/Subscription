@@ -7,13 +7,12 @@
  */
 class msAccountType
 {
-
-    const TYPE_ILIAS = 1;
-    const TYPE_SHIBBOLETH = 2;
+    public const TYPE_ILIAS = 1;
+    public const TYPE_SHIBBOLETH = 2;
     /**
      * @var array
      */
-    public static $domains = array();
+    public static $domains = [];
     /**
      * @var
      */
@@ -27,7 +26,6 @@ class msAccountType
      */
     protected $account_type = self::TYPE_ILIAS;
 
-
     /**
      * @param string $matching_string
      * @param string $subscription_type
@@ -39,17 +37,16 @@ class msAccountType
         $this->initAccountType();
     }
 
-
     /**
      *
      */
-    public function initAccountType()
+    public function initAccountType(): void
     {
-        if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL AND msConfig::getValueByKey('shibboleth')) {
+        if ($this->getSubscriptionType() == msSubscription::TYPE_EMAIL && msConfig::getValueByKey('shibboleth')) {
             self::readDomains();
             foreach (self::$domains as $aai) {
                 // (bool)preg_match("/(\\@".$aai.")|(\\@[a-zA-Z0-9]*\\.".$aai.")/uism", $this->getMatchingString()) // Possible Fix fo
-                if (strpos($this->getMatchingString(), $aai)) {
+                if (strpos($this->getMatchingString(), (string) $aai)) {
                     $this->setAccountType(self::TYPE_SHIBBOLETH);
 
                     return;
@@ -59,15 +56,13 @@ class msAccountType
         $this->setAccountType(self::TYPE_ILIAS);
     }
 
-
     /**
      * @param mixed $matching_string
      */
-    public function setMatchingString($matching_string)
+    public function setMatchingString($matching_string): void
     {
         $this->matching_string = $matching_string;
     }
-
 
     /**
      * @return mixed
@@ -77,15 +72,13 @@ class msAccountType
         return $this->matching_string;
     }
 
-
     /**
      * @param mixed $subscription_type
      */
-    public function setSubscriptionType($subscription_type)
+    public function setSubscriptionType($subscription_type): void
     {
         $this->subscription_type = $subscription_type;
     }
-
 
     /**
      * @return mixed
@@ -95,15 +88,13 @@ class msAccountType
         return $this->subscription_type;
     }
 
-
     /**
      * @param int $account_type
      */
-    public function setAccountType($account_type)
+    public function setAccountType($account_type): void
     {
         $this->account_type = $account_type;
     }
-
 
     /**
      * @return int
@@ -122,21 +113,19 @@ class msAccountType
      */
     protected static function readDomains()
     {
-        if (count(self::$domains) == 0) {
-            if (msConfig::checkShibboleth()) {
-                $xslt = new XSLTProcessor();
-                $xslt->importStylesheet(new SimpleXMLElement(file_get_contents('domain_to_idp_entityid.xsl', true)));
-                $metadata = new SimpleXMLElement(file_get_contents(msConfig::getValueByKey('metadata_xml')));
-                $xml = simplexml_load_string($xslt->transformToXml($metadata));
-                $domains = array();
-                foreach ($xml->children() as $child) {
-                    /**
-                     * @var SimpleXMLElement $child
-                     */
-                    $domains[] = $child->__toString();
-                }
-                self::$domains = $domains;
+        if (count(self::$domains) == 0 && msConfig::checkShibboleth()) {
+            $xslt = new XSLTProcessor();
+            $xslt->importStylesheet(new SimpleXMLElement(file_get_contents('domain_to_idp_entityid.xsl', true)));
+            $metadata = new SimpleXMLElement(file_get_contents(msConfig::getValueByKey('metadata_xml')));
+            $xml = simplexml_load_string($xslt->transformToXml($metadata));
+            $domains = [];
+            foreach ($xml->children() as $child) {
+                /**
+                 * @var SimpleXMLElement $child
+                 */
+                $domains[] = $child->__toString();
             }
+            self::$domains = $domains;
         }
     }
 }

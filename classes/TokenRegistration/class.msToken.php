@@ -7,24 +7,17 @@
  */
 class msToken
 {
+    public const TABLE_NAME = 'rep_robj_xmsb_token';
 
-    const TABLE_NAME = 'rep_robj_xmsb_token';
-
-
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
 
-
     /**
-     * @return string
      * @deprecated
      */
-    public static function returnDbTableName()
+    public static function returnDbTableName(): string
     {
         return self::TABLE_NAME;
     }

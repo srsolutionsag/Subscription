@@ -7,24 +7,17 @@
  */
 class msInvitation
 {
+    public const TABLE_NAME = 'rep_robj_xmsb_invt';
 
-    const TABLE_NAME = 'rep_robj_xmsb_invt';
-
-
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
 
-
     /**
-     * @return string
      * @deprecated
      */
-    public static function returnDbTableName()
+    public static function returnDbTableName(): string
     {
         return self::TABLE_NAME;
     }

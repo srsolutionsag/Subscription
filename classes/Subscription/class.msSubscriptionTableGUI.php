@@ -7,14 +7,9 @@
  */
 class msSubscriptionTableGUI extends msModelObjectTableGUI
 {
-
-    const DISABLED = 'disabled';
-    const CHECKED = 'checked';
-    const STD_ROLE = 2; // IL_CRS_MEMBER
-    /**
-     * @var ilSubscriptionPlugin
-     */
-    protected $pl;
+    public const DISABLED = 'disabled';
+    public const CHECKED = 'checked';
+    public const STD_ROLE = 2; // IL_CRS_MEMBER
 
 
     public function __construct($a_parent_obj, $a_parent_cmd)
@@ -24,55 +19,50 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $this->setSelectAllCheckbox('obj');
     }
 
-
-    /**
-     * @return bool
-     */
-    protected function initTableFilter()
+    protected function initTableFilter(): bool
     {
         $this->setDefaultOrderField('name');
 
         return false;
     }
 
-
     protected function initTableData()
     {
-        $where = array(
+        $where = [
             'obj_ref_id' => $_GET['obj_ref_id'],
-            'deleted'    => false,
-        );
-        $data = array();
+            'deleted' => false,
+        ];
+        $data = [];
 
-        $user_ids = array();
+        $user_ids = [];
         foreach (msSubscription::where($where)->orderBy('matching_string')->get() as $dat) {
             /**
              * @var msSubscription $dat
              */
+            $dat->afterObjectLoad();
             // SW: Remove duplicated users, see bug https://jira.studer-raimann.ch/browse/PLMSC-11
             $user_id = $dat->user_status_object->getUsrId();
             if (in_array($user_id, $user_ids)) {
                 continue;
             }
-            if ($user_id) {
+            if ($user_id !== 0) {
                 $user_ids[] = $user_id;
             }
-            $row = $dat->__asArray();
+            $row = (array) $dat->asStdClass();
             $row['name'] = $dat->lookupName();
             $row['status_sort'] = $this->pl->txt('main_user_status_' . $dat->getUserStatus());
-            $row['in_ilias'] = $user_id ? 1 : 0;
+            $row['in_ilias'] = $user_id !== 0 ? 1 : 0;
             $data[] = $row;
         }
 
         $this->setData($data);
     }
 
-
-    protected function initTableColumns()
+    protected function initTableColumns(): bool
     {
         $this->addColumn($this->pl->txt('main_tblh_subscribe'));
 
-        if ($this->getMailUsage() AND msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
+        if ($this->getMailUsage() && msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             $this->addColumn($this->pl->txt('main_tblh_invite'));
         }
         if ($this->getMailUsage()) {
@@ -91,8 +81,9 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $this->addColumn($this->pl->txt('main_tblh_status'), 'status_sort');
 
         $this->addColumn($this->pl->txt('main_tblh_role'));
-    }
 
+        return true;
+    }
 
     protected function initTableProperties()
     {
@@ -101,35 +92,44 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $this->prefix = 'srsubscr';
     }
 
-
-    protected function initFormActionsAndCmdButtons()
+    protected function initFormActionsAndCmdButtons(): bool
     {
-        $this->addCommandButton(msSubscriptionGUI::CMD_REMOVE_UNREGISTERED, $this->pl->txt('main_send_table_remove_unregistered'));
+        $this->addCommandButton(
+            msSubscriptionGUI::CMD_REMOVE_UNREGISTERED,
+            $this->pl->txt('main_send_table_remove_unregistered')
+        );
         $this->addCommandButton(msSubscriptionGUI::CMD_CLEAR, $this->pl->txt('main_send_table_clear'));
-        if (msConfig::getValueByKey(msConfig::F_USE_EMAIL_FOR_USERS) AND msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
+        if (msConfig::getValueByKey(msConfig::F_USE_EMAIL_FOR_USERS) && msConfig::getValueByKey(
+            msConfig::F_ENABLE_SENDING_INVITATIONS
+        )) {
             $this->addCommandButton(msSubscriptionGUI::CMD_TRIAGE, $this->pl->txt('main_send_table_usage_2'));
         } else {
             $this->addCommandButton(msSubscriptionGUI::CMD_TRIAGE, $this->pl->txt('main_send_table_usage_1'));
         }
         $this->setFormAction($this->ctrl->getFormAction($this->parent_obj));
+
+        return true;
     }
 
-
-    protected function initTableRowTemplate()
+    protected function initTableRowTemplate(): bool
     {
         $this->setRowTemplate($this->pl->getDirectory() . '/templates/default/Subscription/tpl.subscription_row.html');
+        return true;
     }
 
-
-    protected function initLanguage()
+    protected function initLanguage(): bool
     {
         $this->pl = ilSubscriptionPlugin::getInstance();
-        $this->lng = $this->pl;
+        $this->translator = $this->pl;
+
+        return true;
     }
 
-
-    protected function fillTableRow($a_set)
+    protected function fillTableRow($a_set): bool
     {
+        if (!isset($a_set['id'])) {
+            return false;
+        }
         /**
          * @var msSubscription $msSubscription
          */
@@ -137,8 +137,9 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $this->fillStandardFields($msSubscription);
         $this->fillActions($msSubscription);
         $this->tpl->setVariable('OPTIONS', $this->getRoleSelector($msSubscription->getRole()));
-    }
 
+        return true;
+    }
 
     /**
      * @param int $selected
@@ -150,17 +151,27 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $type = $this->parent_obj->getObj()->getType();
         switch ($type) {
             case 'crs':
-                $roles = array(
-                    IL_CRS_MEMBER => $this->pl->txt('main_role_' . IL_CRS_MEMBER),
-                    IL_CRS_TUTOR  => $this->pl->txt('main_role_' . IL_CRS_TUTOR),
-                    IL_CRS_ADMIN  => $this->pl->txt('main_role_' . IL_CRS_ADMIN),
-                );
+                $roles = [
+                    ilCourseParticipants::IL_CRS_MEMBER => $this->pl->txt(
+                        'main_role_' . ilCourseParticipants::IL_CRS_MEMBER
+                    ),
+                    ilCourseParticipants::IL_CRS_TUTOR => $this->pl->txt(
+                        'main_role_' . ilCourseParticipants::IL_CRS_TUTOR
+                    ),
+                    ilCourseParticipants::IL_CRS_ADMIN => $this->pl->txt(
+                        'main_role_' . ilCourseParticipants::IL_CRS_ADMIN
+                    ),
+                ];
                 break;
             case 'grp':
-                $roles = array(
-                    IL_GRP_MEMBER => $this->pl->txt('main_role_' . IL_GRP_MEMBER),
-                    IL_GRP_ADMIN  => $this->pl->txt('main_role_' . IL_GRP_ADMIN),
-                );
+                $roles = [
+                    ilGroupParticipants::IL_GRP_MEMBER => $this->pl->txt(
+                        'main_role_' . ilGroupParticipants::IL_GRP_MEMBER
+                    ),
+                    ilGroupParticipants::IL_GRP_ADMIN => $this->pl->txt(
+                        'main_role_' . ilGroupParticipants::IL_GRP_ADMIN
+                    ),
+                ];
                 break;
         }
 
@@ -173,31 +184,33 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         return $selection_menu;
     }
 
-
-    /**
-     * @param msSubscription $msSubscription
-     */
     protected function fillStandardFields(msSubscription $msSubscription)
     {
+        $msSubscription->afterObjectLoad();
         if ($this->getMailUsage()) {
             $this->tpl->setCurrentBlock('email');
             $this->tpl->setVariable(
-                'EMAIL', ($msSubscription->getSubscriptionType()
-            == msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;')
+                'EMAIL',
+                ($msSubscription->getSubscriptionType()
+                == msSubscription::TYPE_EMAIL ? $msSubscription->getMatchingString() : '&nbsp;')
             );
             $this->tpl->parseCurrentBlock();
         }
         if ($this->getMatriculationUsage()) {
             $this->tpl->setCurrentBlock('matriculation');
             $this->tpl->setVariable(
-                'MATRICULATION', ($msSubscription->getSubscriptionType()
-            == msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;')
+                'MATRICULATION',
+                ($msSubscription->getSubscriptionType()
+                == msSubscription::TYPE_MATRICULATION ? $msSubscription->getMatchingString() : '&nbsp;')
             );
             $this->tpl->parseCurrentBlock();
         }
         if ($this->getMatriculationAndMailUsage()) {
             $this->tpl->setCurrentBlock('type');
-            $this->tpl->setVariable('TYPE', $this->pl->txt('subscription_type_' . $msSubscription->getSubscriptionType()));
+            $this->tpl->setVariable(
+                'TYPE',
+                $this->pl->txt('subscription_type_' . $msSubscription->getSubscriptionType())
+            );
             $this->tpl->parseCurrentBlock();
         }
         $this->tpl->setVariable('STATUS', $this->pl->txt('main_user_status_' . $msSubscription->getUserStatus()));
@@ -208,7 +221,7 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         }
         $this->tpl->setVariable('USR_ID', 'obj_' . $msSubscription->getId());
         $this->tpl->setVariable('STD_ROLE', msUserStatus::ROLE_MEMBER);
-        if (!$this->getMailUsage() OR !msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
+        if (!$this->getMailUsage() || !msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
             $this->tpl->setVariable('DISABLE_NOMAIL', 'nomail');
         }
         $this->tpl->setVariable('CMD_INVITE', msSubscriptionGUI::CMD_INVITE);
@@ -216,10 +229,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         $this->tpl->setVariable('CMD_SUBSCRIBE', msSubscriptionGUI::CMD_SUBSCRIBE);
     }
 
-
-    /**
-     * @param msSubscription $msSubscription
-     */
     protected function fillActions(msSubscription $msSubscription)
     {
         switch ($msSubscription->getUserStatus()) {
@@ -267,15 +276,10 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         }
     }
 
-
-    /**
-     * @return bool
-     */
-    protected function getMatriculationAndMailUsage()
+    protected function getMatriculationAndMailUsage(): bool
     {
         return msConfig::getUsageType() == msConfig::TYPE_USAGE_BOTH;
     }
-
 
     /**
      * @return bool|string
@@ -284,7 +288,6 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
     {
         return msConfig::getValueByKey('use_matriculation');
     }
-
 
     /**
      * @return bool|string

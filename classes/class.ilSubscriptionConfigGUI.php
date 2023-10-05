@@ -1,17 +1,20 @@
 <?php
 
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
-
 /**
  * Example configuration user interface class
  *
- * @author  Alex Killing <alex.killing@gmx.de>
- * @author  Fabian Schmid <fs@studer-raimann.ch>
- * @version $Id$
+ * @author            Alex Killing <alex.killing@gmx.de>
+ * @author            Fabian Schmid <fs@studer-raimann.ch>
+ * @version           $Id$
  *
+ * @ilCtrl_isCalledBy ilSubscriptionConfigGUI: ilObjComponentSettingsGUI
  */
 class ilSubscriptionConfigGUI extends ilPluginConfigGUI
 {
+    /**
+     * @var \ilSubscriptionPlugin
+     */
+    public $pl;
     public const CMD_CANCEL = 'cancel';
     public const CMD_CONFIGURE = 'configure';
     public const CMD_SAVE = 'save';
@@ -28,7 +31,6 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
      */
     protected $tpl;
 
-
     public function __construct()
     {
         global $DIC;
@@ -39,10 +41,6 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
         $this->pl = ilSubscriptionPlugin::getInstance();
     }
 
-
-    /**
-     * @param string $cmd
-     */
     public function performCommand(string $cmd): void
     {
         switch ($cmd) {
@@ -54,14 +52,12 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
         }
     }
 
-
-    public function configure()
+    public function configure(): void
     {
         $form = new msConfigFormGUI($this);
         $form->fillForm();
         $this->tpl->setContent($form->getHTML());
     }
-
 
     protected function save()
     {
@@ -72,7 +68,6 @@ class ilSubscriptionConfigGUI extends ilPluginConfigGUI
         }
         $this->tpl->setContent($form->getHTML());
     }
-
 
     protected function cancel()
     {

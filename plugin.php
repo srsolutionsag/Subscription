@@ -1,9 +1,9 @@
 <?php
 
 $id                 = 'subscription';
-$version            = '4.0.0';
-$ilias_min_version  = '6.0.0';
-$ilias_max_version  = '7.999';
-$responsible        = 'studer + raimann ag – Team Core 1';
-$responsible_mail   = 'support-core1@studer-raimann.ch';
+$version            = '5.0.0';
+$ilias_min_version  = '8.0';
+$ilias_max_version  = '8.999';
+$responsible        = 'sr.solutions';
+$responsible_mail   = 'support@sr.solutions';
 $supports_cli_setup = false;

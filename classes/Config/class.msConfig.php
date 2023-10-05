@@ -30,18 +30,12 @@ class msConfig extends ActiveRecord
     public const F_IGNORE_SUBTREE_ACTIVE = 'activate_ignore_subtree';
     public const TABLE_NAME = 'rep_robj_xmsb_conf';
 
-
-    /**
-     * @return string
-     */
     public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
 
-
     /**
-     * @return string
      * @deprecated
      */
     public static function returnDbTableName(): string
@@ -53,7 +47,7 @@ class msConfig extends ActiveRecord
     /**
      * @var array
      */
-    protected static $ignore_chache = array();
+    protected static $ignore_chache = [];
     /**
      * @var string
      *
@@ -74,7 +68,6 @@ class msConfig extends ActiveRecord
      */
     protected $config_value;
 
-
     /**
      * @param string $key
      *
@@ -87,31 +80,25 @@ class msConfig extends ActiveRecord
         return $obj->getConfigValue();
     }
 
-
     /**
      * @param string $name
      * @param string $value
      */
-    public static function set($name, $value)
+    public static function set($name, $value): void
     {
         $obj = new self($name);
         $obj->setConfigValue($value);
-        if (self::where(array('config_key' => $name))->hasSets()) {
+        if (self::where(['config_key' => $name])->hasSets()) {
             $obj->update();
         } else {
             $obj->create();
         }
     }
 
-
-    /**
-     * @return bool
-     */
-    public static function checkShibboleth()
+    public static function checkShibboleth(): bool
     {
-        return self::getValueByKey(self::F_SHIBBOLETH) and is_readable(self::getValueByKey(self::F_METADATA_XML));
+        return self::getValueByKey(self::F_SHIBBOLETH) && is_readable(self::getValueByKey(self::F_METADATA_XML));
     }
-
 
     /**
      * @return string
@@ -120,7 +107,6 @@ class msConfig extends ActiveRecord
     {
         return strstr(ILIAS_HTTP_PATH, 'Customizing', true);
     }
-
 
     /**
      * @return int
@@ -135,13 +121,12 @@ class msConfig extends ActiveRecord
         if (self::getValueByKey(self::F_USE_MATRICULATION)) {
             $usage_type = self::TYPE_USAGE_MATRICULATION;
         }
-        if (self::getValueByKey(self::F_USE_MATRICULATION) and self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
+        if (self::getValueByKey(self::F_USE_MATRICULATION) && self::getValueByKey(self::F_USE_EMAIL_FOR_USERS)) {
             $usage_type = self::TYPE_USAGE_BOTH;
         }
 
         return $usage_type;
     }
-
 
     /**
      * @param int $check_ref_id
@@ -160,7 +145,7 @@ class msConfig extends ActiveRecord
         global $DIC;
 
         $subtrees = explode(',', self::getValueByKey(self::F_IGNORE_SUBTREE));
-        if (!is_array($subtrees) or count($subtrees) == 0) {
+        if (!is_array($subtrees) || count($subtrees) == 0) {
             self::$ignore_chache[$check_ref_id] = false;
 
             return false;
@@ -168,7 +153,7 @@ class msConfig extends ActiveRecord
 
         $return = false;
         foreach ($subtrees as $ref_id) {
-            if (!$ref_id) {
+            if ($ref_id === '' || $ref_id === '0') {
                 continue;
             }
             if ($DIC->repositoryTree()->isGrandChild($ref_id, $check_ref_id)) {
@@ -181,15 +166,13 @@ class msConfig extends ActiveRecord
         return self::$ignore_chache[$check_ref_id];
     }
 
-
     /**
      * @param string $config_key
      */
-    public function setConfigKey($config_key)
+    public function setConfigKey($config_key): void
     {
         $this->config_key = $config_key;
     }
-
 
     /**
      * @return string
@@ -199,15 +182,13 @@ class msConfig extends ActiveRecord
         return $this->config_key;
     }
 
-
     /**
      * @param string $config_value
      */
-    public function setConfigValue($config_value)
+    public function setConfigValue($config_value): void
     {
         $this->config_value = $config_value;
     }
-
 
     /**
      * @return string

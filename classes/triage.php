@@ -9,7 +9,6 @@ if (php_sapi_name() !== 'cli') {
     }
 }
 
-
 /**
  * msTriage
  *
@@ -19,15 +18,8 @@ if (php_sapi_name() !== 'cli') {
  */
 class msTriage
 {
-
-    /**
-     * @var ilSubscriptionPlugin
-     */
-    protected $pl;
-    /**
-     * @var msSubscription
-     */
-    protected $subscription;
+    protected \ilSubscriptionPlugin $pl;
+    protected \msSubscription $subscription;
     /**
      * @var ilObjUser
      */
@@ -49,7 +41,6 @@ class msTriage
      */
     protected $token;
 
-
     public function __construct()
     {
         $this->initILIAS();
@@ -65,8 +56,7 @@ class msTriage
         $this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $_REQUEST['token']);
     }
 
-
-    public function initILIAS()
+    public function initILIAS(): void
     {
         chdir(substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], '/Customizing')));
 
@@ -100,11 +90,10 @@ class msTriage
         require_once('./Services/Object/classes/class.ilObject2.php');
     }
 
-
     /**
      * @param string $cmd
      */
-    public function performCommand($cmd)
+    public function performCommand($cmd): void
     {
 
         if (is_array($cmd)) {
@@ -124,30 +113,24 @@ class msTriage
         $this->tpl->printToStdout();
     }
 
-
-    public function hasLogin()
+    public function hasLogin(): void
     {
         $this->redirectToLogin();
     }
 
-
-    public function hasNoLogin()
+    public function hasNoLogin(): void
     {
         $this->determineLogin();
     }
 
-
-    public function start()
+    public function start(): void
     {
         if (msConfig::getValueByKey('ask_for_login')) {
             $this->showLoginDecision();
         } else {
             $this->determineLogin();
         }
-
-        return;
     }
-
 
     protected function showLoginDecision()
     {
@@ -168,31 +151,25 @@ class msTriage
         $this->tpl->setContent($de->getHTML());
     }
 
-
-    public function determineLogin()
+    public function determineLogin(): void
     {
-        if (msConfig::checkShibboleth() AND $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
+        if (msConfig::checkShibboleth() && $this->subscription->getAccountType() == msAccountType::TYPE_SHIBBOLETH) {
             $this->redirectToLogin();
+        } elseif (msConfig::getValueByKey('allow_registration')) {
+            $this->redirectToTokenRegistrationGUI();
         } else {
-            if (msConfig::getValueByKey('allow_registration')) {
-                $this->redirectToTokenRegistrationGUI();
-            } else {
-                $this->redirectToLogin();
-            }
+            $this->redirectToLogin();
         }
-
-        return;
     }
 
-
-    public function redirectToLogin()
+    public function redirectToLogin(): void
     {
         $this->setSubscriptionToDeleted();
-        $link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId() . '_rcode' . $this->getRegistrationCode();
+        $link = msConfig::getPath() . 'goto.php?target=crs_' . $this->subscription->getObjRefId(
+        ) . '_rcode' . $this->getRegistrationCode();
 
         ilUtil::redirect($link);
     }
-
 
     /**
      * @return object
@@ -213,13 +190,11 @@ class msTriage
         return $crs->getRegistrationAccessCode();
     }
 
-
     protected function setSubscriptionToDeleted()
     {
         $this->subscription->setDeleted(true);
         $this->subscription->update();
     }
-
 
     protected function redirectToTokenRegistrationGUI()
     {

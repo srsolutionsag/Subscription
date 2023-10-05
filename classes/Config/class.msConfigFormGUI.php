@@ -14,11 +14,7 @@ class msConfigFormGUI extends ilPropertyFormGUI
      * @var ilSubscriptionConfigGUI
      */
     protected $parent_gui;
-    /**
-     * @var ilSubscriptionPlugin
-     */
-    protected $pl;
-
+    protected \ilSubscriptionPlugin $pl;
 
     /**
      * @param ilSubscriptionConfigGUI $parent_gui
@@ -35,23 +31,24 @@ class msConfigFormGUI extends ilPropertyFormGUI
         $this->initForm();
     }
 
-
     /**
      * @param string $key
      *
      * @return mixed
      */
-    protected function txt($key)
+    protected function txt($key): string
     {
         return $this->pl->txt('admin_' . $key);
     }
 
-
-    private function initForm()
+    private function initForm(): void
     {
         $this->setTitle($this->txt('conf_title'));
 
-        $activate_courses = new ilCheckboxInputGUI($this->txt(msConfig::F_ACTIVATE_COURSES), msConfig::F_ACTIVATE_COURSES);
+        $activate_courses = new ilCheckboxInputGUI(
+            $this->txt(msConfig::F_ACTIVATE_COURSES),
+            msConfig::F_ACTIVATE_COURSES
+        );
         $this->addItem($activate_courses);
 
         $activate_groups = new ilCheckboxInputGUI($this->txt(msConfig::F_ACTIVATE_GROUPS), msConfig::F_ACTIVATE_GROUPS);
@@ -63,10 +60,19 @@ class msConfigFormGUI extends ilPropertyFormGUI
 
         $cb_mail = new ilCheckboxInputGUI($this->txt(msConfig::F_USE_EMAIL_FOR_USERS), msConfig::F_USE_EMAIL_FOR_USERS);
         {
-            $cb_enable_invitation = new ilCheckboxInputGUI($this->txt(msConfig::F_ENABLE_SENDING_INVITATIONS), msConfig::F_ENABLE_SENDING_INVITATIONS);
+            $cb_enable_invitation = new ilCheckboxInputGUI(
+                $this->txt(msConfig::F_ENABLE_SENDING_INVITATIONS),
+                msConfig::F_ENABLE_SENDING_INVITATIONS
+            );
             {
-                $cb_reg = new ilCheckboxInputGUI($this->txt(msConfig::F_ALLOW_REGISTRATION), msConfig::F_ALLOW_REGISTRATION);
-                $ask_for_login = new ilCheckboxInputGUI($this->txt(msConfig::F_ASK_FOR_LOGIN), msConfig::F_ASK_FOR_LOGIN);
+                $cb_reg = new ilCheckboxInputGUI(
+                    $this->txt(msConfig::F_ALLOW_REGISTRATION),
+                    msConfig::F_ALLOW_REGISTRATION
+                );
+                $ask_for_login = new ilCheckboxInputGUI(
+                    $this->txt(msConfig::F_ASK_FOR_LOGIN),
+                    msConfig::F_ASK_FOR_LOGIN
+                );
                 $cb_reg->addSubItem($ask_for_login);
 
                 $fixed_email = new ilCheckboxInputGUI($this->txt(msConfig::F_FIXED_EMAIL), msConfig::F_FIXED_EMAIL);
@@ -86,7 +92,10 @@ class msConfigFormGUI extends ilPropertyFormGUI
             $cb_mail->addSubItem($cb_enable_invitation);
         }
 
-        $use_matriculation = new ilCheckboxInputGUI($this->txt(msConfig::F_USE_MATRICULATION), msConfig::F_USE_MATRICULATION);
+        $use_matriculation = new ilCheckboxInputGUI(
+            $this->txt(msConfig::F_USE_MATRICULATION),
+            msConfig::F_USE_MATRICULATION
+        );
         $this->addItem($use_matriculation);
 
         $ti = new ilFormSectionHeaderGUI();
@@ -102,7 +111,10 @@ class msConfigFormGUI extends ilPropertyFormGUI
         $cb_purge = new ilCheckboxInputGUI($this->txt(msConfig::F_PURGE), msConfig::F_PURGE);
         $this->addItem($cb_purge);
 
-        $activate_ignore_subtree = new ilCheckboxInputGUI($this->txt(msConfig::F_IGNORE_SUBTREE_ACTIVE), msConfig::F_IGNORE_SUBTREE_ACTIVE);
+        $activate_ignore_subtree = new ilCheckboxInputGUI(
+            $this->txt(msConfig::F_IGNORE_SUBTREE_ACTIVE),
+            msConfig::F_IGNORE_SUBTREE_ACTIVE
+        );
         {
             $ignore_subtree = new ilTextInputGUI($this->txt(msConfig::F_IGNORE_SUBTREE), msConfig::F_IGNORE_SUBTREE);
             $ignore_subtree->setInfo($this->txt(msConfig::F_IGNORE_SUBTREE . '_info'));
@@ -110,16 +122,18 @@ class msConfigFormGUI extends ilPropertyFormGUI
         }
         $this->addItem($activate_ignore_subtree);
 
-        $cb_send_mails = new ilCheckboxInputGUI($this->txt(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION), msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION);
+        $cb_send_mails = new ilCheckboxInputGUI(
+            $this->txt(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION),
+            msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION
+        );
         $this->addItem($cb_send_mails);
 
         $this->addCommandButtons();
     }
 
-
-    public function fillForm()
+    public function fillForm(): void
     {
-        $array = array();
+        $array = [];
         foreach ($this->getItems() as $item) {
             $array = $this->fillValue($item, $array);
         }
@@ -127,26 +141,15 @@ class msConfigFormGUI extends ilPropertyFormGUI
         $this->setValuesByArray($array);
     }
 
-
     /**
      * returns whether checkinput was successful or not.
-     *
-     * @return bool
      */
-    public function fillObject()
+    public function fillObject(): bool
     {
-        if (!$this->checkInput()) {
-            return false;
-        }
-
-        return true;
+        return $this->checkInput();
     }
 
-
-    /**
-     * @return bool
-     */
-    public function saveObject()
+    public function saveObject(): bool
     {
         if (!$this->fillObject()) {
             return false;
@@ -154,11 +157,10 @@ class msConfigFormGUI extends ilPropertyFormGUI
         foreach ($this->getItems() as $item) {
             $this->writeValue($item);
         }
-        ilUtil::sendSuccess($this->pl->txt('admin_save_succeed'), true);
+        $this->global_tpl->setOnScreenMessage('success', $this->pl->txt('admin_save_succeed'), true);
 
         return true;
     }
-
 
     protected function addCommandButtons()
     {
@@ -166,10 +168,8 @@ class msConfigFormGUI extends ilPropertyFormGUI
         $this->addCommandButton(ilSubscriptionConfigGUI::CMD_CANCEL, $this->txt('form_button_cancel'));
     }
 
-
     /**
      * @param ilFormPropertyGUI $item
-     * @param array             $array
      *
      * @return mixed
      */
@@ -185,7 +185,6 @@ class msConfigFormGUI extends ilPropertyFormGUI
 
         return $array;
     }
-
 
     /**
      * @param ilFormPropertyGUI $item

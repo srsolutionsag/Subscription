@@ -1,7 +1,5 @@
 <?php
 
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Subscription/vendor/autoload.php');
-
 /**
  * Class ilSubscriptionPlugin
  *
@@ -11,36 +9,31 @@ class ilSubscriptionPlugin extends ilUserInterfaceHookPlugin
 {
     public const PLUGIN_ID = 'subscription';
     public const PLUGIN_NAME = 'Subscription';
-    /**
-     * @var ilSubscriptionPlugin
-     */
-    protected static $instance;
 
+    private static ?self $instance = null;
 
-    /**
-     * @return ilSubscriptionPlugin
-     */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
+        if (!self::$instance instanceof self) {
+            global $DIC;
+            // ILIAS 8
+            if (isset($DIC['component.factory']) && $DIC['component.factory'] instanceof ilComponentFactory) {
+                $component_factory = $DIC['component.factory'];
+                self::$instance = $component_factory->getPlugin(self::PLUGIN_ID);
+            } // ILIAS 7
+            else {
+                self::$instance = new self();
+            }
         }
 
         return self::$instance;
     }
 
-    /**
-     * @return string
-     */
     public function getPluginName(): string
     {
         return self::PLUGIN_NAME;
     }
 
-
-    /**
-     * @return bool
-     */
     protected function beforeUninstall(): bool
     {
         $this->db->dropTable(msConfig::TABLE_NAME, false);

@@ -9,9 +9,11 @@
 class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 {
     /**
-     * @var msSubscription
+     * @var \ilSubscriptionPlugin
      */
-    protected $subscription;
+    public $pl;
+    public $token;
+    protected ?\ActiveRecord $subscription;
 
     public function __construct()
     {
@@ -22,10 +24,10 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         $this->pl = ilSubscriptionPlugin::getInstance();
         $this->ctrl = $DIC->ctrl();
         $this->token = $_GET['token'];
-        $this->subscription = msSubscription::where(array('token' => $this->token))->first();
+        $this->subscription = msSubscription::where(['token' => $this->token])->first();
+        $this->subscription->afterObjectLoad();
         $this->ctrl->saveParameter($this, 'token');
     }
-
 
     public function executeCommand(): void
     {
@@ -42,17 +44,15 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         $this->tpl->printToStdout();
     }
 
-
     /**
      * @param int $a_usr_id
      */
-    public function activateUser($a_usr_id)
+    public function activateUser($a_usr_id): void
     {
         $user = new ilObjUser($a_usr_id);
         $user->setActive(true);
         $user->update();
     }
-
 
     /**
      * @param bool $a_force_code
@@ -65,11 +65,6 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             throw new ilException('this token is no longer valid');
         }
         parent::initForm();
-        /**
-         * @var ilPropertyFormGUI $form
-         * @var ilTextInputGUI    $usr_email
-         */
-
         $this->form->setFormAction(
             $this->ctrl->getFormAction(
                 $this,
@@ -87,7 +82,10 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
             case msSubscription::TYPE_EMAIL:
                 $usr_email->setDisabled(msConfig::getValueByKey('fixed_email'));
                 $usr_email->setValue($this->subscription->getMatchingString());
-                $retype = in_array('setRetypeValue', get_class_methods(get_class($usr_email)));
+                $retype = in_array(
+                    'setRetypeValue',
+                    get_class_methods($usr_email instanceof \ilFormPropertyGUI ? get_class($usr_email) : self::class)
+                );
                 if ($retype) {
                     $usr_email->setRetypeValue($this->subscription->getMatchingString());
                 }
@@ -109,12 +107,12 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         }
     }
 
-
     public function displayForm(): ilGlobalTemplateInterface
     {
-        if (!$this->subscription or $this->subscription->getDeleted() == 1) {
+        if (!$this->subscription || $this->subscription->getDeleted() == 1) {
             $this->tpl->setContent($this->pl->txt('main_not_invalid_token'));
-        } elseif ($this->subscription->getUserStatus() == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED or $this->subscription->getUserStatus()
+        } elseif ($this->subscription->getUserStatus(
+        ) == msUserStatus::STATUS_USER_CAN_BE_ASSIGNED || $this->subscription->getUserStatus()
             == msUserStatus::STATUS_ALREADY_ASSIGNED
         ) {
             $this->assignUser();
@@ -126,8 +124,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         return $this->tpl;
     }
 
-
-    public function assignUser()
+    public function assignUser(): void
     {
         $obj_id = ilObject::_lookupObjId($this->subscription->getObjRefId());
         $a_usr_id = $this->subscription->user_status_object->getUsrId();
@@ -147,12 +144,14 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         $this->subscription->update();
     }
 
-
-    public function redirectToCourse()
+    /**
+     * @return never
+     */
+    public function redirectToCourse(): void
     {
         header('Location: ' . ilLink::_getStaticLink($this->subscription->getObjRefId()));
+        exit;
     }
-
 
     public function saveForm(): ilGlobalTemplateInterface
     {
@@ -178,19 +177,17 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         return $this->tpl;
     }
 
-
     /**
      * @param string $password
      */
-    public function loginDeprecated($password)
+    public function loginDeprecated($password): void
     {
         $_POST['username'] = $this->userObj->getLogin();
         $_POST['password'] = $password;
         ilInitialisation::initILIAS();
     }
 
-
-    public function subscribeToAllCourses()
+    public function subscribeToAllCourses(): void
     {
     }
 }

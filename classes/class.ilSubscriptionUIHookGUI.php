@@ -18,11 +18,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     /**
      * @var array
      */
-    protected static $ignored_subtree = array();
-    /**
-     * @var ilSubscriptionPlugin
-     */
-    private $pl;
+    protected static $ignored_subtree = [];
     /**
      * @var ilCtrl
      */
@@ -36,7 +32,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
      */
     private $tree;
 
-
     public function __construct()
     {
         global $DIC;
@@ -49,9 +44,7 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
         if ($DIC->offsetExists('tree')) {
             $this->tree = $DIC->repositoryTree();
         }
-        $this->pl = ilSubscriptionPlugin::getInstance();
     }
-
 
     public function modifyGUI(
         string $a_comp,
@@ -60,38 +53,38 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     ): void {
         global $DIC;
 
-        $locations = array(
-            array(ilObjGroupGUI::class, 'members'),
-            array(ilObjCourseGUI::class, 'members'),
-            array(ilCourseParticipantsGroupsGUI::class, 'show'),
-            array(ilObjCourseGUI::class, 'membersGallery'),
-            array(ilObjCourseGUI::class, 'mailMembers'),
-            array(ilObjGroupGUI::class, 'membersGallery'),
-            array(ilObjGroupGUI::class, 'mailMembers'),
-            array(ilSessionOverviewGUI::class, 'listSessions'),
-            array(msSubscriptionGUI::class, '*'),
-            array(ilCourseParticipantsGroupsTableGUI::class, '*'),
-            array(ilObjCourseGUI::class, 'editMember'),
-            array(ilObjCourseGUI::class, 'updateMembers'),
-            array(ilObjCourseGUI::class, 'deleteMembers'),
-            array(ilObjCourseGUI::class, 'removeMembers'),
-            array(ilObjGroupGUI::class, 'editMember'),
-            array(ilObjGroupGUI::class, 'updateMembers'),
-            array(ilObjGroupGUI::class, 'confirmDeleteMembers'),
-            array(ilObjGroupGUI::class, 'deleteMembers'),
-            array(ilRepositorySearchGUI::class, '*'),
-            array(ilMemberExportGUI::class, '*'),
-            array(ilCourseMembershipGUI::class, '*'),
-            array(ilGroupMembershipGUI::class, '*'),
-        );
+        $locations = [
+            [ilObjGroupGUI::class, 'members'],
+            [ilObjCourseGUI::class, 'members'],
+            [ilCourseParticipantsGroupsGUI::class, 'show'],
+            [ilObjCourseGUI::class, 'membersGallery'],
+            [ilObjCourseGUI::class, 'mailMembers'],
+            [ilObjGroupGUI::class, 'membersGallery'],
+            [ilObjGroupGUI::class, 'mailMembers'],
+            [ilSessionOverviewGUI::class, 'listSessions'],
+            [msSubscriptionGUI::class, '*'],
+            [ilCourseParticipantsGroupsTableGUI::class, '*'],
+            [ilObjCourseGUI::class, 'editMember'],
+            [ilObjCourseGUI::class, 'updateMembers'],
+            [ilObjCourseGUI::class, 'deleteMembers'],
+            [ilObjCourseGUI::class, 'removeMembers'],
+            [ilObjGroupGUI::class, 'editMember'],
+            [ilObjGroupGUI::class, 'updateMembers'],
+            [ilObjGroupGUI::class, 'confirmDeleteMembers'],
+            [ilObjGroupGUI::class, 'deleteMembers'],
+            [ilRepositorySearchGUI::class, '*'],
+            [ilMemberExportGUI::class, '*'],
+            [ilCourseMembershipGUI::class, '*'],
+            [ilGroupMembershipGUI::class, '*'],
+        ];
         $locations = array_map(
-            function ($c) {
-                return array(strtolower($c[0]), $c[1]); // ::class no lower case
+            function ($c): array {
+                return [strtolower($c[0]), $c[1]]; // ::class no lower case
             },
             $locations
         );
 
-        $tab_highlight = array(array(msSubscriptionGUI::class, '*'),);
+        $tab_highlight = [[msSubscriptionGUI::class, '*'],];
 
         if ($this->checkContext($a_part, $locations)) {
             $tabs = $DIC->tabs();
@@ -106,10 +99,10 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
                 self::TAB_SRSUBSCRIPTION,
                 $pl_obj->txt('tab_usage_' . msConfig::getUsageType()),
                 $this->ctrl->getLinkTargetByClass(
-                    array(
-                    ilUIPluginRouterGUI::class,
-                    msSubscriptionGUI::class,
-                )
+                    [
+                        ilUIPluginRouterGUI::class,
+                        msSubscriptionGUI::class,
+                    ]
                 ),
                 ''
             );
@@ -120,7 +113,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
         }
     }
 
-
     /**
      * @description Check whether current context is in array. Array should look like
      * $array = array(
@@ -130,11 +122,9 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
      * );
      *
      * @param string $a_part
-     * @param array  $context
      *
-     * @return bool
      */
-    protected function checkContext($a_part, array $context)
+    protected function checkContext($a_part, array $context): bool
     {
         if ($a_part != self::PART_SUB_TABS) {
             return false;
@@ -144,12 +134,20 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             return false;
         }
 
-        $check_cmd = in_array(array($this->ctrl->getCmdClass(), $this->ctrl->getCmd()), $context);
-        $check_cmd_class = in_array(array($this->ctrl->getCmdClass(), '*'), $context);
+        foreach ($context as $item) {
+            if (strtolower($this->ctrl->getCmdClass()) === $item[0]
+                && ($this->ctrl->getCmd() === $item[1] || $item[1] === '*')) {
+                return true;
+            }
+        }
+
+        $array = [strtolower($this->ctrl->getCmdClass()), $this->ctrl->getCmd()];
+        $check_cmd = in_array($array, $context);
+        $check_cmd_class = in_array([$this->ctrl->getCmdClass(), '*'], $context);
         if (!$check_cmd && !$check_cmd_class) {
             return false;
         }
-        if (!in_array($this->ctrl->getContextObjType(), array(self::CONTEXT_OBJECT_GROUP, self::CONTEXT_OBJECT_COURSE))) {
+        if (!in_array($this->ctrl->getContextObjType(), [self::CONTEXT_OBJECT_GROUP, self::CONTEXT_OBJECT_COURSE])) {
             return false;
         }
 
@@ -158,44 +156,41 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             return false;
         }
 
-        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_COURSE && !msConfig::getValueByKey(msConfig::F_ACTIVATE_COURSES)) {
+        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_COURSE && !msConfig::getValueByKey(
+            msConfig::F_ACTIVATE_COURSES
+        )) {
             return false;
         }
 
-        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_GROUP && !msConfig::getValueByKey(msConfig::F_ACTIVATE_GROUPS)) {
+        if ($this->ctrl->getContextObjType() == self::CONTEXT_OBJECT_GROUP && !msConfig::getValueByKey(
+            msConfig::F_ACTIVATE_GROUPS
+        )) {
             return false;
         }
-
-        if (msConfig::isInIgnoredSubtree($ref_id)) {
-            return false;
-        }
-
-        return true;
+        return !msConfig::isInIgnoredSubtree($ref_id);
     }
-
 
     public function gotoHook(): void
     {
         if (preg_match("/tokenreg_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
             $token = $matches[1];
-            $this->initBaseClass();
+            //            $this->initBaseClass();
             $this->ctrl->setTargetScript('./ilias.php');
             $this->ctrl->setParameterByClass(ilTokenRegistrationGUI::class, 'token', $token);
-            $arr = array(ilUIPluginRouterGUI::class, subscrTriageGUI::class);
+            $arr = [ilUIPluginRouterGUI::class, subscrTriageGUI::class];
             $this->ctrl->redirectByClass($arr);
         }
 
         if (preg_match("/subscr_([0-9a-zA-Z]*)/uim", $_GET['target'], $matches)) {
             $token = $matches[1];
-            $this->initBaseClass();
+            //            $this->initBaseClass();
             $this->ctrl->setTargetScript('./ilias.php');
             $this->ctrl->setParameterByClass(subscrTriageGUI::class, 'token', $token);
-            $arr = array(ilUIPluginRouterGUI::class, subscrTriageGUI::class);
+            $arr = [ilUIPluginRouterGUI::class, subscrTriageGUI::class];
 
             $this->ctrl->redirectByClass($arr);
         }
     }
-
 
     /**
      * @return array
@@ -204,19 +199,21 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
     {
         if (!isset(self::$ignored_subtree)) {
             foreach (explode(',', trim(msConfig::getValueByKey(msConfig::F_IGNORE_SUBTREE))) as $root_id) {
-                if (!$root_id) {
+                if ($root_id === '' || $root_id === '0') {
                     continue;
                 }
-                self::$ignored_subtree = array_merge(self::$ignored_subtree, $this->tree->getSubTree($this->tree->getNodeData($root_id), false));
+                self::$ignored_subtree = array_merge(
+                    self::$ignored_subtree,
+                    $this->tree->getSubTree($this->tree->getNodeData($root_id), false)
+                );
             }
         }
 
         return self::$ignored_subtree;
     }
 
-
     protected function initBaseClass()
     {
-        $this->ctrl->initBaseClass(ilUIPluginRouterGUI::class);
+        //        $this->ctrl->initBaseClass(ilUIPluginRouterGUI::class);
     }
 }

@@ -15,35 +15,28 @@ class msSubscription extends ActiveRecord
      * @var array
      */
     protected static $deletable_status
-        = array(
+        = [
             msUserStatus::STATUS_USER_NOT_ASSIGNABLE,
             msUserStatus::STATUS_USER_CAN_BE_INVITED,
-        );
+        ];
     public const TYPE_EMAIL = 1;
     public const TYPE_MATRICULATION = 2;
     public const DELIMITER = '|';
     public const CONTEXT_CRS = 1;
     public const CONTEXT_GRP = 2;
 
-
-    /**
-     * @return string
-     */
     public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
 
-
     /**
-     * @return string
      * @deprecated
      */
     public static function returnDbTableName(): string
     {
         return self::TABLE_NAME;
     }
-
 
     /**
      * @var msUserStatus
@@ -54,21 +47,19 @@ class msSubscription extends ActiveRecord
      */
     public $account_type_object;
 
-
     public function afterObjectLoad(): void
     {
-        $this->user_status_object = new msUserStatus($this->getMatchingString(), $this->getSubscriptionType(), $this->getObjRefId());
+        $this->user_status_object = new msUserStatus(
+            (string) $this->getMatchingString(),
+            (int) $this->getSubscriptionType(),
+            (int) $this->getObjRefId()
+        );
         $this->account_type_object = new msAccountType($this->getMatchingString(), $this->getSubscriptionType());
     }
 
-
     protected bool $ar_safe_read = false;
 
-
-    /**
-     * @return bool
-     */
-    public function isDeletable()
+    public function isDeletable(): bool
     {
         return in_array($this->getUserStatus(), self::$deletable_status);
     }
@@ -84,22 +75,21 @@ class msSubscription extends ActiveRecord
      */
     public static function getInstanceByToken($token)
     {
-        $where = array('token' => $token);
+        $where = ['token' => $token];
         $obj = self::where($where)->first();
-        if ($obj) {
+        if ($obj instanceof \ActiveRecord) {
             $obj->read();
         }
 
         return $obj;
     }
 
-
     /**
      * @return string
      */
     public function lookupName()
     {
-        if ($this->user_status_object->getUsrId()) {
+        if ($this->user_status_object->getUsrId() !== 0) {
             $lookupName = ilObjUser::_lookupName($this->user_status_object->getUsrId());
 
             return $lookupName['lastname'] . ', ' . $lookupName['firstname'];
@@ -108,12 +98,9 @@ class msSubscription extends ActiveRecord
         }
     }
 
-
-    public function assignToObject()
+    public function assignToObject(): void
     {
-        /**
-         * @var ilCourseParticipants $participants
-         */
+        $participants = null;
         $obj_id = ilObject::_lookupObjId($this->getObjRefId());
         $usr_id = $this->user_status_object->getUsrId();
         $status = false;
@@ -129,10 +116,13 @@ class msSubscription extends ActiveRecord
                 $status = $participants->add($usr_id, $this->getRole());
                 break;
         }
-        if ($status and msConfig::getValueByKey(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION)) {
+        if ($status && msConfig::getValueByKey(msConfig::F_SEND_MAILS_FOR_COURSE_SUBSCRIPTION)) {
             switch ($this->getContext()) {
                 case self::CONTEXT_CRS:
-                    $participants->sendNotification(ilGroupMembershipMailNotification::TYPE_ACCEPTED_SUBSCRIPTION_MEMBER, $usr_id);
+                    $participants->sendNotification(
+                        ilGroupMembershipMailNotification::TYPE_ACCEPTED_SUBSCRIPTION_MEMBER,
+                        $usr_id
+                    );
                     break;
                 case self::CONTEXT_GRP:
                     $participants->sendNotification(ilGroupMembershipMailNotification::TYPE_ADMISSION_MEMBER, $usr_id);
@@ -160,19 +150,16 @@ class msSubscription extends ActiveRecord
 
             return explode(self::DELIMITER, $result);
         }
-        preg_match_all("/[A-Za-z0-9_.-]+@[A-Za-z0-9_.-]+\\.[A-Za-z0-9_-][A-Za-z0-9_]+/uismx", $email, $matches);
+        preg_match_all("/[A-Za-z0-9_.-]+@[A-Za-z0-9_.-]+\\.[A-Za-z0-9_-]\\w+/uismx", $email, $matches);
 
         return $matches[0];
     }
 
-
     /**
      * @param
      * $matriculation
-     *
-     * @return array
      */
-    public static function seperateMatriculationString($matriculation)
+    public static function seperateMatriculationString($matriculation): array
     {
         $result = preg_replace("/([;,\\n\\r ])/um", self::DELIMITER, $matriculation);
         $result = str_ireplace(self::DELIMITER . self::DELIMITER, self::DELIMITER, $result);
@@ -180,26 +167,25 @@ class msSubscription extends ActiveRecord
         return explode(self::DELIMITER, $result);
     }
 
-
     /**
      * @param int    $obj_ref_id
      * @param string $input
      * @param int    $type
      * @param string $context
      */
-    public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context)
+    public static function insertNewRequests($obj_ref_id, $input, $type = msSubscription::TYPE_EMAIL, $context): void
     {
-        $where = array(
+        $where = [
             'matching_string' => $input,
-            'obj_ref_id'      => $obj_ref_id,
-            'deleted'         => false,
-        );
-        $operators = array(
+            'obj_ref_id' => $obj_ref_id,
+            'deleted' => false,
+        ];
+        $operators = [
             'matching_string' => 'LIKE',
-            'obj_ref_id'      => '=',
-            'deleted'         => '=',
-        );
-        if (!msSubscription::where($where, $operators)->hasSets() and $input != '') {
+            'obj_ref_id' => '=',
+            'deleted' => '=',
+        ];
+        if (!msSubscription::where($where, $operators)->hasSets() && $input != '') {
             $msSubscription = new msSubscription();
             $msSubscription->setMatchingString($input);
             $status = new msUserStatus($input, $type, $obj_ref_id);
@@ -212,27 +198,24 @@ class msSubscription extends ActiveRecord
         }
     }
 
-
     /**
      * @return string
      */
     public static function generateToken()
     {
-        $token = sha1(microtime() * rand(1, 10000));
-        while (self::where(array('token' => $token))->hasSets()) {
-            $token = sha1(microtime() * rand(1, 10000));
+        $token = sha1(microtime() * random_int(1, 10000));
+        while (self::where(['token' => $token])->hasSets()) {
+            $token = sha1(microtime() * random_int(1, 10000));
         }
 
         return $token;
     }
-
 
     public function create(): void
     {
         $this->setToken(self::generateToken());
         parent::create();
     }
-
 
     /**
      * @var int
@@ -329,15 +312,13 @@ class msSubscription extends ActiveRecord
      */
     protected $context = self::CONTEXT_CRS;
 
-
     /**
      * @param int $account_type
      */
-    public function setAccountType($account_type)
+    public function setAccountType($account_type): void
     {
         $this->account_type = $account_type;
     }
-
 
     /**
      * @return int
@@ -347,15 +328,13 @@ class msSubscription extends ActiveRecord
         return $this->account_type_object->getAccountType();
     }
 
-
     /**
      * @param int $obj_ref_id
      */
-    public function setObjRefId($obj_ref_id)
+    public function setObjRefId($obj_ref_id): void
     {
         $this->obj_ref_id = $obj_ref_id;
     }
-
 
     /**
      * @return int
@@ -365,15 +344,13 @@ class msSubscription extends ActiveRecord
         return $this->obj_ref_id;
     }
 
-
     /**
      * @param string $matching_string
      */
-    public function setMatchingString($matching_string)
+    public function setMatchingString($matching_string): void
     {
         $this->matching_string = $matching_string;
     }
-
 
     /**
      * @return string
@@ -383,15 +360,13 @@ class msSubscription extends ActiveRecord
         return $this->matching_string;
     }
 
-
     /**
      * @param boolean $invitations_sent
      */
-    public function setInvitationsSent($invitations_sent)
+    public function setInvitationsSent($invitations_sent): void
     {
         $this->invitations_sent = $invitations_sent;
     }
-
 
     /**
      * @return boolean
@@ -401,15 +376,13 @@ class msSubscription extends ActiveRecord
         return $this->invitations_sent;
     }
 
-
     /**
      * @param int $role
      */
-    public function setRole($role)
+    public function setRole($role): void
     {
         $this->role = $role;
     }
-
 
     /**
      * @return int
@@ -419,15 +392,13 @@ class msSubscription extends ActiveRecord
         return $this->role;
     }
 
-
     /**
      * @param int $user_status
      */
-    public function setUserStatus($user_status)
+    public function setUserStatus($user_status): void
     {
         $this->user_status = $user_status;
     }
-
 
     /**
      * @return int
@@ -437,15 +408,13 @@ class msSubscription extends ActiveRecord
         return $this->user_status_object->getStatus();
     }
 
-
     /**
      * @param boolean $deleted
      */
-    public function setDeleted($deleted)
+    public function setDeleted($deleted): void
     {
         $this->deleted = $deleted;
     }
-
 
     /**
      * @return boolean
@@ -455,15 +424,13 @@ class msSubscription extends ActiveRecord
         return $this->deleted;
     }
 
-
     /**
      * @param string $token
      */
-    public function setToken($token)
+    public function setToken($token): void
     {
         $this->token = $token;
     }
-
 
     /**
      * @return string
@@ -473,15 +440,13 @@ class msSubscription extends ActiveRecord
         return $this->token;
     }
 
-
     /**
      * @param int $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
-
 
     /**
      * @return int
@@ -491,15 +456,13 @@ class msSubscription extends ActiveRecord
         return $this->id;
     }
 
-
     /**
      * @param int $subscription_type
      */
-    public function setSubscriptionType($subscription_type)
+    public function setSubscriptionType($subscription_type): void
     {
         $this->subscription_type = $subscription_type;
     }
-
 
     /**
      * @return int
@@ -509,7 +472,6 @@ class msSubscription extends ActiveRecord
         return $this->subscription_type;
     }
 
-
     /**
      * @return int
      */
@@ -518,15 +480,13 @@ class msSubscription extends ActiveRecord
         return $this->context;
     }
 
-
     /**
      * @param int $context
      */
-    public function setContext($context)
+    public function setContext($context): void
     {
         $this->context = $context;
     }
-
 
     /**
      * @return string
