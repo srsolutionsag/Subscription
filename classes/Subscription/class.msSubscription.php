@@ -100,6 +100,7 @@ class msSubscription extends ActiveRecord
 
     public function assignToObject(): void
     {
+        $this->afterObjectLoad();
         $participants = null;
         $obj_id = ilObject::_lookupObjId($this->getObjRefId());
         $usr_id = $this->user_status_object->getUsrId();
@@ -405,6 +406,9 @@ class msSubscription extends ActiveRecord
      */
     public function getUserStatus()
     {
+        if (!$this->user_status_object instanceof msUserStatus) {
+            $this->afterObjectLoad();
+        }
         return $this->user_status_object->getStatus();
     }
 
