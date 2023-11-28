@@ -89,13 +89,13 @@ class msSubscription extends ActiveRecord
      */
     public function lookupName()
     {
-        if ($this->user_status_object->getUsrId() !== 0) {
+        if ($this->user_status_object->getUsrId() !== null) {
             $lookupName = ilObjUser::_lookupName($this->user_status_object->getUsrId());
 
             return $lookupName['lastname'] . ', ' . $lookupName['firstname'];
-        } else {
-            return '&nbsp;';
         }
+        
+        return '&nbsp;';
     }
 
     public function assignToObject(): void
@@ -380,7 +380,7 @@ class msSubscription extends ActiveRecord
     /**
      * @param int $role
      */
-    public function setRole($role): void
+    public function setRole(int $role): void
     {
         $this->role = $role;
     }

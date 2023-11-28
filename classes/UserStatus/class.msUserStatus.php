@@ -21,9 +21,9 @@ class msUserStatus
     public const ROLE_TUTOR = 3;
     public const ROLE_ADMIN = 1;
     /**
-     * @var int
+     * @var int|null
      */
-    protected $usr_id;
+    protected $usr_id = null;
     /**
      * @var int
      */
@@ -54,10 +54,10 @@ class msUserStatus
         $this->initStatus();
         $this->initRole();
     }
-
-    protected function initUsrId()
+    
+    protected function initUsrId() : void
     {
-        $usr_id = false;
+        $usr_id = null;
         switch ($this->getType()) {
             case self::EMAIL:
                 $usr_id = self::lookupUsrIdByField('email', $this->getInput());
@@ -70,19 +70,21 @@ class msUserStatus
         $this->setUsrId($usr_id);
     }
 
-    protected function initStatus()
+    protected function initStatus():void
     {
-        if ($this->getUsrId() !== 0) {
+        if ($this->getUsrId() !== null) {
             if (ilCourseParticipants::_isParticipant($this->getCrsRefId(), $this->getUsrId())) {
                 $this->setStatus(self::STATUS_ALREADY_ASSIGNED);
 
                 return;
-            } else {
-                $this->setStatus(self::STATUS_USER_CAN_BE_ASSIGNED);
-
-                return;
             }
-        } elseif ($this->getType() == self::EMAIL) {
+            
+            $this->setStatus(self::STATUS_USER_CAN_BE_ASSIGNED);
+            
+            return;
+        }
+        
+        if ($this->getType() === self::EMAIL) {
             $where = [
                 'matching_string' => $this->getInput(),
                 'obj_ref_id' => $this->getCrsRefId(),
@@ -97,17 +99,17 @@ class msUserStatus
                 $this->setStatus(self::STATUS_ALREADY_INVITED);
 
                 return;
-            } else {
-                if (msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
-                    $this->setStatus(self::STATUS_USER_CAN_BE_INVITED);
-                } else {
-                    $this->setStatus(self::STATUS_USER_NOT_ASSIGNABLE);
-                }
-
-                return;
             }
+            
+            if (msConfig::getValueByKey(msConfig::F_ENABLE_SENDING_INVITATIONS)) {
+                $this->setStatus(self::STATUS_USER_CAN_BE_INVITED);
+            } else {
+                $this->setStatus(self::STATUS_USER_NOT_ASSIGNABLE);
+            }
+            
+            return;
         }
-
+        
         $this->setStatus(self::STATUS_USER_NOT_INVITABLE);
     }
 
@@ -118,16 +120,20 @@ class msUserStatus
          */
         $crs = ilObjectFactory::getInstanceByRefId($this->getCrsRefId());
         $members = ilCourseParticipants::_getInstanceByObjId($crs->getId());
-        if ($this->getUsrId() !== 0) {
+        if ($this->getUsrId() !== null) {
             if ($members->isAdmin($this->getUsrId())) {
                 $this->setRole(self::ROLE_ADMIN);
 
                 return;
-            } elseif ($members->isTutor($this->getUsrId())) {
+            }
+            
+            if ($members->isTutor($this->getUsrId())) {
                 $this->setRole(self::ROLE_TUTOR);
 
                 return;
-            } elseif ($members->isMember($this->getUsrId())) {
+            }
+            
+            if ($members->isMember($this->getUsrId())) {
                 $this->setRole(self::ROLE_MEMBER);
 
                 return;
@@ -294,18 +300,12 @@ class msUserStatus
         return $this->type;
     }
 
-    /**
-     * @param mixed $usr_id
-     */
-    public function setUsrId($usr_id): void
+    public function setUsrId(?int $usr_id): void
     {
         $this->usr_id = $usr_id;
     }
-
-    /**
-     * @return int
-     */
-    public function getUsrId()
+    
+    public function getUsrId():?int
     {
         $this->initUsrId();
 
@@ -355,17 +355,15 @@ class msUserStatus
      *
      * @return bool
      */
-    public static function lookupUsrIdByField($field, $value)
+    public static function lookupUsrIdByField(string $field, string $value):?int
     {
         global $DIC;
         $ilDB = $DIC->database();
 
         $query = 'SELECT usr_id FROM usr_data WHERE ' . $field . ' LIKE ' . $ilDB->quote($value, 'text');
         $set = $ilDB->query($query);
-        while ($rec = $ilDB->fetchObject($set)) {
-            return $rec->usr_id;
-        }
-
-        return false;
+        $rec = $ilDB->fetchObject($set);
+        
+        return $rec->usr_id ?? null;
     }
 }

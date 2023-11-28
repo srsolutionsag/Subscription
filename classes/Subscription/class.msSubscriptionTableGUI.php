@@ -42,10 +42,10 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
             $dat->afterObjectLoad();
             // SW: Remove duplicated users, see bug https://jira.studer-raimann.ch/browse/PLMSC-11
             $user_id = $dat->user_status_object->getUsrId();
-            if (in_array($user_id, $user_ids)) {
+            if (in_array($user_id, $user_ids, true)) {
                 continue;
             }
-            if ($user_id !== 0) {
+            if ($user_id !== null) {
                 $user_ids[] = $user_id;
             }
             $row = (array) $dat->asStdClass();
@@ -140,13 +140,8 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
 
         return true;
     }
-
-    /**
-     * @param int $selected
-     *
-     * @return string
-     */
-    protected function getRoleSelector($selected = self::STD_ROLE)
+    
+    protected function getRoleSelector(int $selected = self::STD_ROLE): string
     {
         $type = $this->parent_obj->getObj()->getType();
         switch ($type) {

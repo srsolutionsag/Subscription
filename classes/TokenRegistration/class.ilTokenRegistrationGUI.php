@@ -9,6 +9,10 @@
 class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
 {
     /**
+     * @var true
+     */
+    private bool $user_created = false;
+    /**
      * @var \ilSubscriptionPlugin
      */
     public $pl;
@@ -59,7 +63,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
      *
      * @throws \ilException
      */
-    protected function internalInitForm($a_force_code = false)
+    protected function initForm(): void
     {
         if ($this->subscription->getDeleted()) {
             throw new ilException('this token is no longer valid');
@@ -127,6 +131,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
     public function assignUser(): void
     {
         $obj_id = ilObject::_lookupObjId($this->subscription->getObjRefId());
+        $this->subscription->afterObjectLoad();
         $a_usr_id = $this->subscription->user_status_object->getUsrId();
         switch ($this->subscription->getContext()) {
             case msSubscription::CONTEXT_CRS:
@@ -152,6 +157,11 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
         header('Location: ' . ilLink::_getStaticLink($this->subscription->getObjRefId()));
         exit;
     }
+    
+    protected function createUser(int $a_role): string {
+        $this->user_created = true;
+        return parent::createUser($a_role);
+    }
 
     public function saveForm(): ilGlobalTemplateInterface
     {
@@ -170,7 +180,7 @@ class ilTokenRegistrationGUI extends ilAccountRegistrationGUI
                 }
         }
 
-        if (parent::saveForm()) {
+        if (parent::saveForm() && $this->user_created) {
             $this->assignUser();
             $this->redirectToCourse();
         }
