@@ -79,6 +79,7 @@ class msSubscription extends ActiveRecord
         $obj = self::where($where)->first();
         if ($obj instanceof \ActiveRecord) {
             $obj->read();
+            $obj->afterObjectLoad();
         }
 
         return $obj;
