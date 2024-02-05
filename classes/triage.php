@@ -1,10 +1,12 @@
 <?php
 
-$obj = new msTriage();
-if (!$_REQUEST['cmd']) {
-    $obj->start();
-} else {
-    $obj->performCommand($_REQUEST['cmd']);
+if(php_sapi_name() !== 'cli') {
+    $obj = new msTriage();
+    if (!$_REQUEST['cmd']) {
+        $obj->start();
+    } else {
+        $obj->performCommand($_REQUEST['cmd']);
+    }
 }
 
 /**
