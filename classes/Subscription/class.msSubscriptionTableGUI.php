@@ -22,6 +22,8 @@ class msSubscriptionTableGUI extends msModelObjectTableGUI
         parent::__construct($a_parent_obj, $a_parent_cmd);
 
         $this->setSelectAllCheckbox('obj');
+        $this->setShowRowsSelector(false);
+        $this->setLimit(9999);
     }
 
 
