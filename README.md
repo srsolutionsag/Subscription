@@ -1,3 +1,11 @@
+Further development discontinued
+================================
+The Subscription plugin is no longer being developed. The requirements for adding accounts to courses and other objects in ILIAs have increased over the years and additional workflows have become necessary. We have decided to cover these requirements with a new plugin and also to simplify the connection to new ILAIS versions. If you are dependent on the plugin, please contact us at support@sr.solutions - we will then check with you how you could implement your workflows with the new plugin in the future.
+
+
+
+
+
 Subscription
 ============
 This UIHook-Plugin allows you to subscribe multiple users to a course at once, by writing the names into a list. You can also type in e-mail addresses, to which the plugin will send an invitation and a formular to create an ilias account. 
