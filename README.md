@@ -1,6 +1,6 @@
 Further development discontinued
 ================================
-The Subscription plugin is no longer being developed. The requirements for adding accounts to courses and other objects in ILIAs have increased over the years and additional workflows have become necessary. We have decided to cover these requirements with a new plugin and also to simplify the connection to new ILAIS versions. If you are dependent on the plugin, please contact us at support@sr.solutions - we will then check with you how you could implement your workflows with the new plugin in the future.
+The Subscription plugin is no longer being developed. The requirements for adding accounts to courses and other objects in ILIAS have increased over the years and additional workflows have become necessary. We have decided to cover these requirements with a new plugin and also to simplify the connection to new ILIAS versions. If you are dependent on the plugin, please contact us at support@sr.solutions - we will then check with you how you could implement your workflows with the new plugin in the future.
 
 
 
