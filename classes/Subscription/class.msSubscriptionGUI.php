@@ -11,6 +11,7 @@
  */
 class msSubscriptionGUI
 {
+    private ilLanguage $lng;
     public $tpl;
     public $ctrl;
     /**
@@ -87,6 +88,7 @@ class msSubscriptionGUI
         $this->access = $DIC->access();
         $this->obj_def = $objDefinition;
         $this->pl = ilSubscriptionPlugin::getInstance();
+        $this->lng = $DIC->language();
         //		$this->pl->updateLanguageFiles();
 
         $this->obj_ref_id = $_GET['obj_ref_id'];
@@ -303,6 +305,27 @@ class msSubscriptionGUI
             $mail = new ilMail(self::SYSTEM_USER);
         }
 
+        $initiator_role = '';
+        $initiator_uid = $this->usr->getId();
+        $target_obj = ilObjectFactory::getInstanceByRefId($msSubscription->getObjRefId());
+        if ($target_obj instanceof ilObjCourse) {
+            $target_memberships = $target_obj->getMembersObject();
+            if ($target_memberships->isAdmin($initiator_uid)) {
+                $initiator_role = $this->lng->txt('il_crs_admin');
+            } elseif ($target_memberships->isTutor($initiator_uid)) {
+                $initiator_role = $this->lng->txt('il_crs_tutor');
+            } elseif ($target_memberships->isMember($initiator_uid)) {
+                $initiator_role = $this->lng->txt('il_crs_member');
+            }
+        } elseif ($target_obj instanceof ilObjGroup) {
+            $target_memberships = $target_obj->getMembersObject();
+            if ($target_memberships->isAdmin($initiator_uid)) {
+                $initiator_role = $this->lng->txt('il_grp_admin');
+            } elseif ($target_memberships->isMember($initiator_uid)) {
+                $initiator_role = $this->lng->txt('il_grp_member');
+            }
+        }
+
         $sf = [
             'obj_title' => ilObject2::_lookupTitle(ilObject2::_lookupObjId($msSubscription->getObjRefId())),
             'role' => $this->pl->txt('main_role_' . $msSubscription->getRole()),
@@ -310,6 +333,7 @@ class msSubscriptionGUI
             'link' => ILIAS_HTTP_PATH . '/goto.php?target=subscr_' . $msSubscription->getToken(),
             'username' => $this->usr->getFullname(),
             'email' => $this->usr->getEmail(),
+            'initiator_role' => $initiator_role
         ];
 
         $mail_body = vsprintf($this->pl->txt('main_notification_body'), $sf);
