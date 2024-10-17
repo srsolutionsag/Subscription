@@ -134,13 +134,6 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
             return false;
         }
 
-        foreach ($context as $item) {
-            if (strtolower($this->ctrl->getCmdClass()) === $item[0]
-                && ($this->ctrl->getCmd() === $item[1] || $item[1] === '*')) {
-                return true;
-            }
-        }
-
         $array = [strtolower($this->ctrl->getCmdClass()), $this->ctrl->getCmd()];
         $check_cmd = in_array($array, $context);
         $check_cmd_class = in_array([$this->ctrl->getCmdClass(), '*'], $context);
@@ -167,6 +160,14 @@ class ilSubscriptionUIHookGUI extends ilUIHookPluginGUI
         )) {
             return false;
         }
+
+        foreach ($context as $item) {
+            if (strtolower($this->ctrl->getCmdClass()) === $item[0]
+                && ($this->ctrl->getCmd() === $item[1] || $item[1] === '*')) {
+                return true;
+            }
+        }
+
         return !msConfig::isInIgnoredSubtree($ref_id);
     }
 
